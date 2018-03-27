@@ -21,6 +21,10 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        string apkPath;
+        string keyStorePath;
+        string exportPath;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +44,39 @@ namespace APKRepackageSDKTool
             if (result == true)
             {
                 this.Text_APKPath.Text = openFileDialog.FileName;
+                apkPath = openFileDialog.FileName;
+            }
+        }
+
+
+
+        private void Button_ClickSelectExportPath(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
+            DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+            this.Text_APKExportPath.Text = m_Dir;
+            exportPath = m_Dir;
+        }
+
+        private void Button_ClickSelectKeyStore(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("点击了click事件");
+
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "APK Files (*.apk)|*.apk"
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                this.Text_APKPath.Text = openFileDialog.FileName;
+                apkPath = openFileDialog.FileName;
             }
         }
 
@@ -50,8 +87,13 @@ namespace APKRepackageSDKTool
         /// <param name="e"></param>
         private void Button_ClicRepackageAPK(object sender, RoutedEventArgs e)
         {
+            RepackageInfo ri = new RepackageInfo();
+            ri.apkPath = apkPath;
+            ri.keyStorePath = keyStorePath;
+            ri.exportPath = exportPath;
+
             RepackageManager rm = new RepackageManager();
-            rm.Repackage(null, RepackCallBack);
+            rm.Repackage(ri, RepackCallBack);
         }   
 
         void RepackCallBack(string content)

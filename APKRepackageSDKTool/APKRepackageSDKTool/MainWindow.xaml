@@ -11,6 +11,9 @@
             <TextBox x:Name="Text_APKPath" Margin="10,40,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" HorizontalAlignment="Left" Width="137" Height="23" VerticalAlignment="Top"/>
             <Label Content="APK目录" Margin="10,10,0,0" HorizontalAlignment="Left" Width="58" Height="25" VerticalAlignment="Top"/>
             <Button Content="浏览" Margin="161,44,0,0" Click="Button_ClickSelectAPK" HorizontalAlignment="Left" Width="75" Height="19" VerticalAlignment="Top"/>
+            <Label Content="APK导出目录" Margin="10,83,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
+            <TextBox x:Name="Text_APKExportPath" Margin="10,113,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" HorizontalAlignment="Left" Width="137" Height="23" VerticalAlignment="Top"/>
+            <Button Content="浏览" Margin="161,117,0,0" Click="Button_ClickSelectExportPath" HorizontalAlignment="Left" Width="75" Height="19" VerticalAlignment="Top"/>
         </Grid>
         <Button Content="重打包" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
         <TextBox x:Name="Text_output" Margin="319,58,10,53" TextWrapping="Wrap"/>
