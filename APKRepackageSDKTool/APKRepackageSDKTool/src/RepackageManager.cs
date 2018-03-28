@@ -69,6 +69,7 @@ namespace APKRepackageSDKTool
                 MakeProgress("进行签名");
                 cmd.Execute("jarsigner -verbose"
                     //+ " -tsa https://timestamp.geotrust.com/tsa"
+                    + " -digestalg SHA1 -sigalg MD5withRSA"
                     + " -storepass " + channelInfo.keyStorePassWord
                     + " -keystore " + channelInfo.keyStorePath 
                     + " " + apkPath

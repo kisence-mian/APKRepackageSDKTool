@@ -16,7 +16,12 @@ namespace APKRepackageSDKTool
 
         public void ChannelLogic(string filePath, ChannelInfo info)
         {
+            OutPut("替换包名");
+            OutPut("替换appName");
+            OutPut("替换appIcon");
+            OutPut("放入SDK");
 
+            OutPut("整合AndroidManifest.xml 清单文件");
         }
 
         public void OutPut(string content)

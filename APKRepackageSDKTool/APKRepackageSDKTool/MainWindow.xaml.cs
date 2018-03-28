@@ -128,6 +128,11 @@ namespace APKRepackageSDKTool
             rm.Repackage(ri, ci, RepackCallBack);
         }
 
+        private void Button_ClickClean(object sender, RoutedEventArgs e)
+        {
+            Text_output.Text = "";
+        }
+
         #endregion
 
         #region 事件接收
@@ -159,7 +164,9 @@ namespace APKRepackageSDKTool
             Text_KeyStorePath.Text = keyStorePath;
             Text_SDKLibPath.Text = SDKLibPath;
         }
-        
+
         #endregion
+
+
     }
 }

@@ -29,6 +29,7 @@
         <Label Content="输出" Margin="319,20,302,0" RenderTransformOrigin="0.021,0.189" Height="25" VerticalAlignment="Top"/>
         <ProgressBar x:Name="Progress_repackage" Margin="10,0,10,10" Height="17" VerticalAlignment="Bottom"/>
         <Label x:Name="Text_progressName" Content="准备" Margin="10,0,10,7" Height="24" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
+        <Button Content="清空" Margin="0,23,10,0" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="Button_ClickClean"/>
 
     </Grid>
 </Window>

@@ -72,7 +72,7 @@ namespace APKRepackageSDKTool
             else
             {
                 if (content.Contains("Microsoft")
-                    //|| content.Contains(">")
+                    || content.Contains(">")
                     )
                 {
                     return false;
