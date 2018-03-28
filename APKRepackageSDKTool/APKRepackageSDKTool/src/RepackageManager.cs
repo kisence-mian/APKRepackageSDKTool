@@ -26,7 +26,7 @@ namespace APKRepackageSDKTool
 
         class RepackageThread
         {
-            string outPath = System.IO.Directory.GetCurrentDirectory();
+            string outPath = PathTool.GetCurrentPath();
 
             public RepackageInfo info;
             public RepageProgress callBack;

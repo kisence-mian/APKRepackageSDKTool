@@ -414,6 +414,65 @@ public class FileTool
     }
 
     #endregion
+
+    #region 读操作
+    public static string ReadStringByFile(string path)
+    {
+        StringBuilder line = new StringBuilder();
+        try
+        {
+            if (!File.Exists(path))
+            {
+                return "";
+            }
+
+            StreamReader sr = File.OpenText(path);
+            line.Append(sr.ReadToEnd());
+
+            sr.Close();
+            sr.Dispose();
+        }
+        catch (Exception e)
+        {
+        }
+
+        return line.ToString();
+    }
+
+    #endregion
+
+    #region 写操作
+
+    //web Player 不支持写操作
+    public static void WriteStringByFile(string path, string content)
+    {
+        byte[] dataByte = Encoding.GetEncoding("UTF-8").GetBytes(content);
+
+        CreateFile(path, dataByte);
+    }
+
+    public static void DeleteFile(string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
+
+    public static void CreateFile(string path, byte[] byt)
+    {
+        try
+        {
+            FileTool.CreatFilePath(path);
+            File.WriteAllBytes(path, byt);
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    #endregion
 }
 
 public delegate void FileExecuteHandle(string filePath);

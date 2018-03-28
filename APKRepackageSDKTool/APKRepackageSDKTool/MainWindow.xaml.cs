@@ -21,9 +21,12 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string c_PathRecord = "Paths";
+
         string apkPath;
         string keyStorePath;
         string exportPath;
+        string SDKLibPath;
 
         float progress = 0;
         string content;
@@ -32,6 +35,13 @@ namespace APKRepackageSDKTool
         public MainWindow()
         {
             InitializeComponent();
+
+            apkPath = RecordManager.GetRecord(c_PathRecord, "apkPath", "null");
+            keyStorePath = RecordManager.GetRecord(c_PathRecord, "keyStorePath", "null");
+            exportPath = RecordManager.GetRecord(c_PathRecord, "exportPath", "null");
+            SDKLibPath = RecordManager.GetRecord(c_PathRecord, "SDKLibPath", "null");
+
+            UpdateContent();
         }
 
         #region 点击事件
@@ -49,6 +59,7 @@ namespace APKRepackageSDKTool
             {
                 this.Text_APKPath.Text = openFileDialog.FileName;
                 apkPath = openFileDialog.FileName;
+                RecordManager.SaveRecord(c_PathRecord, "apkPath", apkPath);
             }
         }
 
@@ -64,21 +75,36 @@ namespace APKRepackageSDKTool
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_APKExportPath.Text = m_Dir;
             exportPath = m_Dir;
+            RecordManager.SaveRecord(c_PathRecord, "exportPath", exportPath);
+        }
+
+        private void Button_ClickSelectSDKLibPath(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
+            DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+            this.Text_SDKLibPath.Text = m_Dir;
+            SDKLibPath = m_Dir;
+            RecordManager.SaveRecord(c_PathRecord, "SDKLibPath", SDKLibPath);
         }
 
         private void Button_ClickSelectKeyStore(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("点击了click事件");
-
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Filter = "APK Files (*.apk)|*.apk"
+                Filter = "keystore Files (*.keystore)|*.keystore"
             };
             var result = openFileDialog.ShowDialog();
             if (result == true)
             {
                 this.Text_KeyStorePath.Text = openFileDialog.FileName;
                 keyStorePath = openFileDialog.FileName;
+                RecordManager.SaveRecord(c_PathRecord, "keyStorePath", keyStorePath);
             }
         }
 
@@ -121,6 +147,11 @@ namespace APKRepackageSDKTool
 
             Text_output.Text = output;
             Text_progressName.Content = content;
+
+            Text_APKExportPath.Text = exportPath;
+            Text_APKPath.Text = apkPath;
+            Text_KeyStorePath.Text = keyStorePath;
+            Text_SDKLibPath.Text = SDKLibPath;
         }
         
         #endregion

@@ -56,7 +56,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="src\CmdService.cs" />
+    <Compile Include="src\DeJson.cs" />
     <Compile Include="src\FileTool.cs" />
+    <Compile Include="src\MiniJSON.cs" />
+    <Compile Include="src\PathTool.cs" />
+    <Compile Include="src\RecordManager.cs" />
     <Compile Include="src\RepackageManager.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
