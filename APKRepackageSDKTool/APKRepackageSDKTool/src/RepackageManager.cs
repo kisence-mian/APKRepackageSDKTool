@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -35,7 +36,8 @@ namespace APKRepackageSDKTool
             float progress = 0;
             //const float totalStep = 5f;
 
-            string output;
+            int line = 0;
+            StringBuilder output = new StringBuilder();
             string content = "";
 
             public void Repackage()
@@ -48,7 +50,7 @@ namespace APKRepackageSDKTool
 
                 //反编译APK
                 MakeProgress("反编译APK");
-                cmd.Execute("java -jar apktool.jar d " + info.apkPath + " " + outPath);
+                cmd.Execute("java -jar apktool.jar d -f " + info.apkPath + " -o " + aimPath);
                 
                 //执行对应的文件操作
                 MakeProgress("执行对应的文件操作");
@@ -56,32 +58,41 @@ namespace APKRepackageSDKTool
                 //重打包
                 MakeProgress("重打包");
                 cmd.Execute("java -jar apktool.jar b " + aimPath);
-                
 
                 //进行签名
                 MakeProgress("进行签名");
+                cmd.Execute("jarsigner -verbose -keystore " + info.keyStorePath + " " + apkPath + " -storepass hello9123 huoyu" /*+ info.keyStorePath*/);
 
                 //拷贝到导出目录
                 MakeProgress("拷贝到导出目录");
+                cmd.Execute("copy " + apkPath + " " + info.exportPath + "\\" + fileName +" /Y");
+
+                MakeProgress("删除临时目录");
+                //删除临时目录
+                FileTool.DeleteDirectory(aimPath);
+                Directory.Delete(aimPath);
 
                 MakeProgress("完成");
             }
 
             public void OutPutCallBack(string output)
             {
-                this.output = output;
-                callBack?.Invoke(progress,content, output);
+                line++;
+                this.output.Append("["+line+"]"+ output + "\n");
+                callBack?.Invoke(progress,content, this.output.ToString());
             }
 
             void MakeProgress(string content)
             {
+                line++;
+                this.output.Append("[" + line + "]" + content + "\n");
+
                 this.content = content;
                 progress = step;
                 step++;
 
-                callBack?.Invoke(progress, content, output);
+                callBack?.Invoke(progress, content, output.ToString());
             }
-
         }
     }
 
@@ -95,8 +106,8 @@ namespace APKRepackageSDKTool
     {
         public string apkPath;      //APK的路径
         public string keyStorePath; //KeyStore的路径
-
-        public string exportPath;
+        public string keyStorePassWord; //KeyStore 密码
+        public string exportPath; //导出路径
 
         public string channelID; //渠道ID
 

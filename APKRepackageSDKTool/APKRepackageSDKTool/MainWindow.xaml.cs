@@ -146,6 +146,8 @@ namespace APKRepackageSDKTool
             Progress_repackage.Value = progress;
 
             Text_output.Text = output;
+            Text_output.ScrollToEnd();
+
             Text_progressName.Content = content;
 
             Text_APKExportPath.Text = exportPath;

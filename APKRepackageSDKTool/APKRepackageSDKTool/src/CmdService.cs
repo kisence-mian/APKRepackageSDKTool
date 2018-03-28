@@ -14,9 +14,6 @@ namespace APKRepackageSDKTool
 
         CmdOutPutCallBack callBack;
 
-        int lineCount = 0;
-        StringBuilder output = new StringBuilder();
-
         public CmdService(CmdOutPutCallBack callBack)
         {
             this.callBack = callBack;
@@ -40,6 +37,7 @@ namespace APKRepackageSDKTool
 
             process.StandardInput.AutoFlush = true;
 
+            process.BeginErrorReadLine();
             process.BeginOutputReadLine();
 
             process.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
@@ -61,10 +59,7 @@ namespace APKRepackageSDKTool
         {
             if (Filter(e.Data))
             {
-                lineCount++;
-                output.Append("[" + lineCount + "]: " + e.Data + "\n");
-
-                callBack?.Invoke(output.ToString());
+                callBack?.Invoke(e.Data);
             }
         }
 
@@ -77,7 +72,7 @@ namespace APKRepackageSDKTool
             else
             {
                 if (content.Contains("Microsoft")
-                    //|| content.Contains("exit")
+                    || content.Contains(">")
                     )
                 {
                     return false;
