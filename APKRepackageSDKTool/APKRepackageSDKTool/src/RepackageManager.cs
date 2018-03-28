@@ -10,7 +10,9 @@ namespace APKRepackageSDKTool
 {
     public class RepackageManager
     {
-        public void Repackage(RepackageInfo info, RepageProgress callBack)
+        const string c_channelRecordName = "Channel";
+
+        public void Repackage(RepackageInfo info,ChannelInfo channel, RepageProgress callBack)
         {
             //APK路径正确性校验
 
@@ -18,8 +20,9 @@ namespace APKRepackageSDKTool
 
             RepackageThread rt = new RepackageThread();
 
-            rt.info = info;
+            rt.repackageInfo = info;
             rt.callBack = callBack;
+            rt.channelInfo = channel;
 
             Thread th = new Thread(rt.Repackage);
             th.Start();
@@ -29,7 +32,8 @@ namespace APKRepackageSDKTool
         {
             string outPath = PathTool.GetCurrentPath();
 
-            public RepackageInfo info;
+            public RepackageInfo repackageInfo;
+            public ChannelInfo channelInfo;
             public RepageProgress callBack;
 
             int step = 0;
@@ -42,18 +46,20 @@ namespace APKRepackageSDKTool
 
             public void Repackage()
             {
-                string fileName = FileTool.GetFileNameByPath(info.apkPath);
+                string fileName = FileTool.GetFileNameByPath(repackageInfo.apkPath);
                 string aimPath = outPath + "\\" + FileTool.RemoveExpandName(fileName);
                 string apkPath = aimPath + "\\dist\\" + fileName;
 
                 CmdService cmd = new CmdService(OutPutCallBack);
+                ChannelTool channelTool = new ChannelTool(OutPutCallBack);
 
                 //反编译APK
                 MakeProgress("反编译APK");
-                cmd.Execute("java -jar apktool.jar d -f " + info.apkPath + " -o " + aimPath);
+                cmd.Execute("java -jar apktool.jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
                 
                 //执行对应的文件操作
                 MakeProgress("执行对应的文件操作");
+                channelTool.ChannelLogic(aimPath, null);
 
                 //重打包
                 MakeProgress("重打包");
@@ -61,11 +67,17 @@ namespace APKRepackageSDKTool
 
                 //进行签名
                 MakeProgress("进行签名");
-                cmd.Execute("jarsigner -verbose -keystore " + info.keyStorePath + " " + apkPath + " -storepass hello9123 huoyu" /*+ info.keyStorePath*/);
+                cmd.Execute("jarsigner -verbose"
+                    //+ " -tsa https://timestamp.geotrust.com/tsa"
+                    + " -storepass " + channelInfo.keyStorePassWord
+                    + " -keystore " + channelInfo.keyStorePath 
+                    + " " + apkPath
+                    + " " + channelInfo.keyStoreAlias
+                    );
 
                 //拷贝到导出目录
                 MakeProgress("拷贝到导出目录");
-                cmd.Execute("copy " + apkPath + " " + info.exportPath + "\\" + fileName +" /Y");
+                cmd.Execute("copy " + apkPath + " " + repackageInfo.exportPath + "\\" + fileName +" /Y");
 
                 MakeProgress("删除临时目录");
                 //删除临时目录
@@ -96,21 +108,23 @@ namespace APKRepackageSDKTool
         }
     }
 
+    #region 声明
     /// <summary>
     /// 重打包进度回调
     /// </summary>
     /// <param name="content"></param>
     public delegate void RepageProgress(float progress,string content, string outPut);
+    public delegate void OutPutCallBack(string output);
 
     public class RepackageInfo
     {
         public string apkPath;      //APK的路径
-        public string keyStorePath; //KeyStore的路径
-        public string keyStorePassWord; //KeyStore 密码
         public string exportPath; //导出路径
 
         public string channelID; //渠道ID
 
         public string targetPackageName; //目标包名
     }
+
+    #endregion
 }

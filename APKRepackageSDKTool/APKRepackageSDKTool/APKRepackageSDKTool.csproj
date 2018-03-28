@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChannelTool.cs" />
     <Compile Include="src\CmdService.cs" />
     <Compile Include="src\DeJson.cs" />
     <Compile Include="src\FileTool.cs" />

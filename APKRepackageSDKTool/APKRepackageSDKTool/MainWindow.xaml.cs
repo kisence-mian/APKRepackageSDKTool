@@ -117,11 +117,15 @@ namespace APKRepackageSDKTool
         {
             RepackageInfo ri = new RepackageInfo();
             ri.apkPath = apkPath;
-            ri.keyStorePath = keyStorePath;
             ri.exportPath = exportPath;
 
+            ChannelInfo ci = new ChannelInfo();
+            ci.keyStorePath = "C:\\Users\\GaiKai\\Desktop\\密钥\\fire.keystore";
+            ci.keyStorePassWord = "hello9123";
+            ci.keyStoreAlias = "huoyu";
+
             RepackageManager rm = new RepackageManager();
-            rm.Repackage(ri, RepackCallBack);
+            rm.Repackage(ri, ci, RepackCallBack);
         }
 
         #endregion

@@ -12,14 +12,14 @@ namespace APKRepackageSDKTool
     {
         Process process;
 
-        CmdOutPutCallBack callBack;
+        OutPutCallBack callBack;
 
-        public CmdService(CmdOutPutCallBack callBack)
+        public CmdService(OutPutCallBack callBack)
         {
             this.callBack = callBack;
         }
 
-        public void SetOutPutCallBack(CmdOutPutCallBack callBack)
+        public void SetOutPutCallBack(OutPutCallBack callBack)
         {
             this.callBack = callBack;
         }
@@ -72,7 +72,7 @@ namespace APKRepackageSDKTool
             else
             {
                 if (content.Contains("Microsoft")
-                    || content.Contains(">")
+                    //|| content.Contains(">")
                     )
                 {
                     return false;
@@ -85,5 +85,5 @@ namespace APKRepackageSDKTool
         }
     }
 
-    public delegate void CmdOutPutCallBack(string output);
+
 }
