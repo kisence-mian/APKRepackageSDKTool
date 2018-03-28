@@ -7,17 +7,25 @@
         mc:Ignorable="d"
         Title="APK重打包工具" Height="407.859" Width="684.35">
     <Grid>
-        <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Width="265">
-            <TextBox x:Name="Text_APKPath" Margin="10,40,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" HorizontalAlignment="Left" Width="137" Height="23" VerticalAlignment="Top"/>
+        <Grid Margin="10,10,0,38" HorizontalAlignment="Left" Width="304">
+            <TextBox x:Name="Text_APKPath" Margin="10,40,90,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
             <Label Content="APK目录" Margin="10,10,0,0" HorizontalAlignment="Left" Width="58" Height="25" VerticalAlignment="Top"/>
-            <Button Content="浏览" Margin="161,44,0,0" Click="Button_ClickSelectAPK" HorizontalAlignment="Left" Width="75" Height="19" VerticalAlignment="Top"/>
-            <Label Content="APK导出目录" Margin="10,83,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
-            <TextBox x:Name="Text_APKExportPath" Margin="10,113,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" HorizontalAlignment="Left" Width="137" Height="23" VerticalAlignment="Top"/>
-            <Button Content="浏览" Margin="161,117,0,0" Click="Button_ClickSelectExportPath" HorizontalAlignment="Left" Width="75" Height="19" VerticalAlignment="Top"/>
+            <Button Content="浏览" Margin="219,44,10,0" Click="Button_ClickSelectAPK" Height="19" VerticalAlignment="Top"/>
+
+            <Label Content="APK导出目录" Margin="10,163,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
+            <TextBox x:Name="Text_APKExportPath" Margin="10,193,90,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
+            <Button Content="浏览" Margin="219,197,10,0" Click="Button_ClickSelectExportPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
+
+            <Label Content="KeyStore目录" Margin="10,68,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top" RenderTransformOrigin="0.534,0.64"/>
+            <TextBox x:Name="Text_KeyStorePath" Margin="10,93,90,0" TextWrapping="Wrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
+            <Button Content="浏览" Margin="219,93,10,0" Click="Button_ClickSelectKeyStore" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
+
+            <Button Content="重打包" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
         </Grid>
-        <Button Content="重打包" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
-        <TextBox x:Name="Text_output" Margin="319,58,10,53" TextWrapping="Wrap"/>
+        <TextBox x:Name="Text_output" Margin="319,58,10,38" TextWrapping="Wrap"/>
         <Label Content="输出" Margin="319,20,302,0" RenderTransformOrigin="0.021,0.189" Height="25" VerticalAlignment="Top"/>
+        <ProgressBar x:Name="Progress_repackage" Margin="10,0,10,2" Height="25" VerticalAlignment="Bottom"/>
+        <Label x:Name="Text_progressName" Content="" Margin="10,0,10,2" Height="25" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
 
     </Grid>
 </Window>

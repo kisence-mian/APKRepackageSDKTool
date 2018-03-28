@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace APKRepackageSDKTool
 {
@@ -11,7 +12,22 @@ namespace APKRepackageSDKTool
     {
         Process process;
 
-        public CmdService()
+        CmdOutPutCallBack callBack;
+
+        int lineCount = 0;
+        StringBuilder output = new StringBuilder();
+
+        public CmdService(CmdOutPutCallBack callBack)
+        {
+            this.callBack = callBack;
+        }
+
+        public void SetOutPutCallBack(CmdOutPutCallBack callBack)
+        {
+            this.callBack = callBack;
+        }
+
+        public void Execute(string content)
         {
             process = new Process();
             process.StartInfo.FileName = "cmd.exe";
@@ -23,27 +39,56 @@ namespace APKRepackageSDKTool
             process.Start();//启动程序
 
             process.StandardInput.AutoFlush = true;
-        }
 
-        public void Execute(string content)
-        {
+            process.BeginOutputReadLine();
+
+            process.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputDataReceived);
+
             process.StandardInput.WriteLine(content);
-        }
-
-        public void EndExecute()
-        {
             process.StandardInput.WriteLine("exit");
-        }
 
-        public void Close()
-        {
             process.WaitForExit();//等待程序执行完退出进程
             process.Close();
+            process = null;
         }
 
         public string GetOutPut()
         {
             return process.StandardOutput.ReadToEnd();
         }
+        private void OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (Filter(e.Data))
+            {
+                lineCount++;
+                output.Append("[" + lineCount + "]: " + e.Data + "\n");
+
+                callBack?.Invoke(output.ToString());
+            }
+        }
+
+        bool Filter(string content)
+        {
+            if (String.IsNullOrEmpty(content))
+            {
+                return false;
+            }
+            else
+            {
+                if (content.Contains("Microsoft")
+                    //|| content.Contains("exit")
+                    )
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
     }
+
+    public delegate void CmdOutPutCallBack(string output);
 }

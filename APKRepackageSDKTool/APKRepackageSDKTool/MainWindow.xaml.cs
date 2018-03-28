@@ -25,6 +25,10 @@ namespace APKRepackageSDKTool
         string keyStorePath;
         string exportPath;
 
+        float progress = 0;
+        string content;
+        string output;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -47,8 +51,6 @@ namespace APKRepackageSDKTool
                 apkPath = openFileDialog.FileName;
             }
         }
-
-
 
         private void Button_ClickSelectExportPath(object sender, RoutedEventArgs e)
         {
@@ -75,8 +77,8 @@ namespace APKRepackageSDKTool
             var result = openFileDialog.ShowDialog();
             if (result == true)
             {
-                this.Text_APKPath.Text = openFileDialog.FileName;
-                apkPath = openFileDialog.FileName;
+                this.Text_KeyStorePath.Text = openFileDialog.FileName;
+                keyStorePath = openFileDialog.FileName;
             }
         }
 
@@ -94,13 +96,33 @@ namespace APKRepackageSDKTool
 
             RepackageManager rm = new RepackageManager();
             rm.Repackage(ri, RepackCallBack);
-        }   
-
-        void RepackCallBack(string content)
-        {
-            Text_output.Text = content;
         }
 
+        #endregion
+
+        #region 事件接收
+        void RepackCallBack(float progress, string content, string output)
+        {
+            this.progress = progress;
+            this.content = content;
+            this.output = output;
+
+            Action ac = new Action(UpdateContent);
+            Dispatcher.BeginInvoke(ac);
+        }
+        #endregion
+
+        #region Update
+
+        void UpdateContent()
+        {
+            Progress_repackage.Maximum = 5;
+            Progress_repackage.Value = progress;
+
+            Text_output.Text = output;
+            Text_progressName.Content = content;
+        }
+        
         #endregion
     }
 }
