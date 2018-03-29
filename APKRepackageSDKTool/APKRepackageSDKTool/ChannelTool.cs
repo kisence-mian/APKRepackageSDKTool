@@ -35,7 +35,9 @@ namespace APKRepackageSDKTool
     /// </summary>
     public class ChannelInfo
     {
-        public string channelID;
+        public string channelName; //渠道名
+
+        public bool isChecked; //是否被选中
 
         public string keyStorePath; //KeyStore的路径
         public string keyStorePassWord; //KeyStore 密码
@@ -48,6 +50,17 @@ namespace APKRepackageSDKTool
         public string appIcon;
 
         public List<SDKInfo> sdkList;
+
+        public string Name { get => channelName; set => channelName = value; }
+        public bool IsChecked { get => isChecked; set => isChecked = value; }
+        public string KeyStorePath { get => keyStorePath; set => keyStorePath = value; }
+        public string KeyStorePassWord { get => keyStorePassWord; set => keyStorePassWord = value; }
+        public string KeyStoreAlias { get => keyStoreAlias; set => keyStoreAlias = value; }
+        public string KeyStoreAliasPassWord { get => keyStoreAliasPassWord; set => keyStoreAliasPassWord = value; }
+        public string PackageName { get => packageName; set => packageName = value; }
+        public string AppName { get => appName; set => appName = value; }
+        public string AppIcon { get => appIcon; set => appIcon = value; }
+        public List<SDKInfo> SdkList { get => sdkList; set => sdkList = value; }
     }
 
     public class SDKInfo

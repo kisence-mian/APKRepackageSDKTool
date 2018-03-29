@@ -40,8 +40,6 @@ namespace APKRepackageSDKTool
             float progress = 0;
             //const float totalStep = 5f;
 
-            int line = 0;
-            StringBuilder output = new StringBuilder();
             string content = "";
 
             public void Repackage()
@@ -70,10 +68,10 @@ namespace APKRepackageSDKTool
                 cmd.Execute("jarsigner -verbose"
                     //+ " -tsa https://timestamp.geotrust.com/tsa"
                     + " -digestalg SHA1 -sigalg MD5withRSA"
-                    + " -storepass " + channelInfo.keyStorePassWord
-                    + " -keystore " + channelInfo.keyStorePath 
+                    + " -storepass " + channelInfo.KeyStorePassWord
+                    + " -keystore " + channelInfo.KeyStorePath 
                     + " " + apkPath
-                    + " " + channelInfo.keyStoreAlias
+                    + " " + channelInfo.KeyStoreAlias
                     );
 
                 //拷贝到导出目录
@@ -90,21 +88,16 @@ namespace APKRepackageSDKTool
 
             public void OutPutCallBack(string output)
             {
-                line++;
-                this.output.Append("["+line+"]"+ output + "\n");
-                callBack?.Invoke(progress,content, this.output.ToString());
+                callBack?.Invoke(progress,content, output);
             }
 
             void MakeProgress(string content)
             {
-                line++;
-                this.output.Append("[" + line + "]" + content + "\n");
-
                 this.content = content;
                 progress = step;
                 step++;
 
-                callBack?.Invoke(progress, content, output.ToString());
+                callBack?.Invoke(progress, content, content);
             }
         }
     }

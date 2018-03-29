@@ -56,13 +56,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChannelTool.cs" />
+    <Compile Include="GameSetting.xaml.cs">
+      <DependentUpon>GameSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\CmdService.cs" />
     <Compile Include="src\DeJson.cs" />
     <Compile Include="src\FileTool.cs" />
     <Compile Include="src\MiniJSON.cs" />
+    <Compile Include="src\Model\EditorData.cs" />
     <Compile Include="src\PathTool.cs" />
     <Compile Include="src\RecordManager.cs" />
     <Compile Include="src\RepackageManager.cs" />
+    <Page Include="GameSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

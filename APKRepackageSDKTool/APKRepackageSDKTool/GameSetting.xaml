@@ -1,0 +1,29 @@
+﻿<Window x:Class="APKRepackageSDKTool.GameSetting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:APKRepackageSDKTool"
+        mc:Ignorable="d"
+        Title="项目列表管理" Height="291.526" Width="416.103">
+    <Grid>
+        <ListBox x:Name="ListBox_gameList" Margin="10,10,7,34">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid  >
+                        <Label Content="{Binding Path=GameName}" HorizontalAlignment="Left"/>
+                        <Button Content="删除" Click="Button_ClickDelete" HorizontalAlignment="Right" MinWidth="40"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Content="新增" Margin="0,0,7,10" Height="19" Click="Button_ClickAdd" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="65" RenderTransformOrigin="0.529,2.21"/>
+        <TextBox x:Name="TextBox_GameName" Margin="10,0,77,10" TextWrapping="Wrap" Text="" Height="19" VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>

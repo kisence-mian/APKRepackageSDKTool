@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+using APKRepackageSDKTool;
 using FrameWork;
 using System;
 using System.Collections;

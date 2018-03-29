@@ -21,27 +21,42 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string c_PathRecord = "Paths";
+        const string c_ConfigRecord = "Config";
 
         string apkPath;
         string keyStorePath;
         string exportPath;
         string SDKLibPath;
 
-        float progress = 0;
-        string content;
-        string output;
+        List<ChannelInfo> currentGameChannelList = new List<ChannelInfo>();
+
+        public List<ChannelInfo> CurrentGameChannelList
+        {
+            get => currentGameChannelList;
+            set
+            {
+                currentGameChannelList = value;
+                ListBox_channel.ItemsSource = currentGameChannelList;
+             }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            apkPath = RecordManager.GetRecord(c_PathRecord, "apkPath", "null");
-            keyStorePath = RecordManager.GetRecord(c_PathRecord, "keyStorePath", "null");
-            exportPath = RecordManager.GetRecord(c_PathRecord, "exportPath", "null");
-            SDKLibPath = RecordManager.GetRecord(c_PathRecord, "SDKLibPath", "null");
+            apkPath = RecordManager.GetRecord(c_ConfigRecord, "apkPath", "null");
+            keyStorePath = RecordManager.GetRecord(c_ConfigRecord, "keyStorePath", "null");
+            exportPath = RecordManager.GetRecord(c_ConfigRecord, "exportPath", "null");
+            SDKLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", "null");
 
             UpdateContent();
+
+            //展示到游戏选择界面上
+            ComboBox_gameList.ItemsSource = EditorData.GameList;
+            ComboBox_gameList.SelectedIndex = RecordManager.GetRecord(c_ConfigRecord, "index", -1);
+
+            //再显示该游戏的所有渠道
+            UpdateChannel();
         }
 
         #region 点击事件
@@ -59,7 +74,7 @@ namespace APKRepackageSDKTool
             {
                 this.Text_APKPath.Text = openFileDialog.FileName;
                 apkPath = openFileDialog.FileName;
-                RecordManager.SaveRecord(c_PathRecord, "apkPath", apkPath);
+                RecordManager.SaveRecord(c_ConfigRecord, "apkPath", apkPath);
             }
         }
 
@@ -75,7 +90,7 @@ namespace APKRepackageSDKTool
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_APKExportPath.Text = m_Dir;
             exportPath = m_Dir;
-            RecordManager.SaveRecord(c_PathRecord, "exportPath", exportPath);
+            RecordManager.SaveRecord(c_ConfigRecord, "exportPath", exportPath);
         }
 
         private void Button_ClickSelectSDKLibPath(object sender, RoutedEventArgs e)
@@ -90,22 +105,7 @@ namespace APKRepackageSDKTool
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_SDKLibPath.Text = m_Dir;
             SDKLibPath = m_Dir;
-            RecordManager.SaveRecord(c_PathRecord, "SDKLibPath", SDKLibPath);
-        }
-
-        private void Button_ClickSelectKeyStore(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
-            {
-                Filter = "keystore Files (*.keystore)|*.keystore"
-            };
-            var result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                this.Text_KeyStorePath.Text = openFileDialog.FileName;
-                keyStorePath = openFileDialog.FileName;
-                RecordManager.SaveRecord(c_PathRecord, "keyStorePath", keyStorePath);
-            }
+            RecordManager.SaveRecord(c_ConfigRecord, "SDKLibPath", SDKLibPath);
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace APKRepackageSDKTool
             ri.exportPath = exportPath;
 
             ChannelInfo ci = new ChannelInfo();
-            ci.keyStorePath = "C:\\Users\\GaiKai\\Desktop\\密钥\\fire.keystore";
-            ci.keyStorePassWord = "hello9123";
-            ci.keyStoreAlias = "huoyu";
+            ci.KeyStorePath = "C:\\Users\\GaiKai\\Desktop\\密钥\\fire.keystore";
+            ci.KeyStorePassWord = "hello9123";
+            ci.KeyStoreAlias = "huoyu";
 
             RepackageManager rm = new RepackageManager();
             rm.Repackage(ri, ci, RepackCallBack);
@@ -130,17 +130,54 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickClean(object sender, RoutedEventArgs e)
         {
+            line = 0;
+            output.Clear();
             Text_output.Text = "";
+        }
+
+        private void Button_ClickEditorGame(object sender, RoutedEventArgs e)
+        {
+            GameSetting gs = new GameSetting();
+            gs.Show();
+        }
+
+        private void Button_ClickDelete(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_ClickChannelConfig(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region 界面改变事件
+
+        private void ComboBox_gameList_Selected(object sender, RoutedEventArgs e)
+        {
+            RecordManager.SaveRecord(c_ConfigRecord, "index", ComboBox_gameList.SelectedIndex);
+            UpdateChannel();
         }
 
         #endregion
 
         #region 事件接收
+
+        int line = 0;
+        StringBuilder output = new StringBuilder();
+
+        float progress = 0;
+        string content;
+
         void RepackCallBack(float progress, string content, string output)
         {
             this.progress = progress;
             this.content = content;
-            this.output = output;
+
+            line++;
+            this.output.Append("["+line+"]"+ output+"\n");
 
             Action ac = new Action(UpdateContent);
             Dispatcher.BeginInvoke(ac);
@@ -154,19 +191,55 @@ namespace APKRepackageSDKTool
             Progress_repackage.Maximum = 5;
             Progress_repackage.Value = progress;
 
-            Text_output.Text = output;
+            Text_output.Text = output.ToString();
             Text_output.ScrollToEnd();
 
             Text_progressName.Content = content;
 
             Text_APKExportPath.Text = exportPath;
             Text_APKPath.Text = apkPath;
-            Text_KeyStorePath.Text = keyStorePath;
+            //Text_KeyStorePath.Text = keyStorePath;
             Text_SDKLibPath.Text = SDKLibPath;
         }
 
+        void UpdateChannel()
+        {
+            if(ComboBox_gameList.SelectedIndex != -1
+                && ComboBox_gameList.SelectedIndex < EditorData.GameList.Count
+                )
+            {
+                ListBox_channel.ItemsSource = EditorData.GameList[ComboBox_gameList.SelectedIndex].channelInfo;
+            }
+            else
+            {
+                ListBox_channel.ItemsSource = null;
+            }
+        }
+
+
+
         #endregion
 
+        private void CheckBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Controls.CheckBox cb = sender as System.Windows.Controls.CheckBox;
 
+            
+
+            Grid gd = cb.Parent as Grid;
+
+            int index = -1;
+            int count = VisualTreeHelper.GetChildrenCount(ListBox_channel);
+            for (int i = 0; i < count; i++)
+            {
+                var item = VisualTreeHelper.GetChild(ListBox_channel, i);
+                if (item == gd)
+                {
+                    index = i;
+                }
+            }
+
+            System.Windows.MessageBox.Show("双击了 " + cb.Tag);
+        }
     }
 }
