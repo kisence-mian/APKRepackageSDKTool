@@ -21,7 +21,8 @@ namespace APKRepackageSDKTool
         static ChannelList currentGameChannelList;
         static ChannelInfo currentChannel;
 
-        static TotalSDKConfig totalSDKInfo;
+        static TotalSDKConfig totalSDKConfig;
+        static SDKConfig currentSDKConfig;
 
         static string sdkLibPath;
 
@@ -76,19 +77,19 @@ namespace APKRepackageSDKTool
         {
             get
             {
-                if(totalSDKInfo == null)
+                if(totalSDKConfig == null)
                 {
                     UpdateTotalSDKInfo();
                 }
-                return totalSDKInfo;
+                return totalSDKConfig;
             }
 
             set
             {
-                totalSDKInfo = value;
-                if(totalSDKInfo != null)
+                totalSDKConfig = value;
+                if(totalSDKConfig != null)
                 {
-                    totalSDKInfo.Change();
+                    totalSDKConfig.Change();
                 }
             }
         }
@@ -104,6 +105,20 @@ namespace APKRepackageSDKTool
             {
                 sdkLibPath = value;
                 RecordManager.SaveRecord(c_ConfigRecord, "SDKLibPath", sdkLibPath);
+            }
+        }
+
+        public static SDKConfig CurrentSDKConfig
+        {
+            get => currentSDKConfig;
+
+            set
+            {
+                currentSDKConfig = value;
+                if(currentSDKConfig != null)
+                {
+                    currentSDKConfig.Change();
+                }
             }
         }
 
@@ -201,13 +216,13 @@ namespace APKRepackageSDKTool
 
             if (!string.IsNullOrEmpty(SdkLibPath))
             {
-                if(totalSDKInfo == null)
+                if(totalSDKConfig == null)
                 {
-                    totalSDKInfo = new TotalSDKConfig();
+                    totalSDKConfig = new TotalSDKConfig();
                 }
                 else
                 {
-                    totalSDKInfo.Clear();
+                    totalSDKConfig.Clear();
                 }
 
                 string[] dires = Directory.GetDirectories(SdkLibPath);
@@ -222,15 +237,15 @@ namespace APKRepackageSDKTool
 
                         SDKConfig info = LoadSDKConfig(configPath);
 
-                        totalSDKInfo.Add(info);
+                        totalSDKConfig.Add(info);
                     }
                 }
 
-                TotalSDKInfo = totalSDKInfo;
+                TotalSDKInfo = totalSDKConfig;
             }
             else
             {
-                totalSDKInfo = null;
+                totalSDKConfig = null;
             }
         }
 
@@ -246,6 +261,17 @@ namespace APKRepackageSDKTool
         {
             string content = Serializer.Serialize(config);
             FileTool.WriteStringByFile(path, content);
+        }
+
+        public static void SetCurrentSDKConfig(string sdkName)
+        {
+            for (int i = 0; i < totalSDKConfig.Count; i++)
+            {
+                if(totalSDKConfig[i].sdkName == sdkName)
+                {
+                    CurrentSDKConfig = totalSDKConfig[i];
+                }
+            }
         }
         #endregion
     }
@@ -339,12 +365,20 @@ namespace APKRepackageSDKTool
     /// <summary>
     /// SDKConfig 是SDK的设置
     /// </summary>
-    public class SDKConfig
+    public class SDKConfig : INotifyCollectionChanged
     {
         public string sdkName;
         public Dictionary<string, string> sdkConfig;
 
         public string SdkName { get => sdkName; set => sdkName = value; }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public void Change()
+        {
+            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+            CollectionChanged?.Invoke(this, e);
+        }
     }
 
     /// <summary>

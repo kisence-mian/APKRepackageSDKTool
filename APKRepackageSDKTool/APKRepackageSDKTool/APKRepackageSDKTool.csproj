@@ -71,6 +71,9 @@
     <Compile Include="src\PathTool.cs" />
     <Compile Include="src\RecordManager.cs" />
     <Compile Include="src\RepackageManager.cs" />
+    <Compile Include="UI\SdkEditorWindow.xaml.cs">
+      <DependentUpon>SdkEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="ChannelEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,6 +94,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\SdkEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -126,8 +133,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

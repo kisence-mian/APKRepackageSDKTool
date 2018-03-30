@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APKRepackageSDKTool"
         mc:Ignorable="d"
-        Title="渠道设置编辑器" Height="451.449" Width="808.25">
+        Title="渠道设置" Height="451.449" Width="808.25">
     <Grid x:Name="Grid_root">
         <Label Content="渠道名" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox Height="18" Margin="61,17,0,0" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172"/>
@@ -50,10 +50,15 @@
             <TabItem Header="SDK">
                 <Grid Background="#FFF9F9F9">
                     <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="242">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid >
-                                    <CheckBox Content="{Binding Path=SdkName}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}"/>
+                                    <CheckBox Content="{Binding Path=SdkName}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick"  Tag="{Binding Path=SdkName}"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

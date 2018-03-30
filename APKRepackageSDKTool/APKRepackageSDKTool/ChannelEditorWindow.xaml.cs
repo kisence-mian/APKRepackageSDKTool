@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APKRepackageSDKTool.UI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -108,9 +109,15 @@ namespace APKRepackageSDKTool
             }
         }
 
-        private void CheckBox_MouseDoubleClick(object sender, RoutedEventArgs e)
+        private void CheckBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            CheckBox cb = sender as CheckBox;
+            string sdkName = (string)cb.Tag;
 
+            EditorData.SetCurrentSDKConfig(sdkName);
+
+            SdkEditorWindow sew = new SdkEditorWindow();
+            sew.ShowDialog();
         }
     }
 }
