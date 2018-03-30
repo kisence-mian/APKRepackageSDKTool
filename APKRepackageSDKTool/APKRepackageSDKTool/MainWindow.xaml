@@ -30,14 +30,14 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid >
-                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick"/>
-                                <Button Content="删除" Click="Button_ClickDelete" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding}"/>
+                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}"/>
+                                <Button Content="删除" Click="Button_ClickDeleteChannel" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Border>
-            <Button Content="渠道设置" Margin="0,0,90,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClickChannelConfig"/>
+            <Button Content="新增渠道" Margin="0,0,90,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClickAddChannel"/>
             <Label Content="渠道选择" Margin="10,123,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
             <Label Content="项目选择" Margin="10,98,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
             <ComboBox x:Name="ComboBox_gameList" HorizontalAlignment="Left" Margin="91,100,0,0" VerticalAlignment="Top" Width="251" 
@@ -46,6 +46,7 @@
                       SelectionChanged="ComboBox_gameList_Selected"
                       />
             <Button Content="编辑" HorizontalAlignment="Left" Margin="347,101,0,0" VerticalAlignment="Top" Width="75" Click="Button_ClickEditorGame"/>
+            <TextBox x:Name="Text_AddChannel" Margin="10,0,171,10" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="30" VerticalAlignment="Bottom"/>
         </Grid>
         <ProgressBar x:Name="Progress_repackage" Margin="10,0,10,10" Height="17" VerticalAlignment="Bottom"/>
         <Label x:Name="Text_progressName" Content="准备" Margin="10,0,10,7" Height="24" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>

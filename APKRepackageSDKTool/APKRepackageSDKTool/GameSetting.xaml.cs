@@ -32,7 +32,6 @@ namespace APKRepackageSDKTool
             {
                 GameInfo gi = new GameInfo();
                 gi.GameName = TextBox_GameName.Text;
-                gi.channelInfo = new List<ChannelInfo>();
 
                 EditorData.GameList.Add(gi);
                 EditorData.GameList = EditorData.GameList;

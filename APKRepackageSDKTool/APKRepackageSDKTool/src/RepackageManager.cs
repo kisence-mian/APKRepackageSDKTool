@@ -47,6 +47,7 @@ namespace APKRepackageSDKTool
                 string fileName = FileTool.GetFileNameByPath(repackageInfo.apkPath);
                 string aimPath = outPath + "\\" + FileTool.RemoveExpandName(fileName);
                 string apkPath = aimPath + "\\dist\\" + fileName;
+                string finalPath = repackageInfo.exportPath + "\\" + fileName;
 
                 CmdService cmd = new CmdService(OutPutCallBack);
                 ChannelTool channelTool = new ChannelTool(OutPutCallBack);
@@ -57,7 +58,7 @@ namespace APKRepackageSDKTool
                 
                 //执行对应的文件操作
                 MakeProgress("执行对应的文件操作");
-                channelTool.ChannelLogic(aimPath, null);
+                channelTool.ChannelLogic(aimPath, channelInfo);
 
                 //重打包
                 MakeProgress("重打包");
@@ -69,19 +70,23 @@ namespace APKRepackageSDKTool
                     //+ " -tsa https://timestamp.geotrust.com/tsa"
                     + " -digestalg SHA1 -sigalg MD5withRSA"
                     + " -storepass " + channelInfo.KeyStorePassWord
-                    + " -keystore " + channelInfo.KeyStorePath 
+                    + " -keystore " + channelInfo.KeyStorePath
                     + " " + apkPath
                     + " " + channelInfo.KeyStoreAlias
                     );
 
+                //进行字节对齐并导出到最终目录
+                MakeProgress("进行字节对齐并导出到最终目录");
+                cmd.Execute("zipalign -f -v 4 " + apkPath + " " + finalPath);
+
                 //拷贝到导出目录
-                MakeProgress("拷贝到导出目录");
-                cmd.Execute("copy " + apkPath + " " + repackageInfo.exportPath + "\\" + fileName +" /Y");
+                //MakeProgress("拷贝到导出目录");
+                //cmd.Execute("copy " + apkPath + " " + repackageInfo.exportPath + "\\" + fileName +" /Y");
 
                 MakeProgress("删除临时目录");
                 //删除临时目录
-                FileTool.DeleteDirectory(aimPath);
-                Directory.Delete(aimPath);
+                //FileTool.DeleteDirectory(aimPath);
+                //Directory.Delete(aimPath);
 
                 MakeProgress("完成");
             }
