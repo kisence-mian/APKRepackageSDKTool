@@ -21,12 +21,12 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string c_ConfigRecord = "Config";
+
 
         string apkPath;
         string keyStorePath;
         string exportPath;
-        string SDKLibPath;
+
 
         List<ChannelInfo> currentGameChannelList = new List<ChannelInfo>();
 
@@ -44,16 +44,16 @@ namespace APKRepackageSDKTool
         {
             InitializeComponent();
 
-            apkPath = RecordManager.GetRecord(c_ConfigRecord, "apkPath", "null");
-            keyStorePath = RecordManager.GetRecord(c_ConfigRecord, "keyStorePath", "null");
-            exportPath = RecordManager.GetRecord(c_ConfigRecord, "exportPath", "null");
-            SDKLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", "null");
+            apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
+            keyStorePath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "keyStorePath", "null");
+            exportPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "exportPath", "null");
+            
 
             UpdateContent();
 
             //展示到游戏选择界面上
             ComboBox_gameList.ItemsSource = EditorData.GameList;
-            ComboBox_gameList.SelectedIndex = RecordManager.GetRecord(c_ConfigRecord, "index", -1);
+            ComboBox_gameList.SelectedIndex = RecordManager.GetRecord(EditorData.c_ConfigRecord, "index", -1);
 
             //再显示该游戏的所有渠道
             UpdateChannel();
@@ -74,7 +74,7 @@ namespace APKRepackageSDKTool
             {
                 this.Text_APKPath.Text = openFileDialog.FileName;
                 apkPath = openFileDialog.FileName;
-                RecordManager.SaveRecord(c_ConfigRecord, "apkPath", apkPath);
+                RecordManager.SaveRecord(EditorData.c_ConfigRecord, "apkPath", apkPath);
             }
         }
 
@@ -90,7 +90,7 @@ namespace APKRepackageSDKTool
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_APKExportPath.Text = m_Dir;
             exportPath = m_Dir;
-            RecordManager.SaveRecord(c_ConfigRecord, "exportPath", exportPath);
+            RecordManager.SaveRecord(EditorData.c_ConfigRecord, "exportPath", exportPath);
         }
 
         private void Button_ClickSelectSDKLibPath(object sender, RoutedEventArgs e)
@@ -104,8 +104,8 @@ namespace APKRepackageSDKTool
             }
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_SDKLibPath.Text = m_Dir;
-            SDKLibPath = m_Dir;
-            RecordManager.SaveRecord(c_ConfigRecord, "SDKLibPath", SDKLibPath);
+            EditorData.SdkLibPath = m_Dir;
+
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace APKRepackageSDKTool
 
         private void ComboBox_gameList_Selected(object sender, RoutedEventArgs e)
         {
-            RecordManager.SaveRecord(c_ConfigRecord, "index", ComboBox_gameList.SelectedIndex);
+            RecordManager.SaveRecord(EditorData.c_ConfigRecord, "index", ComboBox_gameList.SelectedIndex);
             UpdateChannel();
         }
 
@@ -242,8 +242,7 @@ namespace APKRepackageSDKTool
 
             Text_APKExportPath.Text = exportPath;
             Text_APKPath.Text = apkPath;
-            //Text_KeyStorePath.Text = keyStorePath;
-            Text_SDKLibPath.Text = SDKLibPath;
+            Text_SDKLibPath.Text = EditorData.SdkLibPath;
         }
 
         void UpdateChannel()

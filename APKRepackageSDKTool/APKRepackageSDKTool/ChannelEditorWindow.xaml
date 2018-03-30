@@ -18,10 +18,10 @@
                         <Button Content="浏览" Margin="0,17,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="66" Click="Button_Click"/>
                         <Label Content="KeyStorePassWord" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
                         <PasswordBox x:Name="PasswordBox_keyStore" Margin="133,40,80,0" VerticalAlignment="Top" PasswordChar="{Binding KeyStorePassWord, Mode=TwoWay}"/>
-                        
+
                         <Label Content="Alias" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top"/>
                         <TextBox Height="18" Margin="133,65,80,0" TextWrapping="Wrap" Text="{Binding KeyStoreAlias, Mode=TwoWay}" VerticalAlignment="Top"/>
-                        
+
                         <Label Content="AliasPassWord" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top"/>
                         <PasswordBox x:Name="PasswordBox_alias" Margin="133,88,80,0" VerticalAlignment="Top" PasswordChar="{Binding KeyStorePassWord, Mode=TwoWay}"/>
                     </Grid>
@@ -49,7 +49,17 @@
             </TabItem>
             <TabItem Header="SDK">
                 <Grid Background="#FFF9F9F9">
-
+                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="242">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <CheckBox Content="{Binding Path=SdkName}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Content="新增" HorizontalAlignment="Left" Margin="177,314,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_AddSDK"/>
+                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Height="19" Margin="10,314,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="162"/>
                 </Grid>
             </TabItem>
             <TabItem Header="详细信息">

@@ -413,6 +413,12 @@ public class FileTool
         }
     }
 
+    public static string GetDirectoryName(string path)
+    {
+        string[] paths = path.Split('\\');
+        return paths[paths.Length - 1];
+    }
+
     #endregion
 
     #region 读操作

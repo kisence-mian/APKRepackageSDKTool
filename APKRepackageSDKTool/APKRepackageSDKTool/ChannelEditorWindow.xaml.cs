@@ -27,6 +27,8 @@ namespace APKRepackageSDKTool
 
             PasswordBox_keyStore.Password = EditorData.CurrentChannel.KeyStorePassWord;
             PasswordBox_alias.Password = EditorData.CurrentChannel.KeyStoreAliasPassWord;
+
+            ListBox_SDKList.ItemsSource = EditorData.TotalSDKInfo;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -80,6 +82,16 @@ namespace APKRepackageSDKTool
 
             EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
             MessageBox.Show("保存成功");
+        }
+
+        private void Button_Click_AddSDK(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_MouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

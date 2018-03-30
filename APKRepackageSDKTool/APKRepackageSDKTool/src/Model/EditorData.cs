@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +11,19 @@ namespace APKRepackageSDKTool
 
     public static class EditorData
     {
-        const string c_GameRecord = "Games";
+        static Deserializer des = new Deserializer();
+
+        public const string c_ConfigRecord = "Config";
+        public const string c_GameRecord = "Games";
 
         private static TotalGameData gameList;
 
         static ChannelList currentGameChannelList;
         static ChannelInfo currentChannel;
+
+        static TotalSDKConfig totalSDKInfo;
+
+        static string sdkLibPath;
 
         #region 属性
 
@@ -64,11 +72,43 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public static TotalSDKConfig TotalSDKInfo
+        {
+            get
+            {
+                if(totalSDKInfo == null)
+                {
+                    GetTotalSDKInfo();
+                }
+                return totalSDKInfo;
+            }
+
+            set
+            {
+                totalSDKInfo = value;
+                totalSDKInfo.Change();
+            }
+        }
+
+        public static string SdkLibPath
+        {
+            get {
+                JudgeInit();
+                return sdkLibPath;
+            }
+
+            set
+            {
+                sdkLibPath = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "SDKLibPath", sdkLibPath);
+            }
+        }
+
         #endregion
 
         #region 初始化
         static bool isInit = false;
-        public static void JudgeInit()
+        static void JudgeInit()
         {
             if(!isInit)
             {
@@ -83,14 +123,9 @@ namespace APKRepackageSDKTool
                     gameList.Add(item);
                 }
 
-                //GameInfo gi = new GameInfo();
-                //gi.GameName = "星空遇奇";
+                SdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", "null");
 
-                //GameInfo gi2 = new GameInfo();
-                //gi2.GameName = "元素大作战";
-
-                //gameList.Add(gi);
-                //gameList.Add(gi2);
+                GetTotalSDKInfo();
             }
         }
 
@@ -155,6 +190,52 @@ namespace APKRepackageSDKTool
 
         #endregion
 
+        #region SDKConfig
+
+        static void GetTotalSDKInfo()
+        {
+            //遍历SDKPath下的全部文件夹，排除Config文件夹
+
+            if (!string.IsNullOrEmpty(SdkLibPath))
+            {
+                totalSDKInfo = new TotalSDKConfig();
+
+                string[] dires = Directory.GetDirectories(SdkLibPath);
+                for (int i = 0; i < dires.Length; i++)
+                {
+                    if (!dires[i].Contains("Config")
+                        && !dires[i].Contains("git")
+                        )
+                    {
+                        //读取每个文件夹中的config.json，以获取对应的设置要求
+                        string configPath = dires[i] + "\\config.json";
+
+                        SDKConfig info = LoadSDKConfig(configPath);
+
+                        totalSDKInfo.Add(info);
+                    }
+                }
+            }
+            else
+            {
+                totalSDKInfo = null;
+            }
+        }
+
+        static SDKConfig LoadSDKConfig(string path)
+        {
+            string content = FileTool.ReadStringByFile(path);
+            SDKConfig config = des.Deserialize<SDKConfig>(content);
+
+            return config;
+        }
+
+        static void SaveSDKConfig(string path, SDKConfig config)
+        {
+            string content = Serializer.Serialize(config);
+            FileTool.WriteStringByFile(path, content);
+        }
+        #endregion
     }
 
     #region 声明
@@ -232,10 +313,39 @@ namespace APKRepackageSDKTool
         }
     }
 
+    public class TotalSDKConfig : List<SDKConfig>, INotifyCollectionChanged
+    {
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public void Change()
+        {
+            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+            CollectionChanged(this, e);
+        }
+    }
+
+    /// <summary>
+    /// SDKConfig 是SDK的设置
+    /// </summary>
+    public class SDKConfig
+    {
+        public string sdkName;
+        public Dictionary<string, string> sdkConfig;
+
+        public string SdkName { get => sdkName; set => sdkName = value; }
+    }
+
+    /// <summary>
+    /// SDKInfo 是用户的设置
+    /// </summary>
     public class SDKInfo
     {
-        public string SDKName;
-        public Dictionary<string, string> SDKConfig;
+        public string sdkName;
+        private bool isChecked;
+        public Dictionary<string, string> sdkConfig;
+
+        public string SdkName { get => sdkName; set => sdkName = value; }
+        public bool IsChecked { get => isChecked; set => isChecked = value; }
     }
 
     #endregion
