@@ -78,7 +78,7 @@ namespace APKRepackageSDKTool
             {
                 if(totalSDKInfo == null)
                 {
-                    GetTotalSDKInfo();
+                    UpdateTotalSDKInfo();
                 }
                 return totalSDKInfo;
             }
@@ -86,7 +86,10 @@ namespace APKRepackageSDKTool
             set
             {
                 totalSDKInfo = value;
-                totalSDKInfo.Change();
+                if(totalSDKInfo != null)
+                {
+                    totalSDKInfo.Change();
+                }
             }
         }
 
@@ -125,7 +128,7 @@ namespace APKRepackageSDKTool
 
                 SdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", "null");
 
-                GetTotalSDKInfo();
+                UpdateTotalSDKInfo();
             }
         }
 
@@ -192,13 +195,20 @@ namespace APKRepackageSDKTool
 
         #region SDKConfig
 
-        static void GetTotalSDKInfo()
+        public static void UpdateTotalSDKInfo()
         {
             //遍历SDKPath下的全部文件夹，排除Config文件夹
 
             if (!string.IsNullOrEmpty(SdkLibPath))
             {
-                totalSDKInfo = new TotalSDKConfig();
+                if(totalSDKInfo == null)
+                {
+                    totalSDKInfo = new TotalSDKConfig();
+                }
+                else
+                {
+                    totalSDKInfo.Clear();
+                }
 
                 string[] dires = Directory.GetDirectories(SdkLibPath);
                 for (int i = 0; i < dires.Length; i++)
@@ -215,6 +225,8 @@ namespace APKRepackageSDKTool
                         totalSDKInfo.Add(info);
                     }
                 }
+
+                TotalSDKInfo = totalSDKInfo;
             }
             else
             {
@@ -230,7 +242,7 @@ namespace APKRepackageSDKTool
             return config;
         }
 
-        static void SaveSDKConfig(string path, SDKConfig config)
+        public static void SaveSDKConfig(string path, SDKConfig config)
         {
             string content = Serializer.Serialize(config);
             FileTool.WriteStringByFile(path, content);
@@ -320,7 +332,7 @@ namespace APKRepackageSDKTool
         public void Change()
         {
             NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            CollectionChanged(this, e);
+            CollectionChanged?.Invoke(this, e);
         }
     }
 

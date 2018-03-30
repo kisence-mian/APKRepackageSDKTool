@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,7 +87,25 @@ namespace APKRepackageSDKTool
 
         private void Button_Click_AddSDK(object sender, RoutedEventArgs e)
         {
+            if(!string.IsNullOrEmpty( TextBox_SDKName.Text)
+                && !string.IsNullOrEmpty(EditorData.SdkLibPath)
+                )
+            {
+                string sdkName = TextBox_SDKName.Text;
+                string path = EditorData.SdkLibPath + "\\" + sdkName;
 
+                //在SdkLibPath新建一个文件夹
+                DirectoryInfo dir = new DirectoryInfo(path);
+                dir.Create();//自行判断一下是否存在。
+
+                //存放一个config文件
+                SDKConfig config = new SDKConfig();
+                config.SdkName = sdkName;
+                EditorData.SaveSDKConfig(path + "\\config.json", config);
+
+                //更新SDKList
+                EditorData.UpdateTotalSDKInfo();
+            }
         }
 
         private void CheckBox_MouseDoubleClick(object sender, RoutedEventArgs e)

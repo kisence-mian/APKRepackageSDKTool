@@ -21,12 +21,9 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
-
-
         string apkPath;
         string keyStorePath;
         string exportPath;
-
 
         List<ChannelInfo> currentGameChannelList = new List<ChannelInfo>();
 
