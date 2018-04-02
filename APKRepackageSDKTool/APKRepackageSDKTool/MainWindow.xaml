@@ -31,6 +31,7 @@
                         <DataTemplate>
                             <Grid >
                                 <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}"/>
+                                <Button Content="编辑" Click="Button_ClickEditor" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}" Margin="0,0,50,0"/>
                                 <Button Content="删除" Click="Button_ClickDeleteChannel" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}"/>
                             </Grid>
                         </DataTemplate>

@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using static APKRepackageSDKTool.SDKConfig;
 
 namespace APKRepackageSDKTool
 {
@@ -235,7 +237,7 @@ namespace APKRepackageSDKTool
                         //读取每个文件夹中的config.json，以获取对应的设置要求
                         string configPath = dires[i] + "\\config.json";
 
-                        SDKConfig info = LoadSDKConfig(configPath);
+                        SDKConfig info = LoadSDKConfig(FileTool.GetDirectoryName(dires[i]),configPath);
 
                         totalSDKConfig.Add(info);
                     }
@@ -249,17 +251,33 @@ namespace APKRepackageSDKTool
             }
         }
 
-        static SDKConfig LoadSDKConfig(string path)
+        static SDKConfig LoadSDKConfig(string configName,string path)
         {
             string content = FileTool.ReadStringByFile(path);
-            SDKConfig config = des.Deserialize<SDKConfig>(content);
+            List < KeyValue > list = des.Deserialize<List<KeyValue>>(content);
+            SDKConfig config = new SDKConfig();
+            config.SdkName = configName;
+
+            foreach (var item in list)
+            {
+                config.Add(item);
+            }
 
             return config;
         }
 
-        public static void SaveSDKConfig(string path, SDKConfig config)
+        public static void SaveSDKConfig(SDKConfig config)
         {
-            string content = Serializer.Serialize(config);
+            string path = SdkLibPath + "\\" + config.SdkName + "\\config.json";
+
+            List<KeyValue> list = new List<KeyValue>();
+
+            foreach (var item in config)
+            {
+                list.Add(item);
+            }
+
+            string content = Serializer.Serialize(list);
             FileTool.WriteStringByFile(path, content);
         }
 
@@ -328,7 +346,7 @@ namespace APKRepackageSDKTool
         public string appIcon;
         public string appBanner;
 
-        public List<SDKInfo> sdkList;
+        public List<SDKInfo> sdkList = new List<SDKInfo>();
 
         public string Name { get => channelName; set => channelName = value; }
         public bool IsChecked { get => isChecked; set => isChecked = value; }
@@ -349,6 +367,19 @@ namespace APKRepackageSDKTool
             NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
             CollectionChanged?.Invoke(this, e);
         }
+
+        public SDKInfo GetSDKInfo(string sdkName)
+        {
+            for (int i = 0; i < sdkList.Count; i++)
+            {
+                if(sdkList[i].sdkName == sdkName)
+                {
+                    return sdkList[i];
+                }
+            }
+
+            return null;
+        }
     }
 
     public class TotalSDKConfig : List<SDKConfig>, INotifyCollectionChanged
@@ -360,17 +391,96 @@ namespace APKRepackageSDKTool
             NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
             CollectionChanged?.Invoke(this, e);
         }
+
+        public SDKConfig GetSDKConfig(string sdkName)
+        {
+            for (int i = 0; i < this.Count; i++)
+            {
+                if(this[i].sdkName == sdkName)
+                {
+                    return this[i];
+                }
+            }
+
+            throw new Exception("找不到SDK设置！ " + sdkName);
+        }
+    }
+
+
+    public class KeyValue
+    {
+        public string key;
+        public string value;
+
+        public string Key { get => key; set => key = value; }
+        public string Value { get => value; set => this.value = value; }
+
+        public KeyValue DeepCopy()
+        {
+            KeyValue cp = new KeyValue();
+            cp.key = key;
+            cp.value = value;
+
+            return cp;
+        }
     }
 
     /// <summary>
     /// SDKConfig 是SDK的设置
     /// </summary>
-    public class SDKConfig : INotifyCollectionChanged
+    public class SDKConfig : List<KeyValue> , INotifyCollectionChanged
     {
         public string sdkName;
-        public Dictionary<string, string> sdkConfig;
+        public List<string> permissionList;
 
         public string SdkName { get => sdkName; set => sdkName = value; }
+
+        public bool IsChecked
+        {
+            get
+            {
+                return EditorData.CurrentChannel.GetSDKInfo(SdkName) != null;
+            }
+
+            set
+            {
+                if(value)
+                {
+                    if(!IsChecked)
+                    {
+                        SDKInfo info = new SDKInfo();
+                        info.sdkName = sdkName;
+                        info.sdkConfig = new List<KeyValue>();
+
+                        for (int i = 0; i < Count; i++)
+                        {
+                            info.sdkConfig.Add(this[i].DeepCopy());
+                        }
+
+                        EditorData.CurrentChannel.sdkList.Add(info);
+                    }
+                }
+                else
+                {
+                    if(IsChecked)
+                    {
+                        MessageBoxResult result = MessageBox.Show("确定要移除这个SDK吗？\n所有填写的配置都会丢失", "警告", MessageBoxButton.YesNo);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            for (int i = 0; i < EditorData.CurrentChannel.sdkList.Count; i++)
+                            {
+                                if (EditorData.CurrentChannel.sdkList[i].sdkName == sdkName)
+                                {
+                                    EditorData.CurrentChannel.sdkList.RemoveAt(i);
+                                    i--;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -387,11 +497,9 @@ namespace APKRepackageSDKTool
     public class SDKInfo
     {
         public string sdkName;
-        private bool isChecked;
-        public Dictionary<string, string> sdkConfig;
+        public List<KeyValue> sdkConfig;
 
         public string SdkName { get => sdkName; set => sdkName = value; }
-        public bool IsChecked { get => isChecked; set => isChecked = value; }
     }
 
     #endregion

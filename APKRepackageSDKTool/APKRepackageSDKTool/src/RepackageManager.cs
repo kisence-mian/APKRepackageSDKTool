@@ -66,18 +66,18 @@ namespace APKRepackageSDKTool
 
                 //进行签名
                 MakeProgress("进行签名");
-                cmd.Execute("jarsigner -verbose"
-                    //+ " -tsa https://timestamp.geotrust.com/tsa"
-                    + " -digestalg SHA1 -sigalg MD5withRSA"
-                    + " -storepass " + channelInfo.KeyStorePassWord
-                    + " -keystore " + channelInfo.KeyStorePath
-                    + " " + apkPath
-                    + " " + channelInfo.KeyStoreAlias
-                    );
+                //cmd.Execute("jarsigner -verbose"
+                //    //+ " -tsa https://timestamp.geotrust.com/tsa"
+                //    + " -digestalg SHA1 -sigalg MD5withRSA"
+                //    + " -storepass " + channelInfo.KeyStorePassWord
+                //    + " -keystore " + channelInfo.KeyStorePath
+                //    + " " + apkPath
+                //    + " " + channelInfo.KeyStoreAlias
+                //    );
 
                 //进行字节对齐并导出到最终目录
                 MakeProgress("进行字节对齐并导出到最终目录");
-                cmd.Execute("zipalign -f -v 4 " + apkPath + " " + finalPath);
+                //cmd.Execute("zipalign -f -v 4 " + apkPath + " " + finalPath);
 
                 //拷贝到导出目录
                 //MakeProgress("拷贝到导出目录");

@@ -1,6 +1,7 @@
 ﻿using APKRepackageSDKTool.UI;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,16 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class ChannelEditorWindow : Window
     {
+        SelectInfo selectInfo = new SelectInfo();
+
+        private SelectInfo CurrentSelectInfo { get => selectInfo;
+            set
+            {
+                selectInfo = value;
+                selectInfo.Change();
+            }
+        }
+
         public ChannelEditorWindow()
         {
             InitializeComponent();
@@ -31,7 +42,10 @@ namespace APKRepackageSDKTool
             PasswordBox_alias.Password = EditorData.CurrentChannel.KeyStoreAliasPassWord;
 
             ListBox_SDKList.ItemsSource = EditorData.TotalSDKInfo;
+            ListBox_SdkConfigList.ItemsSource = CurrentSelectInfo;
         }
+
+        #region 点击事件
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -93,25 +107,22 @@ namespace APKRepackageSDKTool
                 )
             {
                 string sdkName = TextBox_SDKName.Text;
-                string path = EditorData.SdkLibPath + "\\" + sdkName;
-
-                //在SdkLibPath新建一个文件夹
-                DirectoryInfo dir = new DirectoryInfo(path);
-                dir.Create();//自行判断一下是否存在。
 
                 //存放一个config文件
                 SDKConfig config = new SDKConfig();
                 config.SdkName = sdkName;
-                EditorData.SaveSDKConfig(path + "\\config.json", config);
+                EditorData.SaveSDKConfig (config);
 
                 //更新SDKList
                 EditorData.UpdateTotalSDKInfo();
+
+                TextBox_SDKName.Text = "";
             }
         }
 
-        private void CheckBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Button_ClickEditorSDK(object sender, RoutedEventArgs e)
         {
-            CheckBox cb = sender as CheckBox;
+            Button cb = sender as Button;
             string sdkName = (string)cb.Tag;
 
             EditorData.SetCurrentSDKConfig(sdkName);
@@ -119,5 +130,48 @@ namespace APKRepackageSDKTool
             SdkEditorWindow sew = new SdkEditorWindow();
             sew.ShowDialog();
         }
+
+
+        private void Button_ClickSDKView(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string sdkName = (string)btn.Tag;
+
+            SDKInfo info = EditorData.CurrentChannel.GetSDKInfo(sdkName);
+            if (info != null)
+            {
+                CurrentSelectInfo.Clear();
+
+                for (int i = 0; i < info.sdkConfig.Count; i++)
+                {
+                    CurrentSelectInfo.Add(info.sdkConfig[i]);
+                }
+            }
+            else
+            {
+                CurrentSelectInfo.Clear();
+            }
+
+            CurrentSelectInfo = CurrentSelectInfo;
+        }
+
+        #endregion
+
+        #region UI逻辑
+
+        #endregion
+
+        class SelectInfo : List<KeyValue>, INotifyCollectionChanged
+        {
+            public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+            public void Change()
+            {
+                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+                CollectionChanged?.Invoke(this, e);
+            }
+        }
+
     }
 }

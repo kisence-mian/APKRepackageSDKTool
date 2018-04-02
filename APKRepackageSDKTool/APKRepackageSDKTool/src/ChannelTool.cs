@@ -47,7 +47,11 @@ namespace APKRepackageSDKTool
                     ChangeAppBanner(filePath, info.AppBanner);
                 }
 
-                OutPut("放入SDK");
+                for (int i = 0; i < info.sdkList.Count; i++)
+                {
+                    OutPut("放入SDK " + info.sdkList[i].sdkName);
+                    PutSDK(filePath, info.sdkList[i]);
+                }
 
                 OutPut("整合AndroidManifest.xml 清单文件");
             }
@@ -155,7 +159,68 @@ namespace APKRepackageSDKTool
             return b;
         }
 
-        #endregion 
+        #endregion
+
+        #region 放入SDK
+
+        void PutSDK(string filePath,SDKInfo info)
+        {
+            //添加String字段
+            for (int i = 0; i < info.sdkConfig.Count; i++)
+            {
+                KeyValue kv = info.sdkConfig[i];
+                AddStringConfig(filePath, info.sdkName + "_"+ kv.key, kv.value);
+            }
+
+            //添加SDKLib
+
+            //调整权限
+
+        }
+
+        void AddStringConfig(string filePath,string key,string value)
+        {
+            string xmlPath = filePath + "\\res\\values\\strings.xml";
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+
+            XmlNode resources = xmlDoc.SelectSingleNode("resources");
+
+            XmlElement nd = xmlDoc.CreateElement("name");
+            nd.SetAttribute("string", key);
+            nd.InnerText = value;
+
+            resources.AppendChild(nd);
+
+            xmlDoc.Save(xmlPath);
+        }
+
+        /// <summary>
+        /// 添加权限
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="Permission"></param>
+        void AddPermission(string filePath, string permission)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+
+            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
+            XmlElement nodeEle = (XmlElement)manifest;
+
+            XmlElement nd = xmlDoc.CreateElement("uses-permission");
+            nd.SetAttribute("android:name", "android.permission." + permission);
+
+            //nodeEle.SetAttribute("package", packageName);
+            xmlDoc.Save(xmlPath);
+        }
+
+        #endregion
     }
 
 }

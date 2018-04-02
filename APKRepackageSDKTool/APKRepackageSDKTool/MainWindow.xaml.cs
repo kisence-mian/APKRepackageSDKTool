@@ -192,6 +192,16 @@ namespace APKRepackageSDKTool
             cew.ShowDialog();
         }
 
+        private void Button_ClickEditor(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Button cb = sender as System.Windows.Controls.Button;
+
+            EditorData.SetCurrentChannel((string)cb.Tag);
+
+            ChannelEditorWindow cew = new ChannelEditorWindow();
+            cew.ShowDialog();
+        }
+
         #endregion
 
         #region 界面改变事件
@@ -256,6 +266,7 @@ namespace APKRepackageSDKTool
                 ListBox_channel.ItemsSource = null;
             }
         }
+
 
         #endregion
 

@@ -49,7 +49,7 @@
             </TabItem>
             <TabItem Header="SDK">
                 <Grid Background="#FFF9F9F9">
-                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="242">
+                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="239" >
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -58,13 +58,30 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid >
-                                    <CheckBox Content="{Binding Path=SdkName}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick"  Tag="{Binding Path=SdkName}"/>
+                                    <CheckBox Content="{Binding Path=SdkName}" IsChecked="{Binding Path=IsChecked}" Tag="{Binding Path=SdkName}"/>
+                                    <Button Content="查看" HorizontalAlignment="Right" Tag="{Binding Path=SdkName}" Click="Button_ClickSDKView" Width="40" Margin="0,0,50,0"/>
+                                    <Button Content="编辑" HorizontalAlignment="Right" Tag="{Binding Path=SdkName}" Click="Button_ClickEditorSDK" Width="40"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="新增" HorizontalAlignment="Left" Margin="177,314,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_AddSDK"/>
-                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Height="19" Margin="10,314,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="162"/>
+                    <Button Content="新增" HorizontalAlignment="Left" Margin="174,314,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_AddSDK"/>
+                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Height="19" Margin="10,314,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="159"/>
+                    <ListBox x:Name="ListBox_SdkConfigList" HorizontalAlignment="Left" Height="299" Margin="254,10,0,0" VerticalAlignment="Top" Width="233">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <Label Content="{Binding Path=Key,Mode=TwoWay}" Width="140" HorizontalAlignment="Left" />
+                                    <TextBox Text="{Binding Path=Value,Mode=TwoWay}"  HorizontalAlignment="Right" Width="130"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
             <TabItem Header="详细信息">
