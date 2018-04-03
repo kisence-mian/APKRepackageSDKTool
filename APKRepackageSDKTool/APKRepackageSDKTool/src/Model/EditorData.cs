@@ -254,14 +254,17 @@ namespace APKRepackageSDKTool
         static SDKConfig LoadSDKConfig(string configName,string path)
         {
             string content = FileTool.ReadStringByFile(path);
-            List < KeyValue > list = des.Deserialize<List<KeyValue>>(content);
-            SDKConfig config = new SDKConfig();
-            config.SdkName = configName;
 
-            foreach (var item in list)
-            {
-                config.Add(item);
-            }
+            //List < KeyValue > list = des.Deserialize<List<KeyValue>>(content);
+
+            SDKConfig config = des.Deserialize<SDKConfig>(content);
+
+            //config.SdkName = configName;
+
+            //foreach (var item in list)
+            //{
+            //    config.Add(item);
+            //}
 
             return config;
         }
@@ -270,14 +273,14 @@ namespace APKRepackageSDKTool
         {
             string path = SdkLibPath + "\\" + config.SdkName + "\\config.json";
 
-            List<KeyValue> list = new List<KeyValue>();
+            //List<KeyValue> list = new List<KeyValue>();
 
-            foreach (var item in config)
-            {
-                list.Add(item);
-            }
+            //foreach (var item in config)
+            //{
+            //    list.Add(item);
+            //}
 
-            string content = Serializer.Serialize(list);
+            string content = Serializer.Serialize(config);
             FileTool.WriteStringByFile(path, content);
         }
 
@@ -428,10 +431,13 @@ namespace APKRepackageSDKTool
     /// <summary>
     /// SDKConfig 是SDK的设置
     /// </summary>
-    public class SDKConfig : List<KeyValue> , INotifyCollectionChanged
+    public class SDKConfig 
     {
         public string sdkName;
-        public List<string> permissionList;
+        public string className;
+        public SDKType sdkType;
+        public List<KeyValue> configList = new List<KeyValue>();
+        public List<string> permissionList = new List<string>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -452,9 +458,9 @@ namespace APKRepackageSDKTool
                         info.sdkName = sdkName;
                         info.sdkConfig = new List<KeyValue>();
 
-                        for (int i = 0; i < Count; i++)
+                        for (int i = 0; i < configList.Count; i++)
                         {
-                            info.sdkConfig.Add(this[i].DeepCopy());
+                            info.sdkConfig.Add(configList[i].DeepCopy());
                         }
 
                         EditorData.CurrentChannel.sdkList.Add(info);
@@ -482,6 +488,9 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public SDKType SdkType { get => sdkType; set => sdkType = value; }
+        public string ClassName { get => className; set => className = value; }
+
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public void Change()
@@ -499,7 +508,17 @@ namespace APKRepackageSDKTool
         public string sdkName;
         public List<KeyValue> sdkConfig;
 
+
         public string SdkName { get => sdkName; set => sdkName = value; }
+    }
+
+    public enum SDKType
+    {
+        Login,
+        AD,
+        Log,
+        Pay,
+        Other,
     }
 
     #endregion

@@ -8,8 +8,16 @@
         Title="{Binding Path=SdkName}" Height="444" Width="502">
     <Grid>
         <TabControl Margin="10,10,10,34">
+            <TabItem Header="常规设置">
+                <Grid Background="#FFF9F9F9">
+                    <Label Content="Java类名" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="94,12,10,0" TextWrapping="Wrap" Text="{Binding Path=ClassName,Mode=TwoWay}" VerticalAlignment="Top"/>
+                    <Label Content="SDK类型" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="94,40,0,0" VerticalAlignment="Top" Width="140" DataContext="{Binding Path=SdkType}" DisplayMemberPath="{Binding Path=SdkType}"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="字段设置">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="#FFF9F9F9">
                     <ListBox x:Name="ListBox_ConfigList" Margin="10,40,10,34">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
@@ -32,7 +40,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="权限设置">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="#FFF9F9F9">
                     <ListBox x:Name="ListBox_PermissionList" Margin="10,10,10,34">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
@@ -42,20 +50,18 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid >
-                                    <Label Content="{Binding Key}" Width="140" HorizontalAlignment="Left" />
-                                    <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Key}" Click="Button_ClickDelete"/>
+                                    <Label Content="{Binding Path=.}" Width="140" HorizontalAlignment="Left" />
+                                    <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=.}" Click="Button_ClickDeletePermission"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="新增" Margin="0,0,10,10" Height="19" VerticalAlignment="Bottom" Click="Button_ClickAddConfigKey" HorizontalAlignment="Right" Width="75" />
+                    <Button Content="新增" Margin="0,0,10,10" Height="19" VerticalAlignment="Bottom" Click="Button_ClickAddPermission" HorizontalAlignment="Right" Width="75" />
                     <TextBox x:Name="TextBox_PermissionName" Margin="10,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
-
-
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="保存" Margin="0,0,10,10" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="474" Click="Button_ClickSave" RenderTransformOrigin="-0.44,-3.474"/>
+        <Button Content="保存" Margin="10,0,10,10" Height="19" VerticalAlignment="Bottom" Click="Button_ClickSave" RenderTransformOrigin="-0.44,-3.474"/>
 
 
     </Grid>

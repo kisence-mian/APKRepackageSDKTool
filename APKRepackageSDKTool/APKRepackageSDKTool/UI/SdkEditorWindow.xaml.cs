@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,75 @@ namespace APKRepackageSDKTool.UI
     /// </summary>
     public partial class SdkEditorWindow : Window
     {
+        PermissionList permissionList;
+        KeyValueList configList;
+
+        private PermissionList Permission
+        {
+            get
+            {
+                if(permissionList == null)
+                {
+                    permissionList = new PermissionList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.permissionList.Count; i++)
+                    {
+                        permissionList.Add(EditorData.CurrentSDKConfig.permissionList[i]);
+                    }
+                }
+
+                return permissionList;
+            }
+
+            set
+            {
+                permissionList = value;
+                permissionList.Change();
+
+                EditorData.CurrentSDKConfig.permissionList.Clear();
+                for (int i = 0; i < permissionList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.permissionList.Add(permissionList[i]);
+                }
+            }
+        }
+
+        private KeyValueList ConfigList
+        {
+            get
+            {
+                if (configList == null)
+                {
+                    configList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.configList.Count; i++)
+                    {
+                        configList.Add(EditorData.CurrentSDKConfig.configList[i]);
+                    }
+                }
+
+                return configList;
+            }
+
+            set
+            {
+                configList = value;
+                configList.Change();
+
+                EditorData.CurrentSDKConfig.configList.Clear();
+                for (int i = 0; i < configList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.configList.Add(configList[i]);
+                }
+            }
+        }
+
         public SdkEditorWindow()
         {
             InitializeComponent();
 
             DataContext = EditorData.CurrentSDKConfig;
 
-            ListBox_ConfigList.ItemsSource = EditorData.CurrentSDKConfig;
+            ListBox_ConfigList.ItemsSource = ConfigList;
+            ListBox_PermissionList.ItemsSource = Permission;
         }
 
         private void Button_ClickSave(object sender, RoutedEventArgs e)
@@ -41,9 +104,9 @@ namespace APKRepackageSDKTool.UI
                 KeyValue kv = new KeyValue();
                 kv.Key = TextBox_ConfigName.Text;
 
-                EditorData.CurrentSDKConfig.Add(kv);
+                ConfigList.Add(kv);
 
-                EditorData.CurrentSDKConfig = EditorData.CurrentSDKConfig;
+                ConfigList = ConfigList;
 
                 TextBox_ConfigName.Text = "";
             }
@@ -55,15 +118,60 @@ namespace APKRepackageSDKTool.UI
 
             string key = (string)btn.Tag;
 
-            for (int i = 0; i < EditorData.CurrentSDKConfig.Count; i++)
+            for (int i = 0; i < ConfigList.Count; i++)
             {
-                if(EditorData.CurrentSDKConfig[i].key == key)
+                if(ConfigList[i].key == key)
                 {
-                    EditorData.CurrentSDKConfig.RemoveAt(i);
+                    ConfigList.RemoveAt(i);
                 }
             }
 
-            EditorData.CurrentSDKConfig = EditorData.CurrentSDKConfig;
+            ConfigList = ConfigList;
+        }
+
+        private void Button_ClickAddPermission(object sender, RoutedEventArgs e)
+        {
+            if(!string.IsNullOrEmpty(TextBox_PermissionName.Text))
+            {
+                Permission.Add(TextBox_PermissionName.Text);
+
+                Permission = Permission;
+
+                TextBox_PermissionName.Text = "";
+            }
+        }
+
+        private void Button_ClickDeletePermission(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            Permission.Remove(key);
+
+            Permission = Permission;
+        }
+
+        class PermissionList : List<string>, INotifyCollectionChanged
+        {
+            public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+            public void Change()
+            {
+                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+                CollectionChanged?.Invoke(this, e);
+            }
+        }
+
+        class KeyValueList : List<KeyValue>,INotifyCollectionChanged
+        {
+            public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+            public void Change()
+            {
+                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+                CollectionChanged?.Invoke(this, e);
+            }
         }
     }
 }
