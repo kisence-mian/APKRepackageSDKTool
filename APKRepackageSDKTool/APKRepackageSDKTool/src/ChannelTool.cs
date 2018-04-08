@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,19 +48,26 @@ namespace APKRepackageSDKTool
                     ChangeAppBanner(filePath, info.AppBanner);
                 }
 
-                for (int i = 0; i < info.sdkList.Count; i++)
+                if(info.sdkList.Count > 0)
                 {
-                    OutPut("放入SDK " + info.sdkList[i].sdkName);
-                    PutSDK(filePath, info.sdkList[i]);
+                    //OutPut("放入SDK接口 ");
+                    //PutSDKInterface(filePath);
+
+                    for (int i = 0; i < info.sdkList.Count; i++)
+                    {
+                        OutPut("放入SDK " + info.sdkList[i].sdkName);
+                        PutSDK(filePath,info.sdkList[i]);
+                    }
+
+                    OutPut("写配置清单");
+                    SaveSDKManifest(filePath, info);
+
+                    OutPut("整合权限");
+                    PermissionLogic(filePath, info);
                 }
 
-                OutPut("写配置清单");
-                SaveSDKManifest(filePath, info);
-
-                OutPut("整合权限");
-                PermissionLogic(filePath, info);
-
-                OutPut("整合AndroidManifest.xml 清单文件");
+                OutPut("Java重编译成dex");
+                Recompile(filePath + "\\assets");
             }
             catch(Exception e)
             {
@@ -121,22 +129,28 @@ namespace APKRepackageSDKTool
         void ChangeAppIcon(string filePath, string appIcon)
         {
             string exportPath = filePath + "\\res\\drawable-hdpi-v4\\app_icon.png";
-            ExportImage(exportPath, appIcon, 72, 72);
+            if (File.Exists(exportPath))
+                ExportImage(exportPath, appIcon, 72, 72);
 
             exportPath = filePath + "\\res\\drawable-ldpi-v4\\app_icon.png";
-            ExportImage(exportPath, appIcon, 36, 36);
+            if (File.Exists(exportPath))
+                ExportImage(exportPath, appIcon, 36, 36);
 
             exportPath = filePath + "\\res\\drawable-mdpi-v4\\app_icon.png";
-            ExportImage(exportPath, appIcon, 48, 48);
+            if (File.Exists(exportPath))
+                ExportImage(exportPath, appIcon, 48, 48);
 
             exportPath = filePath + "\\res\\drawable-xhdpi-v4\\app_icon.png";
-            ExportImage(exportPath, appIcon, 96, 96);
+            if (File.Exists(exportPath))
+                ExportImage(exportPath, appIcon, 96, 96);
 
             exportPath = filePath + "\\res\\drawable-xxhdpi-v4\\app_icon.png";
-            ExportImage(exportPath, appIcon, 144, 144);
+            if(File.Exists(exportPath))
+                ExportImage(exportPath, appIcon, 144, 144);
 
             exportPath = filePath + "\\res\\drawable-xxxhdpi-v4\\app_icon.png";
-            ExportImage(exportPath, appIcon, 192, 192);
+            if (File.Exists(exportPath))
+                ExportImage(exportPath, appIcon, 192, 192);
         }
 
         void ChangeAppBanner(string filePath, string appBanner)
@@ -171,6 +185,16 @@ namespace APKRepackageSDKTool
         #endregion
 
         #region 放入SDK
+
+        //void PutSDKInterface(string javaPath)
+        //{
+        //    string interfacePath = EditorData.SdkLibPath + "\\Interface\\SDKInterface.jar";
+        //    string aimPath = javaPath + "\\SDKInterface.jar";
+
+        //    FileInfo fi = new FileInfo(interfacePath);
+
+        //    fi.CopyTo(aimPath);
+        //}
 
         void SaveSDKManifest(string filePath, ChannelInfo info)
         {
@@ -212,12 +236,28 @@ namespace APKRepackageSDKTool
 
         void PutSDK(string filePath,SDKInfo info)
         {
-            ////添加String字段
-            //for (int i = 0; i < info.sdkConfig.Count; i++)
-            //{
-            //    KeyValue kv = info.sdkConfig[i];
-            //    AddStringConfig(filePath, info.sdkName + "_"+ kv.key, kv.value);
-            //}
+            //添加接口文件
+            SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
+            if(!string.IsNullOrEmpty(config.className))
+            {
+                string sdkPath = EditorData.SdkLibPath + "\\" + info.sdkName + "\\" + config.className + ".jar";
+                string aimPath = filePath + "\\assets\\" + config.className + ".jar";
+
+                try
+                {
+                    FileInfo fi = new FileInfo(sdkPath);
+                    fi.CopyTo(aimPath);
+                }
+                catch(Exception e)
+                {
+                    OutPut("Exception sdkPath " + sdkPath + " aimPath " + aimPath + " error: " + e.ToString());
+                }
+
+            }
+            else
+            {
+                OutPut(info.sdkName + " 没有配置SDK接口文件");
+            }
 
             //添加SDKLib
 
@@ -239,25 +279,6 @@ namespace APKRepackageSDKTool
             }
 
             FileTool.WriteStringByFile(path, content);
-        }
-
-        void AddStringConfig(string filePath,string key,string value)
-        {
-            string xmlPath = filePath + "\\res\\values\\strings.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode resources = xmlDoc.SelectSingleNode("resources");
-
-            XmlElement nd = xmlDoc.CreateElement("string");
-            nd.SetAttribute("name", key);
-            nd.InnerText = value;
-
-            resources.AppendChild(nd);
-
-            xmlDoc.Save(xmlPath);
         }
 
         //整合权限
@@ -319,6 +340,29 @@ namespace APKRepackageSDKTool
 
             manifest.AppendChild(nd);
             xmlDoc.Save(xmlPath);
+        }
+
+        #endregion
+
+        #region Java重编译
+
+        public void Recompile(string filePath)
+        {
+            CmdService cmd = new CmdService(OutPut);
+
+            //遍历JavaPath下的所有Jar文件
+
+            List<string> list = FileTool.GetAllFileNamesByPath(filePath, new string[] { "jar"},false);
+            for (int i = 0; i < list.Count; i++)
+            {
+                string fp = list[i];
+
+                //Jar To Dex
+                cmd.Execute("java -jar dx --dex --output="+ fp + " " + fp);
+            }
+
+            //转换成smali与原来的smali文件合并
+
         }
 
         #endregion

@@ -230,8 +230,9 @@ namespace APKRepackageSDKTool
                 string[] dires = Directory.GetDirectories(SdkLibPath);
                 for (int i = 0; i < dires.Length; i++)
                 {
-                    if (!dires[i].Contains("Config")
+                    if (!dires[i].Contains("Interface")
                         && !dires[i].Contains("git")
+                        && !dires[i].Contains("Source")
                         )
                     {
                         //读取每个文件夹中的config.json，以获取对应的设置要求
@@ -335,6 +336,7 @@ namespace APKRepackageSDKTool
     public class ChannelInfo : INotifyCollectionChanged
     {
         public string channelName; //渠道名
+        public string suffix; //渠道名
 
         public bool isChecked; //是否被选中
 
@@ -362,6 +364,7 @@ namespace APKRepackageSDKTool
         public string AppIcon { get => appIcon; set => appIcon = value; }
         public List<SDKInfo> SdkList { get => sdkList; set => sdkList = value; }
         public string AppBanner { get => appBanner; set => appBanner = value; }
+        public string Suffix { get => suffix; set => suffix = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

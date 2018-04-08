@@ -360,7 +360,7 @@ public class FileTool
 
     #region 获取一个路径下的所有文件
 
-    public static List<string> GetAllFileNamesByPath(string path,string[] expandNames = null)
+    public static List<string> GetAllFileNamesByPath(string path,string[] expandNames = null,bool isRecursion = true)
     {
         List<string> list = new List<string>();
 
@@ -369,7 +369,7 @@ public class FileTool
         return list;
     }
 
-    static void RecursionFind(List<string> list,string path , string[] expandNames)
+    static void RecursionFind(List<string> list,string path , string[] expandNames, bool isRecursion = true)
     {
         string[] allUIPrefabName = Directory.GetFiles(path);
         foreach (var item in allUIPrefabName)
@@ -380,10 +380,13 @@ public class FileTool
             }
         }
 
-        string[] dires = Directory.GetDirectories(path);
-        for (int i = 0; i < dires.Length; i++)
+        if(isRecursion)
         {
-            RecursionFind(list, dires[i], expandNames);
+            string[] dires = Directory.GetDirectories(path);
+            for (int i = 0; i < dires.Length; i++)
+            {
+                RecursionFind(list, dires[i], expandNames);
+            }
         }
     }
 
