@@ -50,8 +50,8 @@ namespace APKRepackageSDKTool
 
                 if(info.sdkList.Count > 0)
                 {
-                    //OutPut("放入SDK接口 ");
-                    //PutSDKInterface(filePath);
+                    OutPut("放入SDK接口 ");
+                    PutSDKInterface(filePath);
 
                     for (int i = 0; i < info.sdkList.Count; i++)
                     {
@@ -65,9 +65,6 @@ namespace APKRepackageSDKTool
                     OutPut("整合权限");
                     PermissionLogic(filePath, info);
                 }
-
-                OutPut("Java重编译成dex");
-                Recompile(filePath + "\\assets");
             }
             catch(Exception e)
             {
@@ -186,15 +183,11 @@ namespace APKRepackageSDKTool
 
         #region 放入SDK
 
-        //void PutSDKInterface(string javaPath)
-        //{
-        //    string interfacePath = EditorData.SdkLibPath + "\\Interface\\SDKInterface.jar";
-        //    string aimPath = javaPath + "\\SDKInterface.jar";
-
-        //    FileInfo fi = new FileInfo(interfacePath);
-
-        //    fi.CopyTo(aimPath);
-        //}
+        void PutSDKInterface(string filePath)
+        {
+            string interfacePath = EditorData.SdkLibPath + "\\Interface\\SDKInterface.jar";
+            Jar2Smali(interfacePath, filePath);
+        }
 
         void SaveSDKManifest(string filePath, ChannelInfo info)
         {
@@ -236,33 +229,26 @@ namespace APKRepackageSDKTool
 
         void PutSDK(string filePath,SDKInfo info)
         {
-            //添加接口文件
-            SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
-            if(!string.IsNullOrEmpty(config.className))
-            {
-                string sdkPath = EditorData.SdkLibPath + "\\" + info.sdkName + "\\" + config.className + ".jar";
-                string aimPath = filePath + "\\assets\\" + config.className + ".jar";
+            //添加Jar
+            PutJar(filePath, info);
 
-                try
-                {
-                    FileInfo fi = new FileInfo(sdkPath);
-                    fi.CopyTo(aimPath);
-                }
-                catch(Exception e)
-                {
-                    OutPut("Exception sdkPath " + sdkPath + " aimPath " + aimPath + " error: " + e.ToString());
-                }
+            //添加资源文件
 
-            }
-            else
-            {
-                OutPut(info.sdkName + " 没有配置SDK接口文件");
-            }
-
-            //添加SDKLib
 
             //添加配置文件
             SaveSDKConfigFile(filePath, info);
+        }
+
+        void PutJar(string filePath, SDKInfo info)
+        {
+            string libPath = EditorData.SdkLibPath + "\\" + info.sdkName + "\\lib";
+
+            List<string> jarList = FileTool.GetAllFileNamesByPath(libPath, new string[] { "jar" }, false);
+
+            for (int i = 0; i < jarList.Count; i++)
+            {
+                Jar2Smali(jarList[i], filePath);
+            }
         }
 
         void SaveSDKConfigFile(string filePath , SDKInfo info)
@@ -346,23 +332,25 @@ namespace APKRepackageSDKTool
 
         #region Java重编译
 
-        public void Recompile(string filePath)
+        public void Jar2Smali(string jarPath,string filePath)
         {
+            string smaliPath = filePath + "\\smali";
+            string JavaTempPath = PathTool.GetCurrentPath() + "\\JavaTempPath";
+            string jarName = FileTool.GetFileNameByPath(jarPath);
+            string tempPath = JavaTempPath + "\\" + jarName;
+
+            FileTool.CreatPath(JavaTempPath);
+
             CmdService cmd = new CmdService(OutPut);
+            //Jar to dex
+            cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath);
 
-            //遍历JavaPath下的所有Jar文件
+            //dex to smali
+            cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath);
 
-            List<string> list = FileTool.GetAllFileNamesByPath(filePath, new string[] { "jar"},false);
-            for (int i = 0; i < list.Count; i++)
-            {
-                string fp = list[i];
-
-                //Jar To Dex
-                cmd.Execute("java -jar dx --dex --output="+ fp + " " + fp);
-            }
-
-            //转换成smali与原来的smali文件合并
-
+            //删除临时目录
+            FileTool.DeleteDirectory(tempPath);
+            Directory.Delete(tempPath);
         }
 
         #endregion

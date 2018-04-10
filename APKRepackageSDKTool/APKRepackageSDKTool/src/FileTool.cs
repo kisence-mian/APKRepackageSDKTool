@@ -44,6 +44,7 @@ public class FileTool
         {
             string pathTmp = directorys[i];
 
+            DeleteDirectory(pathTmp);
             if (Directory.Exists(pathTmp))
             {
                 Directory.Delete(pathTmp, true);

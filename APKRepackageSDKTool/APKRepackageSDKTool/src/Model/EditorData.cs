@@ -232,6 +232,7 @@ namespace APKRepackageSDKTool
                 {
                     if (!dires[i].Contains("Interface")
                         && !dires[i].Contains("git")
+                         && !dires[i].Contains("svn")
                         && !dires[i].Contains("Source")
                         )
                     {

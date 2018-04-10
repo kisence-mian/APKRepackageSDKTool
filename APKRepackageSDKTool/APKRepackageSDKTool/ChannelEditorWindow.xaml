@@ -49,7 +49,7 @@
             </TabItem>
             <TabItem Header="SDK">
                 <Grid Background="#FFF9F9F9">
-                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="239" >
+                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Margin="10,10,0,34" Width="239" >
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -65,9 +65,9 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="新增" HorizontalAlignment="Left" Margin="174,314,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_AddSDK"/>
-                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Height="19" Margin="10,314,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="159"/>
-                    <ListBox x:Name="ListBox_SdkConfigList" HorizontalAlignment="Left" Height="299" Margin="254,10,0,0" VerticalAlignment="Top" Width="233">
+                    <Button Content="新增" HorizontalAlignment="Left" Margin="174,0,0,10" Width="75" Click="Button_Click_AddSDK" Height="19" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="" Width="159" Height="19" VerticalAlignment="Bottom"/>
+                    <ListBox x:Name="ListBox_SdkConfigList" HorizontalAlignment="Left" Margin="254,10,0,34" Width="233">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
