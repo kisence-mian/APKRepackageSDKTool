@@ -275,15 +275,15 @@ namespace APKRepackageSDKTool
         {
             string path = SdkLibPath + "\\" + config.SdkName + "\\config.json";
 
-            //List<KeyValue> list = new List<KeyValue>();
+            string libPath = SdkLibPath + "\\lib";
+            string soPath = SdkLibPath + "\\so";
 
-            //foreach (var item in config)
-            //{
-            //    list.Add(item);
-            //}
 
             string content = Serializer.Serialize(config);
             FileTool.WriteStringByFile(path, content);
+
+            Directory.CreateDirectory(libPath);
+            Directory.CreateDirectory(soPath);
         }
 
         public static void SetCurrentSDKConfig(string sdkName)
@@ -442,6 +442,11 @@ namespace APKRepackageSDKTool
         public SDKType sdkType;
         public List<KeyValue> configList = new List<KeyValue>();
         public List<string> permissionList = new List<string>();
+        public int minSDKversion;
+        public int targetSDKVersion;
+
+        public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
+        public List<ServiceInfo> serviceInfoList = new List<ServiceInfo>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -494,6 +499,9 @@ namespace APKRepackageSDKTool
 
         public SDKType SdkType { get => sdkType; set => sdkType = value; }
         public string ClassName { get => className; set => className = value; }
+        public int MinSDKversion { get => minSDKversion; set => minSDKversion = value; }
+        public int TargetSDKVersion { get => targetSDKVersion; set => targetSDKVersion = value; }
+        public List<ActivityInfo> ActivityInfoList { get => activityInfoList; set => activityInfoList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -516,13 +524,35 @@ namespace APKRepackageSDKTool
         public string SdkName { get => sdkName; set => sdkName = value; }
     }
 
+    public class ActivityInfo 
+    {
+        private bool mainActivity = true;
+        public string name;
+        public string content;
+
+        public string Content { get => content; set => content = value; }
+        public string Name { get => name; set => name = value; }
+        public bool MainActivity { get => mainActivity; set => mainActivity = value; }
+    }
+
+    public class ServiceInfo 
+    {
+        public string name;
+        public string content;
+
+        public string Content { get => content; set => content = value; }
+        public string Name { get => name; set => name = value; }
+
+    }
+
+    [Flags]
     public enum SDKType
     {
-        Login,
-        AD,
-        Log,
-        Pay,
-        Other,
+        Login = 1,
+        AD = 2,
+        Log = 4,
+        Pay = 8,
+        Other = 16,
     }
 
     #endregion

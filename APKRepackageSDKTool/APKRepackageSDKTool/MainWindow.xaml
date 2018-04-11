@@ -54,7 +54,7 @@
         <Grid Margin="447,20,10,38">
             <Label Content="输出" Margin="10,10,0,0" RenderTransformOrigin="0.021,0.189" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="194" Grid.ColumnSpan="2"/>
             <Button Content="清空" Margin="0,10,10,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="Button_ClickClean" Grid.Column="1" />
-            <TextBox x:Name="Text_output" Margin="10,40,3,10" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
+            <TextBox x:Name="Text_output" Margin="10,40,3,10" TextWrapping="Wrap" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto"/>
         </Grid>
     </Grid>
 </Window>

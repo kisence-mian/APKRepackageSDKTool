@@ -66,28 +66,28 @@ namespace APKRepackageSDKTool
                 channelTool.ChannelLogic(aimPath, channelInfo);
 
                 //重打包
-                MakeProgress("重打包");
-                cmd.Execute("java -jar apktool.jar b " + aimPath);
+                //MakeProgress("重打包");
+                //cmd.Execute("java -jar apktool.jar b " + aimPath);
 
-                //进行签名
-                MakeProgress("进行签名");
-                cmd.Execute("jarsigner -verbose"
-                    //+ " -tsa https://timestamp.geotrust.com/tsa"
-                    + " -digestalg SHA1 -sigalg MD5withRSA"
-                    + " -storepass " + channelInfo.KeyStorePassWord
-                    + " -keystore " + channelInfo.KeyStorePath
-                    + " " + apkPath
-                    + " " + channelInfo.KeyStoreAlias
-                    );
+                ////进行签名
+                //MakeProgress("进行签名");
+                //cmd.Execute("jarsigner -verbose"
+                //    //+ " -tsa https://timestamp.geotrust.com/tsa"
+                //    + " -digestalg SHA1 -sigalg MD5withRSA"
+                //    + " -storepass " + channelInfo.KeyStorePassWord
+                //    + " -keystore " + channelInfo.KeyStorePath
+                //    + " " + apkPath
+                //    + " " + channelInfo.KeyStoreAlias
+                //    );
 
-                //进行字节对齐并导出到最终目录
-                MakeProgress("进行字节对齐并导出到最终目录");
-                cmd.Execute("zipalign -f  4 " + apkPath + " " + finalPath);
+                ////进行字节对齐并导出到最终目录
+                //MakeProgress("进行字节对齐并导出到最终目录");
+                //cmd.Execute("zipalign -f  4 " + apkPath + " " + finalPath);
 
                 //删除临时目录
                 MakeProgress("删除临时目录");
-                FileTool.DeleteDirectory(aimPath);
-                Directory.Delete(aimPath);
+                //FileTool.DeleteDirectory(aimPath);
+                //Directory.Delete(aimPath);
 
                 MakeProgress("完成");
             }
