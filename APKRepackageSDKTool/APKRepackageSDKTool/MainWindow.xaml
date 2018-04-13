@@ -16,7 +16,7 @@
             <TextBox x:Name="Text_APKExportPath" Margin="91,70,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
             <Button Content="浏览" Margin="347,43,10,0" Click="Button_ClickSelectSDKLibPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
 
-            <Button Content="重打包" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
+            <Button x:Name="Button_Repack" Content="重打包" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
             <Label Content="APK导出目录" Margin="10,70,0,0" HorizontalAlignment="Left" Width="81" Height="25" VerticalAlignment="Top"/>
             <TextBox x:Name="Text_SDKLibPath" Margin="91,42,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
             <Button Content="浏览" Margin="347,70,10,0" Click="Button_ClickSelectExportPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
@@ -30,7 +30,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid >
-                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}"/>
+                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                                 <Button Content="编辑" Click="Button_ClickEditor" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}" Margin="0,0,50,0"/>
                                 <Button Content="删除" Click="Button_ClickDeleteChannel" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}"/>
                             </Grid>

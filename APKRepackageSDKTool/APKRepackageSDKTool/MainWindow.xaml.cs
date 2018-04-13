@@ -21,6 +21,12 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        const int c_totalStep = 6;
+        int currentTotalStep = 6;
+
+        RepackageManager repackageManager = new RepackageManager();
+        bool isBuilding = false;
+
         string apkPath;
         string keyStorePath;
         string exportPath;
@@ -45,7 +51,6 @@ namespace APKRepackageSDKTool
             keyStorePath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "keyStorePath", "null");
             exportPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "exportPath", "null");
             
-
             UpdateContent();
 
             //展示到游戏选择界面上
@@ -102,39 +107,52 @@ namespace APKRepackageSDKTool
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_SDKLibPath.Text = m_Dir;
             EditorData.SdkLibPath = m_Dir;
-
         }
 
         /// <summary>
-        /// 通过执行cmd的办法去实现apk的反编译
+        /// 点击重打包
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Button_ClicRepackageAPK(object sender, RoutedEventArgs e)
         {
-            //获取ChannelInfo
-            ChannelInfo ci = null;
-            for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
+            if(!isBuilding)
             {
-                if(EditorData.CurrentGameChannelList[i].isChecked)
+                //获取ChannelInfo
+                List<ChannelInfo> list = new List<ChannelInfo>();
+                for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
                 {
-                    ci = EditorData.CurrentGameChannelList[i];
-                    break;
+                    if (EditorData.CurrentGameChannelList[i].isChecked)
+                    {
+                        list.Add( EditorData.CurrentGameChannelList[i]);
+                    }
                 }
-            }
 
-            if(ci == null)
+                if (list.Count == 0)
+                {
+                    System.Windows.MessageBox.Show("没有渠道被选中");
+                    return;
+                }
+
+                RepackageInfo ri = new RepackageInfo();
+                ri.apkPath = apkPath;
+                ri.exportPath = exportPath;
+
+                repackageManager.Repackage(ri, list, RepackCallBack, RepackCallBackError);
+                isBuilding = true;
+                UpdateRepackButton();
+
+                currentTotalStep = list.Count * c_totalStep;
+            }
+            else
             {
-                System.Windows.MessageBox.Show("没有渠道被选中");
-                return;
+                repackageManager.CancelRepack();
+                isBuilding = false;
+                UpdateRepackButton();
+
+                progress = 0;
+                Text_progressName.Content = "已取消";
             }
-
-            RepackageInfo ri = new RepackageInfo();
-            ri.apkPath = apkPath;
-            ri.exportPath = exportPath;
-
-            RepackageManager rm = new RepackageManager();
-            rm.Repackage(ri, ci, RepackCallBack);
         }
 
         private void Button_ClickClean(object sender, RoutedEventArgs e)
@@ -152,17 +170,21 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickDeleteChannel(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.Button btn = sender as System.Windows.Controls.Button;
-
-            for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
+            MessageBoxResult result = System.Windows.MessageBox.Show("确定要移除这个渠道吗？\n所有填写的配置都会丢失", "警告", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
-                ChannelInfo info = EditorData.CurrentGameChannelList[i];
+                System.Windows.Controls.Button btn = sender as System.Windows.Controls.Button;
 
-                if (info.Name == (string)btn.Tag)
+                for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
                 {
-                    EditorData.CurrentGameChannelList.RemoveAt(i);
-                    EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
-                    return;
+                    ChannelInfo info = EditorData.CurrentGameChannelList[i];
+
+                    if (info.Name == (string)btn.Tag)
+                    {
+                        EditorData.CurrentGameChannelList.RemoveAt(i);
+                        EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+                        return;
+                    }
                 }
             }
 
@@ -212,6 +234,28 @@ namespace APKRepackageSDKTool
             UpdateChannel();
         }
 
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+        }
+
+        void UpdateRepackButton()
+        {
+            if(isBuilding)
+            {
+                Button_Repack.Content = "取消";
+            }
+            else
+            {
+                Button_Repack.Content = "重打包";
+            }
+        }
+
         #endregion
 
         #region 事件接收
@@ -233,13 +277,26 @@ namespace APKRepackageSDKTool
             Action ac = new Action(UpdateContent);
             Dispatcher.BeginInvoke(ac);
         }
+
+        void RepackCallBackError(float progress, string content, string output)
+        {
+            this.progress = progress;
+            this.content = content;
+
+            line++;
+            this.output += "<Error>[" + line + "]" + output + "\n";
+
+            Action ac = new Action(UpdateContent);
+            Dispatcher.BeginInvoke(ac);
+        }
+
         #endregion
 
         #region Update
 
         void UpdateContent()
         {
-            Progress_repackage.Maximum = 5;
+            Progress_repackage.Maximum = currentTotalStep;
             Progress_repackage.Value = progress;
 
             Text_output.Text = output;
@@ -266,6 +323,7 @@ namespace APKRepackageSDKTool
                 ListBox_channel.ItemsSource = null;
             }
         }
+
 
 
         #endregion

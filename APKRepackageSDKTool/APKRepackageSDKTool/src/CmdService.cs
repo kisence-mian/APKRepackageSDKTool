@@ -19,11 +19,6 @@ namespace APKRepackageSDKTool
             this.callBack = callBack;
         }
 
-        public void SetOutPutCallBack(OutPutCallBack callBack)
-        {
-            this.callBack = callBack;
-        }
-
         public void Execute(string content)
         {
             process = new Process();
@@ -41,7 +36,7 @@ namespace APKRepackageSDKTool
             process.BeginOutputReadLine();
 
             process.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
-            process.ErrorDataReceived += new DataReceivedEventHandler(OutputDataReceived);
+            process.ErrorDataReceived += new DataReceivedEventHandler(ErrorReceived);
 
             process.StandardInput.WriteLine(content);
             process.StandardInput.WriteLine("exit");
@@ -60,6 +55,14 @@ namespace APKRepackageSDKTool
             if (Filter(e.Data))
             {
                 callBack?.Invoke(e.Data);
+            }
+        }
+
+        private void ErrorReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (Filter(e.Data))
+            {
+                throw new Exception(e.Data);
             }
         }
 

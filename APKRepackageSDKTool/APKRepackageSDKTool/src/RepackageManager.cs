@@ -12,20 +12,31 @@ namespace APKRepackageSDKTool
     {
         const string c_channelRecordName = "Channel";
 
-        public void Repackage(RepackageInfo info,ChannelInfo channel, RepageProgress callBack)
+        RepackageThread repackageThread;
+        Thread thread;
+
+        public void Repackage(RepackageInfo info,List< ChannelInfo> channelList, RepageProgress callBack, RepageProgress errorCallBack)
         {
             //APK路径正确性校验
 
             //keyStore路径正确性校验
+            repackageThread = new RepackageThread();
+            repackageThread.repackageInfo = info;
+            repackageThread.callBack = callBack;
+            repackageThread.errorCallBack = errorCallBack;
+            repackageThread.channelList = channelList;
 
-            RepackageThread rt = new RepackageThread();
+            thread = new Thread(repackageThread.Repackage);
+            thread.Start();
+        }
 
-            rt.repackageInfo = info;
-            rt.callBack = callBack;
-            rt.channelInfo = channel;
-
-            Thread th = new Thread(rt.Repackage);
-            th.Start();
+        public void CancelRepack()
+        {
+            if(thread != null)
+            {
+                thread.Abort();
+                thread = null;
+            }
         }
 
         class RepackageThread
@@ -33,8 +44,9 @@ namespace APKRepackageSDKTool
             string outPath = PathTool.GetCurrentPath();
 
             public RepackageInfo repackageInfo;
-            public ChannelInfo channelInfo;
+            public List<ChannelInfo> channelList;
             public RepageProgress callBack;
+            public RepageProgress errorCallBack;
 
             int step = 0;
             float progress = 0;
@@ -44,52 +56,64 @@ namespace APKRepackageSDKTool
 
             public void Repackage()
             {
-                string fileName = FileTool.GetFileNameByPath(repackageInfo.apkPath);
-                string aimPath = outPath + "\\" + FileTool.RemoveExpandName(fileName);
-                string apkPath = aimPath + "\\dist\\" + fileName;
-                string finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + ".apk";
-
-                if(!string.IsNullOrEmpty( channelInfo.suffix))
+                try
                 {
-                    finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix + ".apk";
+                    for (int i = 0; i < channelList.Count; i++)
+                    {
+                        ChannelInfo channelInfo = channelList[i];
+
+                        string fileName = FileTool.GetFileNameByPath(repackageInfo.apkPath);
+                        string aimPath = outPath + "\\" + FileTool.RemoveExpandName(fileName);
+                        string apkPath = aimPath + "\\dist\\" + fileName;
+                        string finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + ".apk";
+
+                        if (!string.IsNullOrEmpty(channelInfo.suffix))
+                        {
+                            finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix + ".apk";
+                        }
+
+                        CmdService cmd = new CmdService(OutPutCallBack);
+                        ChannelTool channelTool = new ChannelTool(OutPutCallBack);
+
+                        //反编译APK
+                        MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
+                        cmd.Execute("java -jar apktool.jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
+
+                        //执行对应的文件操作
+                        MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
+                        channelTool.ChannelLogic(aimPath, channelInfo);
+
+                        //重打包
+                        MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
+                        cmd.Execute("java -jar apktool.jar b " + aimPath);
+
+                        //进行签名
+                        MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);
+                        cmd.Execute("jarsigner -verbose"
+                            //+ " -tsa https://timestamp.geotrust.com/tsa"
+                            + " -digestalg SHA1 -sigalg MD5withRSA"
+                            + " -storepass " + channelInfo.KeyStorePassWord
+                            + " -keystore " + channelInfo.KeyStorePath
+                            + " " + apkPath
+                            + " " + channelInfo.KeyStoreAlias
+                            );
+
+                        //进行字节对齐并导出到最终目录
+                        MakeProgress("进行字节对齐并导出到最终目录", i, channelList.Count, channelInfo.Name);
+                        cmd.Execute("zipalign -f  4 " + apkPath + " " + finalPath);
+
+                        //删除临时目录
+                        MakeProgress("删除临时目录", i, channelList.Count, channelInfo.Name);
+                        FileTool.DeleteDirectory(aimPath);
+                        Directory.Delete(aimPath);
+
+                        MakeProgress("完成", i, channelList.Count, channelInfo.Name);
+                    }
                 }
-
-                CmdService cmd = new CmdService(OutPutCallBack);
-                ChannelTool channelTool = new ChannelTool(OutPutCallBack);
-
-                //反编译APK
-                MakeProgress("反编译APK");
-                cmd.Execute("java -jar apktool.jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
-                
-                //执行对应的文件操作
-                MakeProgress("执行对应的文件操作");
-                channelTool.ChannelLogic(aimPath, channelInfo);
-
-                //重打包
-                //MakeProgress("重打包");
-                //cmd.Execute("java -jar apktool.jar b " + aimPath);
-
-                ////进行签名
-                //MakeProgress("进行签名");
-                //cmd.Execute("jarsigner -verbose"
-                //    //+ " -tsa https://timestamp.geotrust.com/tsa"
-                //    + " -digestalg SHA1 -sigalg MD5withRSA"
-                //    + " -storepass " + channelInfo.KeyStorePassWord
-                //    + " -keystore " + channelInfo.KeyStorePath
-                //    + " " + apkPath
-                //    + " " + channelInfo.KeyStoreAlias
-                //    );
-
-                ////进行字节对齐并导出到最终目录
-                //MakeProgress("进行字节对齐并导出到最终目录");
-                //cmd.Execute("zipalign -f  4 " + apkPath + " " + finalPath);
-
-                //删除临时目录
-                MakeProgress("删除临时目录");
-                //FileTool.DeleteDirectory(aimPath);
-                //Directory.Delete(aimPath);
-
-                MakeProgress("完成");
+                catch (Exception e)
+                {
+                    ErrorCallBack(e.ToString());
+                }
             }
 
             public void OutPutCallBack(string output)
@@ -97,13 +121,18 @@ namespace APKRepackageSDKTool
                 callBack?.Invoke(progress,content, output);
             }
 
-            void MakeProgress(string content)
+            public void ErrorCallBack(string output)
             {
-                this.content = content;
+                errorCallBack?.Invoke(progress, content, output);
+            }
+
+            void MakeProgress(string content ,int currentChannel ,int totalChannel,string channelName)
+            {
+                this.content = content + " " + channelName + " ( " + (currentChannel + 1)+ " / "+ totalChannel + " )";
                 progress = step;
                 step++;
 
-                callBack?.Invoke(progress, content, content);
+                callBack?.Invoke(progress, this.content, content);
             }
         }
     }

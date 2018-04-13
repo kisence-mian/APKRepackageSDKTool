@@ -42,11 +42,23 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickDelete(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            int index = (int)btn.Tag;
+            MessageBoxResult result = MessageBox.Show("确定要移除这个项目吗？\n所有填写的配置都会丢失", "警告", MessageBoxButton.YesNo);
 
-            EditorData.GameList.RemoveAt(index);
-            EditorData.GameList = EditorData.GameList;
+            if (result == MessageBoxResult.Yes)
+            {
+                Button btn = sender as Button;
+                string name = (string)btn.Tag;
+
+                for (int i = 0; i < EditorData.GameList.Count; i++)
+                {
+                    if(EditorData.GameList[i].GameName == name)
+                    {
+                        EditorData.GameList.RemoveAt(i);
+                        EditorData.GameList = EditorData.GameList;
+                        break;
+                    }
+                }
+            }
         }
     }
 }

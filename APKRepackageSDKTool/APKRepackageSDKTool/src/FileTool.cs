@@ -365,7 +365,7 @@ public class FileTool
     {
         List<string> list = new List<string>();
 
-        RecursionFind(list,path,expandNames);
+        RecursionFind(list,path,expandNames, isRecursion);
 
         return list;
     }
@@ -479,6 +479,38 @@ public class FileTool
         }
         catch (Exception e)
         {
+        }
+    }
+
+    #endregion
+
+    #region 拷贝目录
+
+    /// <summary>
+    /// 从一个目录将其内容复制到另一目录
+    /// </summary>
+    /// <param name="directorySource">源目录</param>
+    /// <param name="directoryTarget">目标目录</param>
+    static void CopyFolderTo(string directorySource, string directoryTarget)
+    {
+        //检查是否存在目的目录  
+        if (!Directory.Exists(directoryTarget))
+        {
+            Directory.CreateDirectory(directoryTarget);
+        }
+        //先来复制文件  
+        DirectoryInfo directoryInfo = new DirectoryInfo(directorySource);
+        FileInfo[] files = directoryInfo.GetFiles();
+        //复制所有文件  
+        foreach (FileInfo file in files)
+        {
+            file.CopyTo(Path.Combine(directoryTarget, file.Name));
+        }
+        //最后复制目录  
+        DirectoryInfo[] directoryInfoArray = directoryInfo.GetDirectories();
+        foreach (DirectoryInfo dir in directoryInfoArray)
+        {
+            CopyFolderTo(Path.Combine(directorySource, dir.Name), Path.Combine(directoryTarget, dir.Name));
         }
     }
 

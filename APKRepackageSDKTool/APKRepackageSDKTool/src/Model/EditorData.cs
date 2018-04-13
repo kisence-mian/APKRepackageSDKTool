@@ -275,15 +275,8 @@ namespace APKRepackageSDKTool
         {
             string path = SdkLibPath + "\\" + config.SdkName + "\\config.json";
 
-            string libPath = SdkLibPath + "\\lib";
-            string soPath = SdkLibPath + "\\so";
-
-
             string content = Serializer.Serialize(config);
             FileTool.WriteStringByFile(path, content);
-
-            Directory.CreateDirectory(libPath);
-            Directory.CreateDirectory(soPath);
         }
 
         public static void SetCurrentSDKConfig(string sdkName)
@@ -444,6 +437,7 @@ namespace APKRepackageSDKTool
         public List<string> permissionList = new List<string>();
         public int minSDKversion;
         public int targetSDKVersion;
+        public string applicationName;
 
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
         public List<ServiceInfo> serviceInfoList = new List<ServiceInfo>();
@@ -502,6 +496,7 @@ namespace APKRepackageSDKTool
         public int MinSDKversion { get => minSDKversion; set => minSDKversion = value; }
         public int TargetSDKVersion { get => targetSDKVersion; set => targetSDKVersion = value; }
         public List<ActivityInfo> ActivityInfoList { get => activityInfoList; set => activityInfoList = value; }
+        public string ApplicationName { get => applicationName; set => applicationName = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -526,7 +521,7 @@ namespace APKRepackageSDKTool
 
     public class ActivityInfo 
     {
-        private bool mainActivity = true;
+        public bool mainActivity = true;
         public string name;
         public string content;
 

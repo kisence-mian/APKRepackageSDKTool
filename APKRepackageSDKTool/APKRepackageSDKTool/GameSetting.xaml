@@ -17,7 +17,7 @@
                 <DataTemplate>
                     <Grid  >
                         <Label Content="{Binding Path=GameName}" HorizontalAlignment="Left"/>
-                        <Button Content="删除" Click="Button_ClickDelete" HorizontalAlignment="Right" MinWidth="40"/>
+                        <Button Content="删除" Click="Button_ClickDelete" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=GameName}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -330,6 +330,7 @@ namespace APKRepackageSDKTool.UI
             }
 
             TextBox_ActivityContent.Text = currentActivityInfo.Content;
+            CheckBox_main.IsChecked = currentActivityInfo.MainActivity;
         }
 
         private void TextBox_ActivityContent_TextChanged(object sender, TextChangedEventArgs e)
@@ -337,6 +338,16 @@ namespace APKRepackageSDKTool.UI
             TextBox tb = sender as TextBox;
 
             currentActivityInfo.Content = tb.Text;
+        }
+
+        private void CheckBox_main_Checked(object sender, RoutedEventArgs e)
+        {
+            currentActivityInfo.MainActivity = true;
+        }
+
+        private void CheckBox_main_Unchecked(object sender, RoutedEventArgs e)
+        {
+            currentActivityInfo.MainActivity = false;
         }
 
         #endregion
@@ -456,6 +467,8 @@ namespace APKRepackageSDKTool.UI
             public string Name { get => name; set => name = value; }
             public bool IsChick { get => isChick; set => isChick = value; }
         }
+
+
 
 
 
