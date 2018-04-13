@@ -307,6 +307,12 @@ namespace APKRepackageSDKTool
             Text_APKExportPath.Text = exportPath;
             Text_APKPath.Text = apkPath;
             Text_SDKLibPath.Text = EditorData.SdkLibPath;
+
+            if(progress == currentTotalStep)
+            {
+                isBuilding = false;
+                UpdateRepackButton();
+            }
         }
 
         void UpdateChannel()
