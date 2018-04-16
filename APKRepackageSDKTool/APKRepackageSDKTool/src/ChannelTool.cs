@@ -15,9 +15,11 @@ namespace APKRepackageSDKTool
     public class ChannelTool
     {
         OutPutCallBack callBack;
-        public ChannelTool(OutPutCallBack callBack)
+        OutPutCallBack errorCallBack;
+        public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
         {
             this.callBack = callBack;
+            this.errorCallBack = errorCallBack;
         }
 
         public void ChannelLogic(string filePath, ChannelInfo info)
@@ -73,6 +75,11 @@ namespace APKRepackageSDKTool
             callBack?.Invoke(content);
         }
 
+
+        public void ErrorOutPut(string content)
+        {
+            errorCallBack?.Invoke(content);
+        }
         #region AndroidManifest 修改
 
         public void ChangePackageName(string filePath, string packageName)
@@ -572,7 +579,7 @@ namespace APKRepackageSDKTool
 
             FileTool.CreatPath(JavaTempPath);
 
-            CmdService cmd = new CmdService(OutPut);
+            CmdService cmd = new CmdService(OutPut, errorCallBack);
             //Jar to dex
             cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath);
 

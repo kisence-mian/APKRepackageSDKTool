@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace APKRepackageSDKTool
 {
@@ -18,8 +19,11 @@ namespace APKRepackageSDKTool
         public void Repackage(RepackageInfo info,List< ChannelInfo> channelList, RepageProgress callBack, RepageProgress errorCallBack)
         {
             //APK路径正确性校验
+            if(string.IsNullOrEmpty(info.apkPath))
+            {
+                MessageBox.Show("APK不能为空！");
+            }
 
-            //keyStore路径正确性校验
             repackageThread = new RepackageThread();
             repackageThread.repackageInfo = info;
             repackageThread.callBack = callBack;
@@ -62,6 +66,26 @@ namespace APKRepackageSDKTool
                     {
                         ChannelInfo channelInfo = channelList[i];
 
+                        if(string.IsNullOrEmpty(channelInfo.keyStorePath))
+                        {
+                            throw new Exception("keyStore 不能为空！");
+                        }
+
+                        if (string.IsNullOrEmpty(channelInfo.KeyStorePassWord))
+                        {
+                            throw new Exception("KeyStore PassWord 不能为空！");
+                        }
+
+                        if (string.IsNullOrEmpty(channelInfo.KeyStoreAlias))
+                        {
+                            throw new Exception("Alias 不能为空！");
+                        }
+
+                        if (string.IsNullOrEmpty(channelInfo.KeyStoreAliasPassWord))
+                        {
+                            throw new Exception("Alias PassWord 不能为空！");
+                        }
+
                         string fileName = FileTool.GetFileNameByPath(repackageInfo.apkPath);
                         string aimPath = outPath + "\\" + FileTool.RemoveExpandName(fileName);
                         string apkPath = aimPath + "\\dist\\" + fileName;
@@ -72,8 +96,8 @@ namespace APKRepackageSDKTool
                             finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix + ".apk";
                         }
 
-                        CmdService cmd = new CmdService(OutPutCallBack);
-                        ChannelTool channelTool = new ChannelTool(OutPutCallBack);
+                        CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
+                        ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
 
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
@@ -104,8 +128,8 @@ namespace APKRepackageSDKTool
 
                         //删除临时目录
                         MakeProgress("删除临时目录", i, channelList.Count, channelInfo.Name);
-                        FileTool.DeleteDirectory(aimPath);
-                        Directory.Delete(aimPath);
+                        //FileTool.DeleteDirectory(aimPath);
+                        //Directory.Delete(aimPath);
 
                         MakeProgress("完成", i, channelList.Count, channelInfo.Name);
                     }

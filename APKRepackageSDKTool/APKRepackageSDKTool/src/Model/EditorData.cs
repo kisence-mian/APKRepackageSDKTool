@@ -143,7 +143,7 @@ namespace APKRepackageSDKTool
                     gameList.Add(item);
                 }
 
-                SdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", "null");
+                SdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", null);
 
                 UpdateTotalSDKInfo();
             }

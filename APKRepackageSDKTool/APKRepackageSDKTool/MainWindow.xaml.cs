@@ -281,13 +281,17 @@ namespace APKRepackageSDKTool
         void RepackCallBackError(float progress, string content, string output)
         {
             this.progress = progress;
-            this.content = content;
+            this.content = "打包异常";
 
             line++;
             this.output += "<Error>[" + line + "]" + output + "\n";
+            isBuilding = false;
+            progress = 0;
 
             Action ac = new Action(UpdateContent);
             Dispatcher.BeginInvoke(ac);
+
+            repackageManager.CancelRepack();
         }
 
         #endregion
@@ -311,8 +315,9 @@ namespace APKRepackageSDKTool
             if(progress == currentTotalStep)
             {
                 isBuilding = false;
-                UpdateRepackButton();
             }
+
+            UpdateRepackButton();
         }
 
         void UpdateChannel()

@@ -13,10 +13,12 @@ namespace APKRepackageSDKTool
         Process process;
 
         OutPutCallBack callBack;
+        OutPutCallBack errorCallBack;
 
-        public CmdService(OutPutCallBack callBack)
+        public CmdService(OutPutCallBack callBack,OutPutCallBack errorCallBack)
         {
             this.callBack = callBack;
+            this.errorCallBack = errorCallBack;
         }
 
         public void Execute(string content)
@@ -62,7 +64,7 @@ namespace APKRepackageSDKTool
         {
             if (Filter(e.Data))
             {
-                throw new Exception(e.Data);
+                errorCallBack?.Invoke(e.Data);
             }
         }
 
