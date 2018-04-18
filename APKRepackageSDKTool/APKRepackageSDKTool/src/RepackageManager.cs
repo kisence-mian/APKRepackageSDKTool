@@ -113,7 +113,7 @@ namespace APKRepackageSDKTool
 
                         //进行签名
                         MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);
-                        cmd.Execute("jarsigner -verbose"
+                        cmd.Execute("jarsigner" // -verbose
                             //+ " -tsa https://timestamp.geotrust.com/tsa"
                             + " -digestalg SHA1 -sigalg MD5withRSA"
                             + " -storepass " + channelInfo.KeyStorePassWord
@@ -156,7 +156,7 @@ namespace APKRepackageSDKTool
                 progress = step;
                 step++;
 
-                callBack?.Invoke(progress, this.content, content);
+                callBack?.Invoke(progress, this.content, this.content);
             }
         }
     }
