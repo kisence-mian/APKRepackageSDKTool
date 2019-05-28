@@ -22,23 +22,28 @@ namespace APKRepackageSDKTool.UI
     {
         List<SDKTypeCheck> checkList;
 
-        PermissionList permissionList;
+        StringList permissionList;
         KeyValueList configList;
         ActivityList activityList;
         ServiceList serviceList;
+        ProviderList providerList;
+        StringList libraryList;
+        KeyValueList customJavaList;
 
         ActivityInfo currentActivityInfo;
         ServiceInfo currentServiceInfo;
+        ProviderInfo currentProviderInfo;
+        KeyValue currentJavacontent;
 
         #region 属性
 
-        private PermissionList Permission
+        private StringList Permission
         {
             get
             {
                 if(permissionList == null)
                 {
-                    permissionList = new PermissionList();
+                    permissionList = new StringList();
                     for (int i = 0; i < EditorData.CurrentSDKConfig.permissionList.Count; i++)
                     {
                         permissionList.Add(EditorData.CurrentSDKConfig.permissionList[i]);
@@ -57,6 +62,35 @@ namespace APKRepackageSDKTool.UI
                 for (int i = 0; i < permissionList.Count; i++)
                 {
                     EditorData.CurrentSDKConfig.permissionList.Add(permissionList[i]);
+                }
+            }
+        }
+
+        private StringList LibraryList
+        {
+            get
+            {
+                if (libraryList == null)
+                {
+                    libraryList = new StringList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.customJavaLibrary.Count; i++)
+                    {
+                        libraryList.Add(EditorData.CurrentSDKConfig.customJavaLibrary[i]);
+                    }
+                }
+
+                return libraryList;
+            }
+
+            set
+            {
+                libraryList = value;
+                libraryList.Change();
+
+                EditorData.CurrentSDKConfig.customJavaLibrary.Clear();
+                for (int i = 0; i < libraryList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.customJavaLibrary.Add(libraryList[i]);
                 }
             }
         }
@@ -86,6 +120,35 @@ namespace APKRepackageSDKTool.UI
                 for (int i = 0; i < configList.Count; i++)
                 {
                     EditorData.CurrentSDKConfig.configList.Add(configList[i]);
+                }
+            }
+        }
+
+        private KeyValueList CustomJavaList
+        {
+            get
+            {
+                if (customJavaList == null)
+                {
+                    customJavaList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.CustomJavaClass.Count; i++)
+                    {
+                        customJavaList.Add(EditorData.CurrentSDKConfig.CustomJavaClass[i]);
+                    }
+                }
+
+                return customJavaList;
+            }
+
+            set
+            {
+                customJavaList = value;
+                customJavaList.Change();
+
+                EditorData.CurrentSDKConfig.CustomJavaClass.Clear();
+                for (int i = 0; i < customJavaList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.CustomJavaClass.Add(customJavaList[i]);
                 }
             }
         }
@@ -148,6 +211,35 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private ProviderList _ProviderInfo
+        {
+            get
+            {
+                if (providerList == null)
+                {
+                    providerList = new ProviderList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.providerInfoList.Count; i++)
+                    {
+                        providerList.Add(EditorData.CurrentSDKConfig.providerInfoList[i]);
+                    }
+                }
+
+                return providerList;
+            }
+
+            set
+            {
+                providerList = value;
+                providerList.Change();
+
+                EditorData.CurrentSDKConfig.providerInfoList.Clear();
+                for (int i = 0; i < providerList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.providerInfoList.Add(providerList[i]);
+                }
+            }
+        }
+
         private List<SDKTypeCheck> CheckList
         {
             get
@@ -199,8 +291,20 @@ namespace APKRepackageSDKTool.UI
             ListBox_PermissionList.ItemsSource = Permission;
             ListBox_ActivtyList.ItemsSource = _ActivityList;
             ListBox_serviceList.ItemsSource = _ServiceInfo;
+            ListBox_ProviderList.ItemsSource = _ProviderInfo;
+            ListBox_CustomJava.ItemsSource = CustomJavaList;
+            ListBox_CustomLibrary.ItemsSource = LibraryList;
 
             BindingEnum();
+
+            if (CheckBox_customJavaClass.IsChecked == true)
+            {
+                Grid_customJava.IsEnabled = true;
+            }
+            else
+            {
+                Grid_customJava.IsEnabled = false;
+            }
         }
 
         #region 枚举绑定
@@ -281,6 +385,127 @@ namespace APKRepackageSDKTool.UI
             Permission = Permission;
         }
 
+        #region 自定义Java类
+
+        private void CheckBox_customJavaClass_checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+
+            if (checkBox.IsChecked == true)
+            {
+                Grid_customJava.IsEnabled = true;
+                EditorData.CurrentSDKConfig.useCustomJavaClass = true;
+            }
+            else
+            {
+                Grid_customJava.IsEnabled = false;
+                EditorData.CurrentSDKConfig.useCustomJavaClass = false;
+            }
+        }
+
+        private void Button_addCustomJavaLibrary_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "Jar Files (*.*)|*.*"
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                LibraryList.Add(openFileDialog.FileName);
+            }
+
+            LibraryList = LibraryList;
+        }
+
+        private void Button_CustomJavaLibrary_Delete(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            for (int i = 0; i < LibraryList.Count; i++)
+            {
+                if (LibraryList[i] == key)
+                {
+                    LibraryList.RemoveAt(i);
+                }
+            }
+
+            LibraryList = LibraryList;
+        }
+
+        private void Button_addCustomJava_Click(object sender, RoutedEventArgs e)
+        {
+            if(TextBox_customJavaName.Text != "")
+            {
+                KeyValue keyValue = new KeyValue();
+                keyValue.key = TextBox_customJavaName.Text;
+                keyValue.value = "";
+
+                TextBox_customJavaName.Text = "";
+
+                CustomJavaList.Add(keyValue);
+            }
+
+            CustomJavaList = customJavaList;
+        }
+
+        private void Button_addCustomJava_Delete(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            for (int i = 0; i < customJavaList.Count; i++)
+            {
+                if (customJavaList[i].key == key)
+                {
+                    customJavaList.RemoveAt(i);
+                }
+            }
+
+            CustomJavaList = customJavaList;
+        }
+
+        private void ListBox_CustomJava_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //自动保存
+            EditorData.SaveSDKConfig(EditorData.CurrentSDKConfig);
+
+            ListBox lb = sender as ListBox;
+
+            string Name = (string)lb.SelectedValue;
+
+            for (int i = 0; i < customJavaList.Count; i++)
+            {
+                if (customJavaList[i].key == Name)
+                {
+                    currentJavacontent = customJavaList[i];
+                }
+            }
+
+            TextBox_ClassTemplate.Text = currentJavacontent.value;
+        }
+
+        private void TextBox_ClassTemplate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (currentJavacontent != null)
+            {
+                currentJavacontent.value = TextBox_ClassTemplate.Text;
+
+                //Encoding utf8 = Encoding.UTF8;
+                //Encoding gb2312 = Encoding.GetEncoding("GB2312");
+
+                //byte[] gb = gb2312.GetBytes(TextBox_ClassTemplate.Text);
+                //gb = Encoding.Convert(gb2312, utf8, gb);
+
+                //currentJavacontent.value = utf8.GetString(gb);
+            }
+        }
+
+        #endregion
+
         #region Activtity
 
         private void Button_ClickAddActivity(object sender, RoutedEventArgs e)
@@ -291,7 +516,6 @@ namespace APKRepackageSDKTool.UI
                 ai.Name = TextBox_ActivityName.Text;
 
                 _ActivityList.Add(ai);
-
                 _ActivityList = _ActivityList;
 
                 TextBox_ActivityName.Text = "";
@@ -412,12 +636,73 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region Provider
+
+        private void Button_ClickAddProvider(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_ProviderName.Text))
+            {
+                ProviderInfo pi = new ProviderInfo();
+                pi.Name = TextBox_ProviderName.Text;
+
+                _ProviderInfo.Add(pi);
+
+                _ProviderInfo = _ProviderInfo;
+
+                TextBox_ProviderName.Text = "";
+            }
+        }
+
+        private void Button_ClickDeleteProvider(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string name = (string)btn.Tag;
+
+            for (int i = 0; i < _ProviderInfo.Count; i++)
+            {
+                if (_ProviderInfo[i].Name == name)
+                {
+                    _ProviderInfo.RemoveAt(i);
+                }
+            }
+
+            _ProviderInfo = _ProviderInfo;
+        }
+
+        private void ListBox_ProviderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lb = sender as ListBox;
+
+            string Name = (string)lb.SelectedValue;
+
+            for (int i = 0; i < _ProviderInfo.Count; i++)
+            {
+                if (_ProviderInfo[i].name == Name)
+                {
+                    currentProviderInfo = _ProviderInfo[i];
+                }
+            }
+
+            TextBox_ProviderContent.Text = currentProviderInfo.Content;
+        }
+
+        private void TextBox_ProviderContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentProviderInfo.Content = tb.Text;
+        }
+
+        #endregion
+
         #endregion
 
         #region 类声明
 
-        class PermissionList : List<string>, INotifyCollectionChanged
+        class StringList : List<string>, INotifyCollectionChanged
         {
+
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
             public void Change()
@@ -458,6 +743,16 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        class ProviderList : List<ProviderInfo>, INotifyCollectionChanged
+        {
+            public event NotifyCollectionChangedEventHandler CollectionChanged;
+            public void Change()
+            {
+                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+                CollectionChanged?.Invoke(this, e);
+            }
+        }
+
         class SDKTypeCheck
         {
             public SDKType type;
@@ -472,7 +767,15 @@ namespace APKRepackageSDKTool.UI
 
 
 
+
         #endregion
+
+        private void Button_ClickInfo(object sender, RoutedEventArgs e)
+        {
+            string content = "{PackageName}会自动替换成包名";
+
+            MessageBox.Show(content);
+        }
 
 
     }

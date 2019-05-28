@@ -24,7 +24,10 @@ namespace APKRepackageSDKTool
     {
         SelectInfo selectInfo = new SelectInfo();
 
-        private SelectInfo CurrentSelectInfo { get => selectInfo;
+        private SelectInfo CurrentSelectInfo
+        {
+            get => selectInfo;
+
             set
             {
                 selectInfo = value;
@@ -158,9 +161,6 @@ namespace APKRepackageSDKTool
 
         #endregion
 
-        #region UI逻辑
-
-        #endregion
 
         class SelectInfo : List<KeyValue>, INotifyCollectionChanged
         {

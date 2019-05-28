@@ -16,10 +16,14 @@ namespace APKRepackageSDKTool
     {
         OutPutCallBack callBack;
         OutPutCallBack errorCallBack;
+
+        CompileTool compileTool;
         public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
         {
             this.callBack = callBack;
             this.errorCallBack = errorCallBack;
+
+            compileTool = new CompileTool(callBack, errorCallBack);
         }
 
         public void ChannelLogic(string filePath, ChannelInfo info)
@@ -56,7 +60,7 @@ namespace APKRepackageSDKTool
                 for (int i = 0; i < info.sdkList.Count; i++)
                 {
                     OutPut("放入SDK " + info.sdkList[i].sdkName);
-                    PutSDK(filePath, info.sdkList[i]);
+                    PutSDK(filePath, info.sdkList[i], info);
                 }
             }
 
@@ -190,7 +194,7 @@ namespace APKRepackageSDKTool
 
         #region 添加Activity与Service
 
-        void AddActivity(string filePath, ActivityInfo info)
+        void AddActivity(string filePath, ActivityInfo info,ChannelInfo channelInfo)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
 
@@ -200,9 +204,12 @@ namespace APKRepackageSDKTool
                 RemoveOldMainActivity(filePath);
             }
 
+            //替换关键字
+            string newContent = compileTool.ReplaceKeyWord(info.content, channelInfo);
+
             string xml = FileTool.ReadStringByFile(xmlPath);
             int index = xml.IndexOf("</application>");
-            xml = xml.Insert(index, info.content);
+            xml = xml.Insert(index, newContent);
 
             //直接保存
             XmlDocument xmlDoc = new XmlDocument();
@@ -323,6 +330,19 @@ namespace APKRepackageSDKTool
             xmlDoc.Save(xmlPath);
         }
 
+        void AddProvider(string filePath, ProviderInfo info,ChannelInfo channelInfo)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            int index = xml.IndexOf("</application>");
+            xml = xml.Insert(index, compileTool.ReplaceKeyWord(info.content, channelInfo));
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            xmlDoc.Save(xmlPath);
+        }
+
         void ChangeApplicationName(string filePath,string applicationName)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
@@ -410,7 +430,7 @@ namespace APKRepackageSDKTool
         void PutSDKInterface(string filePath)
         {
             string interfacePath = EditorData.SdkLibPath + "\\Interface\\SDKInterface.jar";
-            Jar2Smali(interfacePath, filePath);
+            compileTool.Jar2Smali(interfacePath, filePath);
         }
 
         void SaveSDKManifest(string filePath, ChannelInfo info)
@@ -451,13 +471,20 @@ namespace APKRepackageSDKTool
             FileTool.WriteStringByFile(path, content);
         }
 
-        void PutSDK(string filePath,SDKInfo info)
+        void PutSDK(string filePath,SDKInfo info, ChannelInfo channelInfo)
         {
             SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
 
             //添加Jar
             OutPut("添加Jar " + info.sdkName);
             PutJar(filePath, info);
+
+            //自动编译类
+            if(config.useCustomJavaClass)
+            {
+                OutPut("自动编译 " );
+                compileTool.Compile(config, channelInfo, filePath);
+            }
 
             //拷贝资源文件
             OutPut("拷贝资源文件 " + info.sdkName);
@@ -467,7 +494,7 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < config.ActivityInfoList.Count; i++)
             {
                 OutPut("添加Activity " + info.sdkName + " " + config.ActivityInfoList[i].name);
-                AddActivity(filePath, config.ActivityInfoList[i]);
+                AddActivity(filePath, config.ActivityInfoList[i], channelInfo);
             }
 
             //添加Service
@@ -477,7 +504,14 @@ namespace APKRepackageSDKTool
                 AddService(filePath, config.serviceInfoList[i]);
             }
 
-            if(!string.IsNullOrEmpty(config.ApplicationName))
+            //添加Provider
+            for (int i = 0; i < config.providerInfoList.Count; i++)
+            {
+                OutPut("添加Provider " + info.sdkName + " " + config.providerInfoList[i].name);
+                AddProvider(filePath, config.providerInfoList[i], channelInfo);
+            }
+
+            if (!string.IsNullOrEmpty(config.ApplicationName))
             {
                 ChangeApplicationName(filePath, config.ApplicationName);
             }
@@ -495,14 +529,15 @@ namespace APKRepackageSDKTool
 
             for (int i = 0; i < jarList.Count; i++)
             {
-                Jar2Smali(jarList[i], filePath);
+                compileTool.Jar2Smali(jarList[i], filePath);
             }
         }
 
         void SaveSDKConfigFile(string filePath , SDKInfo info)
         {
             //TODO 加密此处以免破解
-            string path = filePath + "\\assets\\"+ info.SdkName+ ".properties";
+            SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
+            string path = filePath + "\\assets\\"+ config.className+ ".properties";
 
             string content = "";
             for (int i = 0; i < info.sdkConfig.Count; i++)
@@ -565,31 +600,6 @@ namespace APKRepackageSDKTool
         }
 
 
-
-        #endregion
-
-        #region Java重编译
-
-        public void Jar2Smali(string jarPath,string filePath)
-        {
-            string smaliPath = filePath + "\\smali";
-            string JavaTempPath = PathTool.GetCurrentPath() + "\\JavaTempPath";
-            string jarName = FileTool.GetFileNameByPath(jarPath);
-            string tempPath = JavaTempPath + "\\" + jarName;
-
-            FileTool.CreatPath(JavaTempPath);
-
-            CmdService cmd = new CmdService(OutPut, errorCallBack);
-            //Jar to dex
-            cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath);
-
-            //dex to smali
-            cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath);
-
-            //删除临时目录
-            FileTool.DeleteDirectory(JavaTempPath);
-            Directory.Delete(JavaTempPath);
-        }
 
         #endregion
 

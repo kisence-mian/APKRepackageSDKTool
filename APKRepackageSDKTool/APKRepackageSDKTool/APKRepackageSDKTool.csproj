@@ -64,6 +64,7 @@
       <DependentUpon>GameSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\CmdService.cs" />
+    <Compile Include="src\CompileTool.cs" />
     <Compile Include="src\DeJson.cs" />
     <Compile Include="src\FileTool.cs" />
     <Compile Include="src\MiniJSON.cs" />

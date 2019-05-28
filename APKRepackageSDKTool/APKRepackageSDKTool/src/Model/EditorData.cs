@@ -257,16 +257,14 @@ namespace APKRepackageSDKTool
         {
             string content = FileTool.ReadStringByFile(path);
 
-            //List < KeyValue > list = des.Deserialize<List<KeyValue>>(content);
+            if(content == null || content == "")
+            {
+                SDKConfig c = new SDKConfig();
+                c.SdkName = configName;
+                return c;
+            }
 
             SDKConfig config = des.Deserialize<SDKConfig>(content);
-
-            //config.SdkName = configName;
-
-            //foreach (var item in list)
-            //{
-            //    config.Add(item);
-            //}
 
             return config;
         }
@@ -401,11 +399,9 @@ namespace APKRepackageSDKTool
                     return this[i];
                 }
             }
-
             throw new Exception("找不到SDK设置！ " + sdkName);
         }
     }
-
 
     public class KeyValue
     {
@@ -432,6 +428,11 @@ namespace APKRepackageSDKTool
     {
         public string sdkName;
         public string className;
+
+        public bool useCustomJavaClass;
+        public List<KeyValue> customJavaClass = new List<KeyValue>();
+        public List<string> customJavaLibrary = new List<string>();
+
         public SDKType sdkType;
         public List<KeyValue> configList = new List<KeyValue>();
         public List<string> permissionList = new List<string>();
@@ -441,6 +442,7 @@ namespace APKRepackageSDKTool
 
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
         public List<ServiceInfo> serviceInfoList = new List<ServiceInfo>();
+        public List<ProviderInfo> providerInfoList = new List<ProviderInfo>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -497,6 +499,10 @@ namespace APKRepackageSDKTool
         public int TargetSDKVersion { get => targetSDKVersion; set => targetSDKVersion = value; }
         public List<ActivityInfo> ActivityInfoList { get => activityInfoList; set => activityInfoList = value; }
         public string ApplicationName { get => applicationName; set => applicationName = value; }
+        public bool UseCustomJavaClass { get => useCustomJavaClass; set => useCustomJavaClass = value; }
+        public List<KeyValue> CustomJavaClass { get => customJavaClass; set => customJavaClass = value; }
+        public List<string> CustomJavaLibrary { get => customJavaLibrary; set => customJavaLibrary = value; }
+        public List<ProviderInfo> ProviderInfoList { get => providerInfoList; set => providerInfoList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -538,6 +544,27 @@ namespace APKRepackageSDKTool
         public string Content { get => content; set => content = value; }
         public string Name { get => name; set => name = value; }
 
+    }
+
+    public class ProviderInfo
+    {
+        public string name;
+        public string content;
+
+        public string Content { get => content; set => content = value; }
+        public string Name { get => name; set => name = value; }
+
+    }
+
+    class StringList : List<string>, INotifyCollectionChanged
+    {
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public void Change()
+        {
+            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+            CollectionChanged?.Invoke(this, e);
+        }
     }
 
     [Flags]

@@ -10,6 +10,9 @@ namespace APKRepackageSDKTool
 {
     public class CmdService
     {
+        bool ignoreError = false;
+        bool ignoreWarning = false;
+
         Process process;
 
         OutPutCallBack callBack;
@@ -21,31 +24,50 @@ namespace APKRepackageSDKTool
             this.errorCallBack = errorCallBack;
         }
 
-        public void Execute(string content)
+        public void Execute(string content, bool ignoreWarning = false, bool ignoreError = false)
         {
-            process = new Process();
-            process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
-            process.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
-            process.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
-            process.StartInfo.RedirectStandardError = true;//重定向标准错误输出
-            process.StartInfo.CreateNoWindow = true;//不显示程序窗口
-            process.Start();//启动程序
+            this.ignoreError = ignoreError;
+            this.ignoreWarning = ignoreWarning;
 
-            process.StandardInput.AutoFlush = true;
+            try
+            {
+                Out(content);
 
-            process.BeginErrorReadLine();
-            process.BeginOutputReadLine();
+                process = new Process();
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+                process.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+                process.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+                process.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+                process.StartInfo.CreateNoWindow = true;//不显示程序窗口
+                process.Start();//启动程序
 
-            process.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
-            process.ErrorDataReceived += new DataReceivedEventHandler(ErrorReceived);
+                process.StandardInput.AutoFlush = true;
 
-            process.StandardInput.WriteLine(content);
-            process.StandardInput.WriteLine("exit");
+                process.BeginErrorReadLine();
+                process.BeginOutputReadLine();
 
-            process.WaitForExit();//等待程序执行完退出进程
-            process.Close();
-            process = null;
+                process.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
+                process.ErrorDataReceived += new DataReceivedEventHandler(ErrorReceived);
+
+                process.StandardInput.WriteLine(content);
+                process.StandardInput.WriteLine("exit");
+
+                process.WaitForExit();//等待程序执行完退出进程
+                process.Close();
+                process = null;
+            }
+            catch(Exception e)
+            {
+                if(!ignoreError)
+                {
+                    errorCallBack?.Invoke(e.ToString());
+                }
+                else
+                {
+                    callBack?.Invoke(e.ToString());
+                }
+            }
         }
 
         public string GetOutPut()
@@ -62,10 +84,22 @@ namespace APKRepackageSDKTool
 
         private void ErrorReceived(object sender, DataReceivedEventArgs e)
         {
-            if (Filter(e.Data))
+            if(!ignoreError)
             {
-                errorCallBack?.Invoke(e.Data);
+                if (Filter(e.Data))
+                {
+                    errorCallBack?.Invoke(e.Data);
+                }
             }
+            else
+            {
+                Out(e.Data);
+            }
+        }
+
+        void Out(string content)
+        {
+            callBack?.Invoke(content);
         }
 
         bool Filter(string content)
