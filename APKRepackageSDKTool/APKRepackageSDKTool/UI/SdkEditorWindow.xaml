@@ -12,8 +12,8 @@
                 <Grid Background="#FFF9F9F9">
                     <Label Content="Java类名" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                     <TextBox Height="23" Margin="94,12,10,0" TextWrapping="Wrap" Text="{Binding Path=ClassName,Mode=TwoWay}" VerticalAlignment="Top"/>
-                    <Label Content="SDK类型" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
-                    <ListBox x:Name="ListBox_SDKType" HorizontalAlignment="Left" Margin="94,40,0,10" Width="207">
+                    <Label Content="SDK类型" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top"/>
+                    <ListBox x:Name="ListBox_SDKType" HorizontalAlignment="Left" Margin="94,73,0,10" Width="207">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -25,6 +25,8 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <Label Content="SDKName" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="94,40,10,0" TextWrapping="Wrap" Text="{Binding SdkName, Mode=TwoWay}" VerticalAlignment="Top"/>
 
                 </Grid>
             </TabItem>

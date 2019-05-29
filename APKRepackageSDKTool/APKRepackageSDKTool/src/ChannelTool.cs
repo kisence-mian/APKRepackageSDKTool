@@ -200,6 +200,21 @@ namespace APKRepackageSDKTool
 
         #region 添加Activity与Service
 
+        void RemoveErrordManifest(string filePath)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            xml = xml.Replace("android:compileSdkVersion=\"28\"", "");
+            xml = xml.Replace("android:compileSdkVersionCodename=\"9\"", "");
+
+            //直接保存
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            xmlDoc.Save(xmlPath);
+        }
+
         void AddActivity(string filePath, ActivityInfo info,SDKInfo sdkInfo,ChannelInfo channelInfo)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
@@ -471,8 +486,15 @@ namespace APKRepackageSDKTool
                         }
                     }
                 }
-
                 content += key + "=" + value + "\n";
+            }
+
+            //content += "\n";
+
+            for (int i = 0; i < info.sdkList.Count; i++)
+            {
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkList[i].sdkName);
+                content += config.className + "=" + config.sdkName + "\n";
             }
 
             FileTool.WriteStringByFile(path, content);
@@ -499,8 +521,11 @@ namespace APKRepackageSDKTool
             OutPut("添加Jar " + info.sdkName);
             PutJar(filePath, info);
 
+            //手动移除无法编译通过的字段
+            RemoveErrordManifest(filePath);
+
             //自动编译类
-            if(config.useCustomJavaClass)
+            if (config.useCustomJavaClass)
             {
                 OutPut("自动编译 " );
                 compileTool.Compile(config, channelInfo, filePath);
@@ -559,7 +584,7 @@ namespace APKRepackageSDKTool
         {
             //TODO 加密此处以免破解
             SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
-            string path = filePath + "\\assets\\"+ config.className+ ".properties";
+            string path = filePath + "\\assets\\"+ config.sdkName+ ".properties";
 
             string content = "";
             for (int i = 0; i < info.sdkConfig.Count; i++)
