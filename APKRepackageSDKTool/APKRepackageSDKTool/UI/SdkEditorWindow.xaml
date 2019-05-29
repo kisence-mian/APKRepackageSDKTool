@@ -97,7 +97,7 @@
                     <Button Content="新增" HorizontalAlignment="Left" Margin="125,0,0,6" VerticalAlignment="Bottom" Width="75" Click="Button_ClickAddActivity"/>
                     <TextBox x:Name="TextBox_ActivityName" HorizontalAlignment="Left" Margin="10,0,0,4" TextWrapping="NoWrap" Text="" Width="110" Height="23" VerticalAlignment="Bottom"/>
                     <Grid x:Name="Grid_Activity" Margin="205,0,0,0">
-                        <TextBox x:Name="TextBox_ActivityContent" Margin="10,30,10,10" TextWrapping="Wrap" Text="{Binding Path=Content}"  VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextChanged="TextBox_ActivityContent_TextChanged" />
+                        <TextBox x:Name="TextBox_ActivityContent" Margin="10,30,10,10" TextWrapping="Wrap" Text="{Binding Path=Content}"  VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextChanged="TextBox_ActivityContent_TextChanged" IsEnabled="False" />
                         <CheckBox x:Name="CheckBox_main" Content="主Activity" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="CheckBox_main_Checked" Unchecked="CheckBox_main_Unchecked"/>
                         <Button Content="说明" Margin="0,6,10,0" Click="Button_ClickInfo" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
                     </Grid>

@@ -344,6 +344,7 @@ namespace APKRepackageSDKTool
         public string appBanner;
 
         public List<SDKInfo> sdkList = new List<SDKInfo>();
+        public List<KeyValue> propertiesList = new List<KeyValue>();
 
         public string Name { get => channelName; set => channelName = value; }
         public bool IsChecked { get => isChecked; set => isChecked = value; }
@@ -357,6 +358,7 @@ namespace APKRepackageSDKTool
         public List<SDKInfo> SdkList { get => sdkList; set => sdkList = value; }
         public string AppBanner { get => appBanner; set => appBanner = value; }
         public string Suffix { get => suffix; set => suffix = value; }
+        public List<KeyValue> PropertiesList { get => propertiesList; set => propertiesList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -402,6 +404,8 @@ namespace APKRepackageSDKTool
             throw new Exception("找不到SDK设置！ " + sdkName);
         }
     }
+
+
 
     public class KeyValue
     {

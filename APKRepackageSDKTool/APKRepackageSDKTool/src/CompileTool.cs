@@ -103,14 +103,17 @@ public class CompileTool
         string result = oldContent;
         result = result.Replace("{PackageName}", channelInfo.PackageName);
 
-        //Encoding utf8 = Encoding.UTF8;
-        //Encoding gb2312 = Encoding.GetEncoding("GB2312");
+        return result;
+    }
 
-        //byte[] gb = gb2312.GetBytes(result);
-        //gb = Encoding.Convert(gb2312, utf8, gb);
+    public string ReplaceKeyWordbySDKInfo(string oldContent, SDKInfo SDKinfo)
+    {
+        string result = oldContent;
 
-        //result = utf8.GetString(gb);
-
+        for (int i = 0; i < SDKinfo.sdkConfig.Count; i++)
+        {
+            result = result.Replace("{"+ SDKinfo.sdkConfig[i].key + "}", SDKinfo.sdkConfig[i].value);
+        }
         return result;
     }
 }

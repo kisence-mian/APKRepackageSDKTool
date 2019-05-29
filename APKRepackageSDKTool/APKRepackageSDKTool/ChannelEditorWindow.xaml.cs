@@ -23,6 +23,7 @@ namespace APKRepackageSDKTool
     public partial class ChannelEditorWindow : Window
     {
         SelectInfo selectInfo = new SelectInfo();
+        PropertiesList propertiesList;
 
         private SelectInfo CurrentSelectInfo
         {
@@ -32,6 +33,34 @@ namespace APKRepackageSDKTool
             {
                 selectInfo = value;
                 selectInfo.Change();
+            }
+        }
+
+        public PropertiesList _PropertiesList
+        {
+            get
+            {
+                if(propertiesList == null)
+                {
+                    propertiesList = new PropertiesList();
+                    for (int i = 0; i < EditorData.CurrentChannel.PropertiesList.Count; i++)
+                    {
+                        propertiesList.Add(EditorData.CurrentChannel.PropertiesList[i]);
+                    }
+                }
+
+                return propertiesList;
+            }
+            set
+            {
+                propertiesList = value;
+                propertiesList.Change();
+
+                EditorData.CurrentChannel.PropertiesList.Clear();
+                for (int i = 0; i < propertiesList.Count; i++)
+                {
+                    EditorData.CurrentChannel.PropertiesList.Add(propertiesList[i]);
+                }
             }
         }
 
@@ -46,6 +75,7 @@ namespace APKRepackageSDKTool
 
             ListBox_SDKList.ItemsSource = EditorData.TotalSDKInfo;
             ListBox_SdkConfigList.ItemsSource = CurrentSelectInfo;
+            ListBox_PropertiesList.ItemsSource = _PropertiesList;
         }
 
         #region 点击事件
@@ -159,10 +189,57 @@ namespace APKRepackageSDKTool
             CurrentSelectInfo = CurrentSelectInfo;
         }
 
+        #region 属性编辑
+
+        private void Button_AddProperties(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            if(!string.IsNullOrEmpty(TextBox_PropertiesKey.Text))
+            {
+                KeyValue kv = new KeyValue();
+                kv.key = TextBox_PropertiesKey.Text;
+
+                _PropertiesList.Add(kv);
+
+                _PropertiesList = _PropertiesList;
+            }
+        }
+
+        private void Button_DeleteProperties(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string Key = (string)btn.Tag;
+            for (int i = 0; i < _PropertiesList.Count; i++)
+            {
+                if(Key == _PropertiesList[i].key)
+                {
+                    _PropertiesList.RemoveAt(i);
+                    break;
+                }
+            }
+
+            _PropertiesList = _PropertiesList;
+        }
+
+        #endregion
+
         #endregion
 
 
         class SelectInfo : List<KeyValue>, INotifyCollectionChanged
+        {
+            public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+            public void Change()
+            {
+                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+                CollectionChanged?.Invoke(this, e);
+            }
+        }
+
+        public class PropertiesList : List<KeyValue>, INotifyCollectionChanged
         {
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 

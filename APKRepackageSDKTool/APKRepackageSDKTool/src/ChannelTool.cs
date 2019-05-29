@@ -67,6 +67,12 @@ namespace APKRepackageSDKTool
             OutPut("写配置清单");
             SaveSDKManifest(filePath, info);
 
+            if(info.propertiesList.Count > 0)
+            {
+                OutPut("写入配置");
+                SaveProperties(filePath, info);
+            }
+
             OutPut("整合权限");
             PermissionLogic(filePath, info);
 
@@ -194,7 +200,7 @@ namespace APKRepackageSDKTool
 
         #region 添加Activity与Service
 
-        void AddActivity(string filePath, ActivityInfo info,ChannelInfo channelInfo)
+        void AddActivity(string filePath, ActivityInfo info,SDKInfo sdkInfo,ChannelInfo channelInfo)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
 
@@ -206,6 +212,7 @@ namespace APKRepackageSDKTool
 
             //替换关键字
             string newContent = compileTool.ReplaceKeyWord(info.content, channelInfo);
+            newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
 
             string xml = FileTool.ReadStringByFile(xmlPath);
             int index = xml.IndexOf("</application>");
@@ -471,6 +478,19 @@ namespace APKRepackageSDKTool
             FileTool.WriteStringByFile(path, content);
         }
 
+        void SaveProperties(string filePath, ChannelInfo info)
+        {
+            string path = filePath + "\\assets\\Channel.properties";
+            string content = "";
+
+            for (int i = 0; i < info.propertiesList.Count; i++)
+            {
+                content += info.propertiesList[i].key + "=" + info.propertiesList[i].value + "\n";
+            }
+
+            FileTool.WriteStringByFile(path, content);
+        }
+
         void PutSDK(string filePath,SDKInfo info, ChannelInfo channelInfo)
         {
             SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
@@ -494,7 +514,7 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < config.ActivityInfoList.Count; i++)
             {
                 OutPut("添加Activity " + info.sdkName + " " + config.ActivityInfoList[i].name);
-                AddActivity(filePath, config.ActivityInfoList[i], channelInfo);
+                AddActivity(filePath, config.ActivityInfoList[i], info, channelInfo);
             }
 
             //添加Service
@@ -511,8 +531,10 @@ namespace APKRepackageSDKTool
                 AddProvider(filePath, config.providerInfoList[i], channelInfo);
             }
 
+            //修改ApplicationName
             if (!string.IsNullOrEmpty(config.ApplicationName))
             {
+                OutPut("修改ApplicationName " + config.ApplicationName);
                 ChangeApplicationName(filePath, config.ApplicationName);
             }
 

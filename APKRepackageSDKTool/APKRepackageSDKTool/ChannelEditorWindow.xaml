@@ -49,7 +49,7 @@
             </TabItem>
             <TabItem Header="SDK">
                 <Grid Background="#FFF9F9F9">
-                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Margin="10,10,0,34" Width="239" >
+                    <ListBox x:Name="ListBox_SDKList" HorizontalAlignment="Left" Margin="10,10,0,34" Width="287" >
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -67,7 +67,26 @@
                     </ListBox>
                     <Button Content="新增" HorizontalAlignment="Left" Margin="174,0,0,10" Width="75" Click="Button_Click_AddSDK" Height="19" VerticalAlignment="Bottom"/>
                     <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="" Width="159" Height="19" VerticalAlignment="Bottom"/>
-                    <ListBox x:Name="ListBox_SdkConfigList" HorizontalAlignment="Left" Margin="254,10,0,34" Width="233">
+                    <ListBox x:Name="ListBox_SdkConfigList" Margin="302,10,10,34">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <Label Content="{Binding Path=Key,Mode=TwoWay}" Width="300" HorizontalAlignment="Left" />
+                                    <TextBox Text="{Binding Path=Value,Mode=TwoWay}"  HorizontalAlignment="Right" Width="300"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="渠道配置">
+                <Grid Background="#FFF9F9F9">
+                    <ListBox x:Name="ListBox_PropertiesList" Margin="10,10,10,34">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -77,11 +96,15 @@
                             <DataTemplate>
                                 <Grid >
                                     <Label Content="{Binding Path=Key,Mode=TwoWay}" Width="140" HorizontalAlignment="Left" />
-                                    <TextBox Text="{Binding Path=Value,Mode=TwoWay}"  HorizontalAlignment="Right" Width="130"/>
+                                    <TextBox Text="{Binding Path=Value,Mode=TwoWay}"  HorizontalAlignment="Right" Width="300" Margin="0,0,60,0"/>
+                                    <Button Content="删除" HorizontalAlignment="Right" Tag="{Binding Path=Key}" Click="Button_DeleteProperties" Width="50" Margin="0,0,0,0"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <Button Content="新增" Margin="0,0,10,10" Click="Button_AddProperties" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
+                    <TextBox x:Name="TextBox_PropertiesKey" Margin="10,0,90,10" TextWrapping="Wrap" Text="" Height="19" VerticalAlignment="Bottom"/>
+
                 </Grid>
             </TabItem>
             <TabItem Header="详细信息">

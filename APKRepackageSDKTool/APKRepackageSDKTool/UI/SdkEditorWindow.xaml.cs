@@ -554,6 +554,7 @@ namespace APKRepackageSDKTool.UI
             }
 
             TextBox_ActivityContent.Text = currentActivityInfo.Content;
+            TextBox_ActivityContent.IsEnabled = true;
             CheckBox_main.IsChecked = currentActivityInfo.MainActivity;
         }
 
