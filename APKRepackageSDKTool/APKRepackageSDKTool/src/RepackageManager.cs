@@ -99,9 +99,11 @@ namespace APKRepackageSDKTool
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
                         ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
 
+                        string apktool_version = "apktool";
+
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
-                        cmd.Execute("java -jar apktool.jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
+                        cmd.Execute("java -jar "+ apktool_version + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
 
                         //执行对应的文件操作
                         MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
@@ -109,7 +111,7 @@ namespace APKRepackageSDKTool
 
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
-                        cmd.Execute("java -jar apktool.jar b " + aimPath);
+                        cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath);
 
                         //进行签名
                         MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);

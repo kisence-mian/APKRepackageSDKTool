@@ -52,6 +52,9 @@ namespace APKRepackageSDKTool
                 ChangeAppBanner(filePath, info.AppBanner);
             }
 
+            OutPut("替换MainActity");
+            ChangeMainActity(filePath, info.AppBanner);
+
             if (info.sdkList.Count > 0)
             {
                 OutPut("放入SDK接口 ");
@@ -85,12 +88,24 @@ namespace APKRepackageSDKTool
             callBack?.Invoke(content);
         }
 
-
         public void ErrorOutPut(string content)
         {
             errorCallBack?.Invoke(content);
         }
         #region AndroidManifest 修改
+
+        private void ChangeMainActity(string filePath, string appBanner)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            xml = xml.Replace("com.unity3d.player.UnityPlayerActivity", "SdkInterface.MainActivity");
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+
+            xmlDoc.Save(xmlPath);
+        }
 
         public void ChangePackageName(string filePath, string packageName)
         {

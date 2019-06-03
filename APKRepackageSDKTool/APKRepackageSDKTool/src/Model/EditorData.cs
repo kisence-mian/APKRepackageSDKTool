@@ -343,6 +343,8 @@ namespace APKRepackageSDKTool
         public string appIcon;
         public string appBanner;
 
+        public string apktoolVersion = "apktool";
+
         public List<SDKInfo> sdkList = new List<SDKInfo>();
         public List<KeyValue> propertiesList = new List<KeyValue>();
 
@@ -359,6 +361,7 @@ namespace APKRepackageSDKTool
         public string AppBanner { get => appBanner; set => appBanner = value; }
         public string Suffix { get => suffix; set => suffix = value; }
         public List<KeyValue> PropertiesList { get => propertiesList; set => propertiesList = value; }
+        public string ApktoolVersion { get => apktoolVersion; set => apktoolVersion = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
