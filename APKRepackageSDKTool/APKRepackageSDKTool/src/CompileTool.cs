@@ -35,7 +35,7 @@ public class CompileTool
 
         CmdService cmd = new CmdService(OutPut, errorCallBack);
         //Jar to dex
-        cmd.Execute("java -jar dx.jar --dex --verbose --output=" + tempPath + " " + jarPath,true,true);
+        cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath,true,true);
 
         //dex to smali
         cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath);

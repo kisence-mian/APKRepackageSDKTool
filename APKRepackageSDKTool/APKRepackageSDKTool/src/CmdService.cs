@@ -31,7 +31,7 @@ namespace APKRepackageSDKTool
 
             try
             {
-                Out(content);
+                //Out(content);
 
                 process = new Process();
                 process.StartInfo.FileName = "cmd.exe";

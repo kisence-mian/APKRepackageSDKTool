@@ -1,4 +1,6 @@
-﻿using System;
+﻿using APKRepackageSDKTool.src;
+using APKRepackageSDKTool.src.YML;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -9,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace APKRepackageSDKTool
 {
@@ -708,6 +711,23 @@ namespace APKRepackageSDKTool
                 }
             }
             ChangeSDKVersion(filePath, minSDKVersion, targetSDKVersion);
+        }
+
+        #endregion
+
+        #region YML
+
+
+        public void YMLLogic(string filePath)
+        {
+            string path = filePath + @"\apktool.yml";
+            var input = new StringReader(path);
+
+            YML yml = new YML(path);
+
+            yml.modify("doNotCompress", "null");
+            yml.DeleteAllChildNode("doNotCompress");
+            yml.save();
         }
 
         #endregion

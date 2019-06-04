@@ -99,7 +99,10 @@ namespace APKRepackageSDKTool
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
                         ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
 
-                        string apktool_version = "apktool";
+                        string apktool_version = "apktool_2.3.1";
+
+                        //MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
+                        //channelTool.YMLLogic(aimPath);
 
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
@@ -108,6 +111,10 @@ namespace APKRepackageSDKTool
                         //执行对应的文件操作
                         MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
                         channelTool.ChannelLogic(aimPath, channelInfo);
+
+                        //移除过长的YML
+                        MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
+                        channelTool.YMLLogic(aimPath);
 
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
