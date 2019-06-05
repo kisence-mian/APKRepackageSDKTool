@@ -343,6 +343,8 @@ namespace APKRepackageSDKTool
         public string appIcon;
         public string appBanner;
 
+        public bool isLog;  //输出日志
+
         public string apktoolVersion = "apktool";
 
         public List<SDKInfo> sdkList = new List<SDKInfo>();
@@ -362,6 +364,7 @@ namespace APKRepackageSDKTool
         public string Suffix { get => suffix; set => suffix = value; }
         public List<KeyValue> PropertiesList { get => propertiesList; set => propertiesList = value; }
         public string ApktoolVersion { get => apktoolVersion; set => apktoolVersion = value; }
+        public bool IsLog { get => isLog; set => isLog = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

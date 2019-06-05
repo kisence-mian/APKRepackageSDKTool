@@ -200,6 +200,8 @@ namespace APKRepackageSDKTool
                 KeyValue kv = new KeyValue();
                 kv.key = TextBox_PropertiesKey.Text;
 
+                TextBox_PropertiesKey.Text = "";
+
                 _PropertiesList.Add(kv);
 
                 _PropertiesList = _PropertiesList;

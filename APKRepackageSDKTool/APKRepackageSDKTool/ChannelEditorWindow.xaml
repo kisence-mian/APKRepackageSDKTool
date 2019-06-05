@@ -107,8 +107,9 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="详细信息">
+            <TabItem Header="其他">
                 <Grid Background="#FFF9F9F9">
+                    <CheckBox Content="输出日志" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLog,Mode=TwoWay}" />
 
                 </Grid>
             </TabItem>

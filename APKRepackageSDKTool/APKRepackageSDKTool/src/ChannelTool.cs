@@ -515,6 +515,11 @@ namespace APKRepackageSDKTool
                 content += config.className + "=" + config.sdkName + "\n";
             }
 
+            if(info.isLog)
+            {
+                content += "IsLog=true\n";
+            }
+
             FileTool.WriteStringByFile(path, content);
         }
 
