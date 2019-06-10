@@ -160,8 +160,8 @@
                 <Grid>
                     <CheckBox x:Name="CheckBox_customJavaClass" IsChecked="{Binding Path=UseCustomJavaClass, Mode=TwoWay}" Content="自编译JavaClass" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Unchecked="CheckBox_customJavaClass_checked" Checked="CheckBox_customJavaClass_checked" RenderTransformOrigin="-1.789,-1.333"/>
                     <Grid x:Name="Grid_customJava" Margin="0,30,0,0" >
-                        <TextBox x:Name="TextBox_ClassTemplate" Text="{Binding Path=ClassContent}" Margin="300,0,10,10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" TextChanged="TextBox_ClassTemplate_TextChanged" />
-                        <ListBox x:Name="ListBox_CustomLibrary" Margin="10,0,0,36" HorizontalAlignment="Left" Width="116">
+                        <TextBox x:Name="TextBox_ClassTemplate" Text="{Binding Path=ClassContent}" Margin="420,0,10,10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" TextChanged="TextBox_ClassTemplate_TextChanged" />
+                        <ListBox x:Name="ListBox_CustomLibrary" Margin="10,0,0,36" HorizontalAlignment="Left" Width="200">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -170,13 +170,13 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
-                                        <Label Content="{Binding Path=.}" Width="140" HorizontalAlignment="Left" />
+                                        <Label Content="{Binding Path=.}"  HorizontalAlignment="Left" Margin="0,0,45,0" />
                                         <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=.}" Click="Button_CustomJavaLibrary_Delete"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="ListBox_CustomJava" Margin="131,0,0,36" HorizontalAlignment="Left" Width="164" SelectedValuePath="Key" SelectionChanged="ListBox_CustomJava_SelectionChanged">
+                        <ListBox x:Name="ListBox_CustomJava" Margin="215,0,0,36" HorizontalAlignment="Left" Width="200" SelectedValuePath="Key" SelectionChanged="ListBox_CustomJava_SelectionChanged">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -185,15 +185,15 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
-                                        <Label Content="{Binding Path=Key}" Width="140" HorizontalAlignment="Left" />
+                                        <Label Content="{Binding Path=Key}"  HorizontalAlignment="Left" Margin="0,0,45,0" />
                                         <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Key}" Click="Button_addCustomJava_Delete"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBox x:Name="TextBox_customJavaName" HorizontalAlignment="Left" Margin="131,0,0,11" TextWrapping="Wrap" Text="" Width="105" Height="19" VerticalAlignment="Bottom"/>
-                        <Button x:Name="Button_addCustomJava" Content="新增" HorizontalAlignment="Left" Margin="241,0,0,10" Width="54" RenderTransformOrigin="2.567,0.571" Click="Button_addCustomJava_Click" Height="21" VerticalAlignment="Bottom" />
-                        <Button x:Name="Button_addCustomJavaLibrary" Content="浏览" HorizontalAlignment="Left" Margin="51,0,0,12" Width="75" Click="Button_addCustomJavaLibrary_Click" Height="19" VerticalAlignment="Bottom" />
+                        <TextBox x:Name="TextBox_customJavaName" HorizontalAlignment="Left" Margin="215,0,0,14" TextWrapping="Wrap" Text="" Width="141" Height="19" VerticalAlignment="Bottom"/>
+                        <Button x:Name="Button_addCustomJava" Content="新增" HorizontalAlignment="Left" Margin="361,0,0,12" Width="54" RenderTransformOrigin="2.567,0.571" Click="Button_addCustomJava_Click" Height="21" VerticalAlignment="Bottom" />
+                        <Button x:Name="Button_addCustomJavaLibrary" Content="浏览" HorizontalAlignment="Left" Margin="135,0,0,12" Width="75" Click="Button_addCustomJavaLibrary_Click" Height="19" VerticalAlignment="Bottom" />
                     </Grid>
                 </Grid>
             </TabItem>

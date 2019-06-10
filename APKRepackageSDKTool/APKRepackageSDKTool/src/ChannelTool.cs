@@ -102,7 +102,7 @@ namespace APKRepackageSDKTool
             string xmlPath = filePath + "\\AndroidManifest.xml";
             string xml = FileTool.ReadStringByFile(xmlPath);
 
-            xml = xml.Replace("com.unity3d.player.UnityPlayerActivity", "SdkInterface.MainActivity");
+            xml = xml.Replace("com.unity3d.player.UnityPlayerActivity", "sdkInterface.MainActivity");
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
@@ -469,7 +469,7 @@ namespace APKRepackageSDKTool
 
         void PutSDKInterface(string filePath)
         {
-            string interfacePath = EditorData.SdkLibPath + "\\Interface\\SDKInterface.jar";
+            string interfacePath = EditorData.SdkLibPath + "\\Interface\\SdkInterface.jar";
             compileTool.Jar2Smali(interfacePath, filePath);
         }
 
