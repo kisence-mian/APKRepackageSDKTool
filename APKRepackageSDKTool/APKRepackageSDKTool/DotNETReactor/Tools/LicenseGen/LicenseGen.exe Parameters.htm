@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Command Line Parameters</TITLE>
+<style type="text/css">
+<!--
+.style1 {color: #000099}
+-->
+</style>
+</HTML>
+<BODY alink=#ff0000 bgcolor="#EDF7FE">
+<div align="left"> 
+  <table width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#81A2B3">
+    <tr> 
+      <td align="left"> <span style="font-family:Helvetica,Arial; font-size:12pt; color:"#000000"><b><font color="#FFFFFF">
+Command Line Parameters</font></b><b> <br>
+        </b></span> </td>
+      <td align="right"> <font face="Arial" size="2">&nbsp; </font> </td>
+    </tr>
+  </table>
+  <div align="left"> 
+   
+  </div><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="100" bgcolor="A0A0A0"><table width="100%" height="365" border="0" cellpadding="3" cellspacing="1">
+      <tr>
+        <td width="26%" height="22" bgcolor="E0E0E0"><font size="2" face="Arial, Helvetica, sans-serif"><strong>General Arguments </strong></font></td>
+        <td width="74%" bgcolor="E0E0E0"><font size="2" face="Arial, Helvetica, sans-serif"><strong>Description</strong></font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-project </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;file&gt;</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Path to a .NET Reactor project file.</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif"><strong><font size="2" face="Arial, Helvetica, sans-serif">-masterkey </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;text&gt;</font></font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">32 bytes(a 3 chars). For example: 18 37 111 46... = 018037111046...</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif"><strong><font size="2" face="Arial, Helvetica, sans-serif">-masterkeyfile </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;file&gt;</font></font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif"> Path to a Master 
+          Key file.</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-[q]uiet</font></strong> </td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Specifies quiet mode; suppresses the display of messages</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-targetfile </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;file&gt; </font></td>
+        <td bgcolor="#EDF7FE"><p><font size="2" face="Arial, Helvetica, sans-serif">Creates a license file at a specific location. </font></p></td>
+      </tr>
+      <tr>
+        <td height="25" bgcolor="E0E0E0"><strong><font size="2" face="Arial, Helvetica, sans-serif">Licensing Arguments</font></strong><font size="2" face="Arial, Helvetica, sans-serif">&nbsp;</font></td>
+        <td bgcolor="E0E0E0">&nbsp;</td>
+      </tr>
+      
+      
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-evaluationenable</font><font size="2" face="Arial, Helvetica, sans-serif"> </font></strong><font size="2" face="Arial, Helvetica, sans-serif">[1/0]</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Enable EvaluationLock if you want your license file to be only valid for a limited time. With '-time' you can choose the time<br>
+[1] = Enable<br>
+[0] = Disable <em>{default}</em></font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-evaluationtype</font><font size="2" face="Arial, Helvetica, sans-serif"> </font></strong><font size="2" face="Arial, Helvetica, sans-serif">[trial/runtime]</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Choose between Trial and Runtime<br>
+[trial] = Trial <em>{default}</em><br>
+[runtime] = Runtime</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-time</font><font size="2" face="Arial, Helvetica, sans-serif"> </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;number&gt;</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Evaluation Time(minutes/days). Minutes or days depend on the type of evaluation.</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-hardwareenable</font><font size="2" face="Arial, Helvetica, sans-serif"> </font></strong><font size="2" face="Arial, Helvetica, sans-serif">[1/0]</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Enable Hardware_Lock if you want your license file to be only valid on specific hardware.<br>
+[1] = Enable<br>
+[0] = Disable <em>{default}</em></font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-hardwareid</font><font size="2" face="Arial, Helvetica, sans-serif"> </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;text&gt;</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">HardwareID</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-hardwareidfile</font><font size="2" face="Arial, Helvetica, sans-serif"> </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;file&gt;</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Path to a HardwareID file.</font></td>
+      </tr>
+      <tr>
+        <td height="22" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-expirationdate</font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;y/m/d&gt;</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Choose a day. Your license will be valid up to this day. After this day your customer will need a new license.<br>
+[year/month/day] for example '2006/7/15' </font></td>
+      </tr>
+      <tr>
+        <td height="38" bgcolor="#EDF7FE"><strong><font size="2" face="Arial, Helvetica, sans-serif">-licenseinfo </font></strong><font size="2" face="Arial, Helvetica, sans-serif">&lt;key|value / key|value&gt;</font></td>
+        <td bgcolor="#EDF7FE"><font size="2" face="Arial, Helvetica, sans-serif">Add additonal license information to your license file <br>
+[key|value / key|value] for example &quot;Company|XYLimited/Regname|XYRegname/City|Paris&quot; </font></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+
+  <font size="2" face="Arial, Helvetica, sans-serif">
+</font>
+  <p><font size="2" face="Arial, Helvetica, sans-serif">Example Combinations:</font></p>
+  
+  <p class="style1"><font size="2" face="Arial, Helvetica, sans-serif">LicenseGen.exe   -masterkeyfile "c:\key.mkey" -hardwareenable 1 -hardwareidfile &quot;c:\HardwareID.txt&quot;  -targetfile &quot;c:\license.license&quot;</font></p>
+  
+  <p class="style1"><font size="2" face="Arial, Helvetica, sans-serif">LicenseGen.exe  -project "c:\projx.nrproj" -licenseinfo &quot;Company|XYLimited&quot; -targetfile &quot;c:\license.license&quot; </font></p>
+  
+<p class="style1"><font size="2" face="Arial, Helvetica, sans-serif">LicenseGen.exe  -masterkey 002149181064201017142145188174235116178186198216076246122136168043124074168146180253065165014229 -targetfile &quot;c:\license.license&quot; </font></p>
+</div>
+</BODY>
+</HTML>
+

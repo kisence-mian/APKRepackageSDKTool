@@ -1,0 +1,35 @@
+[General_Settings]
+General_Loading_Screen_Enable = True ; 
+General_Protection_Type = Application ; 
+General_App_Icon =  ; 
+General_App_Satellite_Assemblies =  ; 
+General_App_Satellite_Assemblies_Sizes =  ; 
+General_Lib_Native_Satellite_Name =  ; 
+General_License_File_Name =  ; 
+Assembly_File_Name = LicenseExamination.exe ; 
+General_Lib_Strong_Name_Key_Pair =  ; 
+General_Lib_Remove_Resources = False ; 
+General_Lib_Packer_Enable = True ; 
+General_Lib_Packer_Current = True ; 
+General_Lib_Packer_System = True ; 
+MasterKey = 188060049251052186023090202173122154169081127252087037029030198086189131248049168239228084075008 ; 
+ImageRuntimeVersion = v1.1.4322 ; 
+AdditonalLicenseInformation = Reg_Name|Mister XY|Company|XYZ Limited| ; 
+General_Protection_Type_Enable = False ; 
+[Lock_Settings]
+Lock_Snag_Screen_Enable = False ; 
+Lock_Expiration_Screen_Enable = True ; 
+Lock_License_Enable = False ; 
+Lock_Hardware_Enable = False ; 
+Lock_Evaluation_Enable = True ; 
+Lock_Evaluation_Type = Trial_Days ; 
+Lock_Evaluation_Time = 100 ; 
+Lock_License_Expiration_Date = 20051130 ; 
+[Dialogs]
+Dialogs_Caption = Lock System ; 
+Dialogs_License_Expired = Sorry, your license is expired! Please purchase a new license to extend the current one. ; 
+Dialogs_SnagScreen = Snag Screen! This program needs a valid key to be executed without limitations! This message will disappear when the correct key is installed! ; 
+Dialogs_Trial_Period_End = This program needs a valid key to be executed without limitations! You have exceeded the [current_minutes_days] of [max_minutes_days] days trial period of this software! ; 
+Dialogs_Gradient_Color_Begin = 255255255 ; 
+Dialogs_Gradient_Color_End = 157211252 ; 
+Dialogs_License_Examination_Failed = Sorry, you need a valid license to use this product. ; 

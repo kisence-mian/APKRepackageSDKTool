@@ -116,6 +116,10 @@ namespace APKRepackageSDKTool
                         MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
                         channelTool.YMLLogic(aimPath);
 
+                        ////混淆DLL
+                        //MakeProgress("混淆DLL", i, channelList.Count, channelInfo.Name);
+                        //channelTool.ConfusionDLL(aimPath);
+
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
                         cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath);

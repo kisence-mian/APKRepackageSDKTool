@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MyMessageBox", "MyMessageBox.vbproj", "{A0C3C2B8-258E-41FD-990B-E270A75C3BFE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A0C3C2B8-258E-41FD-990B-E270A75C3BFE}.Debug.ActiveCfg = Debug|.NET
+		{A0C3C2B8-258E-41FD-990B-E270A75C3BFE}.Debug.Build.0 = Debug|.NET
+		{A0C3C2B8-258E-41FD-990B-E270A75C3BFE}.Release.ActiveCfg = Release|.NET
+		{A0C3C2B8-258E-41FD-990B-E270A75C3BFE}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

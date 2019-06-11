@@ -1,0 +1,6 @@
+E:\guofu\mine\.NET Reactor\SDK\Customizeable MessageBox\C#\VS2005\bin\Release\MyMessageBox.exe
+E:\guofu\mine\.NET Reactor\SDK\Customizeable MessageBox\C#\VS2005\obj\Release\ResolveAssemblyReference.cache
+E:\guofu\mine\.NET Reactor\SDK\Customizeable MessageBox\C#\VS2005\obj\Release\MyMessageBox.Form1.resources
+E:\guofu\mine\.NET Reactor\SDK\Customizeable MessageBox\C#\VS2005\obj\Release\MyMessageBox.MyMessageBox.resources
+E:\guofu\mine\.NET Reactor\SDK\Customizeable MessageBox\C#\VS2005\obj\Release\MyMessageBox.csproj.GenerateResource.Cache
+E:\guofu\mine\.NET Reactor\SDK\Customizeable MessageBox\C#\VS2005\obj\Release\MyMessageBox.exe

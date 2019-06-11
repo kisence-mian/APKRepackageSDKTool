@@ -737,6 +737,28 @@ namespace APKRepackageSDKTool
 
         #endregion
 
+        #region 混淆Dll
+
+        public void ConfusionDLL(string filePath)
+        {
+            string dllPath = filePath + @"\assets\bin\Data\Managed\Assembly-CSharp.dll";
+            string outPath = filePath + @"\assets\bin\Data\Managed\Assembly-CSharp_Secure\Assembly-CSharp.dll";
+            string outDir = filePath + @"\assets\bin\Data\Managed\Assembly-CSharp_Secure";
+
+            CmdService cmd = new CmdService(OutPut, errorCallBack);
+            //混淆
+            cmd.Execute(@"DotNETReactor\dotNET_Reactor.exe -file " + dllPath);
+
+            //覆盖
+            File.Copy(outPath, dllPath,true);
+
+            //删除旧文件
+            File.Delete(outPath);
+            Directory.Delete(outDir);
+        }
+
+        #endregion 
+
     }
 
 }

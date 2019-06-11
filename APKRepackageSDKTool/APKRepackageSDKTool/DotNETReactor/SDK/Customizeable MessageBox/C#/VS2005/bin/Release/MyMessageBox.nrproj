@@ -1,0 +1,45 @@
+[General_Settings]
+General_Loading_Screen_Enable = False ; 
+General_Protection_Type = Application ; 
+General_App_Icon =  ; 
+General_App_Satellite_Assemblies =  ; 
+General_App_Satellite_Assemblies_Sizes = 122033 ; 
+General_App_Console = False ; 
+General_Lib_Necrobit = False ; 
+General_Lib_Obfuscation = True ; 
+General_Lib_String_Encryption = True ; 
+General_Lib_DesignTimeLicense = False ; 
+General_Lib_AntiDecompiler = True ; 
+General_Lib_Native_Protection_License_System = True ; 
+General_Lib_Native_Satellite_Name =  ; 
+General_License_File_Name =  ; 
+Assembly_File_Name = MyMessageBox.exe ; 
+Assembly_Full_Name =  ; 
+General_Lib_Strong_Name_Key_Pair =  ; 
+General_Lib_Remove_Resources = False ; 
+General_Lib_Packer_Enable = True ; 
+General_Lib_Packer_Current = True ; 
+General_Lib_Packer_System = True ; 
+General_Compressor = False ; 
+MasterKey = 054187015016204179099036010252084115239204113183094209110057089217038071106110025024143230080144 ; 
+ImageRuntimeVersion = v1.1.4322 ; 
+AdditonalLicenseInformation =  ; 
+General_Protection_Type_Enable = True ; 
+[Lock_Settings]
+Lock_Snag_Screen_Enable = True ; 
+Lock_Expiration_Screen_Enable = True ; 
+Lock_License_Enable = False ; 
+Lock_Hardware_Enable = False ; 
+Lock_Evaluation_Enable = False ; 
+Lock_Evaluation_Type = Trial_Days ; 
+Lock_Evaluation_Time = 1 ; 
+Lock_License_Expiration_Date = 20060309 ; 
+[Dialogs]
+Dialogs_Caption = Lock System ; 
+CustomizeMessageBox = MyMessageBox.MyMessageBox ; 
+Dialogs_License_Expired = Sorry, your license is expired! Please purchase a new license to extend the current one. ; 
+Dialogs_SnagScreen = Snag Screen! This message will disappear when a valid license file is installed! You have exceeded the [current_minutes_days] of [max_minutes_days] days trial period of this software! ; 
+Dialogs_Trial_Period_End = You have exceeded the [current_minutes_days] of [max_minutes_days] days trial period of this software. Your trial period is expired! You need to purchase a full version to run this software. ; 
+Dialogs_Gradient_Color_Begin = 255255255 ; 
+Dialogs_Gradient_Color_End = 000000255 ; 
+Dialogs_License_Examination_Failed = Sorry, you need a valid license to use this product. ; 

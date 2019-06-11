@@ -126,6 +126,25 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="DotNETReactor\data\01" />
+    <None Include="DotNETReactor\data\02" />
+    <None Include="DotNETReactor\data\02_" />
+    <None Include="DotNETReactor\data\03" />
+    <None Include="DotNETReactor\data\03_" />
+    <None Include="DotNETReactor\data\04" />
+    <None Include="DotNETReactor\data\05" />
+    <None Include="DotNETReactor\data\06" />
+    <None Include="DotNETReactor\data\07" />
+    <None Include="DotNETReactor\data\08" />
+    <None Include="DotNETReactor\data\slg" />
+    <None Include="DotNETReactor\Help\REACTOR_HELP.chm" />
+    <None Include="DotNETReactor\inraining.license">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DotNETReactor\Order.url" />
+    <None Include="DotNETReactor\reactor.nrcfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -148,6 +167,32 @@
     <Content Include="baksmali-2.1.3.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="DotNETReactor\dlls\B1Plus.UI.BaseApplications.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DotNETReactor\dlls\B1Plus.UI.BaseApplications_Secure\B1Plus.UI.BaseApplications.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DotNETReactor\dotNET_Reactor.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DotNETReactor\Help\License Agreement.html" />
+    <Resource Include="DotNETReactor\icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="DotNETReactor\IrisSkin2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="DotNETReactor\nrcfg.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="DotNETReactor\Tools\HID\HID.exe" />
+    <Content Include="DotNETReactor\Tools\HID\HID.exe Parameters.htm" />
+    <Content Include="DotNETReactor\Tools\LicenseGen\LicenseGen.exe" />
+    <Content Include="DotNETReactor\Tools\LicenseGen\LicenseGen.exe Parameters.htm" />
+    <Content Include="DotNETReactor\Tools\LicenseGen\LicenseGenWrapper.dll" />
+    <Content Include="DotNETReactor\Tools\Phone Activation System\Client.exe" />
+    <Content Include="DotNETReactor\Tools\Phone Activation System\Server.exe" />
     <Content Include="dx.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
