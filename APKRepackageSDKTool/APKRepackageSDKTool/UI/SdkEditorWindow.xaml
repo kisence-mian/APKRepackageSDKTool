@@ -47,7 +47,7 @@
                             <DataTemplate>
                                 <Grid >
                                     <Label Content="{Binding Path=Key}" Width="140" HorizontalAlignment="Left" />
-                                    <TextBox Text="{Binding Path=Value}"  HorizontalAlignment="Right" Margin="0,0,50,0" Width="130"/>
+                                    <TextBox Text="{Binding Path=Value}"  HorizontalAlignment="Right" Margin="150,0,50,0" />
                                     <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Key}" Click="Button_ClickDelete"/>
                                 </Grid>
                             </DataTemplate>
@@ -106,9 +106,33 @@
 
                 </Grid>
             </TabItem>
+            <TabItem Header="主Activity设置">
+                <Grid Background="#FFF9F9F9">
+                    <ListBox x:Name="ListBox_mainPropertyList" Margin="10,10,0,36" HorizontalAlignment="Left" Width="190" SelectedValuePath="Key" SelectionChanged="ListBox_MainActivityPropertyList_SelectionChanged">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <Label Content="{Binding Path=Key}" Width="140" HorizontalAlignment="Left" />
+                                    <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Key}" Click="Button_ClickDeleteMainActivityProperty"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Content="新增" HorizontalAlignment="Left" Margin="125,0,0,6" Width="75" Click="Button_ClickAddMainActivityProperty" Height="19" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="TextBox_mainPropertyName" HorizontalAlignment="Left" Margin="10,0,0,4" TextWrapping="NoWrap" Text="" Width="110" Height="23" VerticalAlignment="Bottom"/>
+                    <Grid Margin="205,0,0,0">
+                        <TextBox x:Name="TextBox_mainPropertyContent" Margin="10" TextWrapping="Wrap" TextChanged="TextBox_MainActivityPropertyContent_TextChanged"  VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsEnabled="False"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
             <TabItem Header="Service设置">
                 <Grid Background="#FFF9F9F9">
-                    <ListBox x:Name="ListBox_serviceList" Margin="10,23,0,36" HorizontalAlignment="Left" Width="190" SelectedValuePath="Name" SelectionChanged="ListBox_ServiceList_SelectionChanged">
+                    <ListBox x:Name="ListBox_serviceList" Margin="10,10,0,36" HorizontalAlignment="Left" Width="190" SelectedValuePath="Name" SelectionChanged="ListBox_ServiceList_SelectionChanged">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

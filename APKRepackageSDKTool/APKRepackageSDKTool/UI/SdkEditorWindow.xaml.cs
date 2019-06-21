@@ -26,11 +26,13 @@ namespace APKRepackageSDKTool.UI
         KeyValueList configList;
         ActivityList activityList;
         ServiceList serviceList;
+        KeyValueList mainActivityPropertyList;
         ProviderList providerList;
         StringList libraryList;
         KeyValueList customJavaList;
 
         ActivityInfo currentActivityInfo;
+        KeyValue currentMainActivityProperty;
         ServiceInfo currentServiceInfo;
         ProviderInfo currentProviderInfo;
         KeyValue currentJavacontent;
@@ -182,6 +184,35 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private KeyValueList _MainActivityProperty
+        {
+            get
+            {
+                if (mainActivityPropertyList == null)
+                {
+                    mainActivityPropertyList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.mainActivityPropertyList.Count; i++)
+                    {
+                        mainActivityPropertyList.Add(EditorData.CurrentSDKConfig.mainActivityPropertyList[i]);
+                    }
+                }
+
+                return mainActivityPropertyList;
+            }
+
+            set
+            {
+                mainActivityPropertyList = value;
+                mainActivityPropertyList.Change();
+
+                EditorData.CurrentSDKConfig.mainActivityPropertyList.Clear();
+                for (int i = 0; i < mainActivityPropertyList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.mainActivityPropertyList.Add(mainActivityPropertyList[i]);
+                }
+            }
+        }
+
         private ServiceList _ServiceInfo
         {
             get
@@ -294,6 +325,7 @@ namespace APKRepackageSDKTool.UI
             ListBox_ProviderList.ItemsSource = _ProviderInfo;
             ListBox_CustomJava.ItemsSource = CustomJavaList;
             ListBox_CustomLibrary.ItemsSource = LibraryList;
+            ListBox_mainPropertyList.ItemsSource = _MainActivityProperty;
 
             BindingEnum();
 
@@ -573,6 +605,68 @@ namespace APKRepackageSDKTool.UI
         private void CheckBox_main_Unchecked(object sender, RoutedEventArgs e)
         {
             currentActivityInfo.MainActivity = false;
+        }
+
+        #endregion
+
+        #region MainActivityProperty
+
+        private void Button_ClickAddMainActivityProperty(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_mainPropertyName.Text))
+            {
+                KeyValue kv = new KeyValue();
+                kv.key = TextBox_mainPropertyName.Text;
+
+                _MainActivityProperty.Add(kv);
+
+                _MainActivityProperty = _MainActivityProperty;
+
+                TextBox_mainPropertyName.Text = "";
+            }
+        }
+
+        private void Button_ClickDeleteMainActivityProperty(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string name = (string)btn.Tag;
+
+            for (int i = 0; i < _MainActivityProperty.Count; i++)
+            {
+                if (_MainActivityProperty[i].key == name)
+                {
+                    _MainActivityProperty.RemoveAt(i);
+                }
+            }
+
+            _MainActivityProperty = _MainActivityProperty;
+        }
+
+        private void ListBox_MainActivityPropertyList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TextBox_mainPropertyContent.IsEnabled = true;
+
+            ListBox lb = sender as ListBox;
+
+            string Name = (string)lb.SelectedValue;
+
+            for (int i = 0; i < _MainActivityProperty.Count; i++)
+            {
+                if (_MainActivityProperty[i].key == Name)
+                {
+                    currentMainActivityProperty = _MainActivityProperty[i];
+                }
+            }
+
+            TextBox_mainPropertyContent.Text = currentMainActivityProperty.value;
+        }
+
+        private void TextBox_MainActivityPropertyContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentMainActivityProperty.value = tb.Text;
         }
 
         #endregion

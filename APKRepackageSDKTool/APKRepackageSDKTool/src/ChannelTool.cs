@@ -56,7 +56,7 @@ namespace APKRepackageSDKTool
             }
 
             OutPut("替换MainActity");
-            ChangeMainActity(filePath, info.AppBanner);
+            ChangeMainActity(filePath);
 
             if (info.sdkList.Count > 0)
             {
@@ -97,7 +97,7 @@ namespace APKRepackageSDKTool
         }
         #region AndroidManifest 修改
 
-        private void ChangeMainActity(string filePath, string appBanner)
+        private void ChangeMainActity(string filePath)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
             string xml = FileTool.ReadStringByFile(xmlPath);
@@ -177,8 +177,20 @@ namespace APKRepackageSDKTool
                 }
             }
 
-            XmlElement nd = xmlDoc.CreateElement("uses-permission");
-            nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + permission);
+            XmlElement nd = null;
+
+            string[] info = permission.Split('|');
+
+            if (info.Length == 1)
+            {
+                nd = xmlDoc.CreateElement("uses-permission");
+                nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
+            }
+            else
+            {
+                nd = xmlDoc.CreateElement("uses-permission-sdk-" + info[1]);
+                nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
+            }
 
             manifest.AppendChild(nd);
             xmlDoc.Save(xmlPath);
@@ -263,6 +275,50 @@ namespace APKRepackageSDKTool
             }
         }
 
+        void AddMainActivityProperty(string filePath, KeyValue kv, SDKInfo sdkInfo, ChannelInfo channelInfo)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+
+            string xml = FileTool.ReadStringByFile(xmlPath);
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+
+            //替换关键字
+            string newValue = compileTool.ReplaceKeyWord(kv.value, channelInfo);
+            newValue = compileTool.ReplaceKeyWordbySDKInfo(newValue, sdkInfo);
+
+            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
+            XmlNode app = GetNode(manifest, "application");
+
+            //获取主Activity
+            for (int i = 0; i < app.ChildNodes.Count; i++)
+            {
+                XmlNode node = app.ChildNodes[i];
+                XmlElement ele = (XmlElement)node;
+                for (int j = 0; j < ele.ChildNodes.Count; j++)
+                {
+                    XmlNode node2 = ele.ChildNodes[j];
+
+                    if (node2.Name == "intent-filter")
+                    {
+                        XmlNode action = GetNode(node2, "category");
+                        XmlElement ele2 = (XmlElement)action;
+
+                        if (ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
+                        {
+                            //增加属性
+                            ele.SetAttribute(kv.key, "http://schemas.android.com/apk/res/android", newValue);
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //保存
+            xmlDoc.Save(xmlPath);
+        }
+
         void RemoveOldMainActivity(string filePath)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
@@ -275,7 +331,7 @@ namespace APKRepackageSDKTool
             XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
             XmlNode app = GetNode(manifest, "application");
 
-            //权限判重
+            //获取主Activity
             for (int i = 0; i < app.ChildNodes.Count; i++)
             {
                 XmlNode node = app.ChildNodes[i];
@@ -563,6 +619,13 @@ namespace APKRepackageSDKTool
             {
                 OutPut("添加Activity " + info.sdkName + " " + config.ActivityInfoList[i].name);
                 AddActivity(filePath, config.ActivityInfoList[i], info, channelInfo);
+            }
+
+            //添加MainActivityProperty
+            for (int i = 0; i < config.mainActivityPropertyList.Count; i++)
+            {
+                OutPut("添加mainActivityProperty " + info.sdkName + " " + config.mainActivityPropertyList[i].key);
+                AddMainActivityProperty(filePath, config.mainActivityPropertyList[i], info, channelInfo);
             }
 
             //添加Service
