@@ -65,8 +65,8 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="新增" HorizontalAlignment="Left" Margin="174,0,0,10" Width="75" Click="Button_Click_AddSDK" Height="19" VerticalAlignment="Bottom"/>
-                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="" Width="159" Height="19" VerticalAlignment="Bottom"/>
+                    <Button Content="新增" HorizontalAlignment="Left" Margin="222,0,0,10" Width="75" Click="Button_Click_AddSDK" Height="19" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="TextBox_SDKName" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="" Width="207" Height="19" VerticalAlignment="Bottom"/>
                     <ListBox x:Name="ListBox_SdkConfigList" Margin="302,10,10,34">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">

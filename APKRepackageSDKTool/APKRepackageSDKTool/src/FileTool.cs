@@ -69,7 +69,7 @@ public class FileTool
     /// </summary>
     /// <param name="sourcePath">待复制的文件夹路径</param>
     /// <param name="destinationPath">目标路径</param>
-    public static void CopyDirectory(string sourcePath, string destinationPath)
+    public static void CopyDirectory(string sourcePath, string destinationPath, FileRepeatErrorHandle repeatCallBack = null)
     {
         DirectoryInfo info = new DirectoryInfo(sourcePath);
         Directory.CreateDirectory(destinationPath);
@@ -80,11 +80,21 @@ public class FileTool
             //Debug.Log(destName);
 
             if (fsi is FileInfo)          //如果是文件，复制文件
-                File.Copy(fsi.FullName, destName);
-            else                                    //如果是文件夹，新建文件夹，递归
+            {
+                if(File.Exists(destName) && repeatCallBack != null)
+                {
+                    repeatCallBack(fsi.FullName, destName);
+                }
+                else
+                {
+                    File.Copy(fsi.FullName, destName);
+                }
+            }
+            //如果是文件夹，新建文件夹，递归
+            else
             {
                 Directory.CreateDirectory(destName);
-                CopyDirectory(fsi.FullName, destName);
+                CopyDirectory(fsi.FullName, destName, repeatCallBack);
             }
         }
     }
@@ -518,3 +528,4 @@ public class FileTool
 }
 
 public delegate void FileExecuteHandle(string filePath);
+public delegate void FileRepeatErrorHandle(string source,string dest);

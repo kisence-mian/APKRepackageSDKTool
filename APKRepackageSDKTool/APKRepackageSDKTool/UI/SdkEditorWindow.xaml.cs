@@ -28,6 +28,7 @@ namespace APKRepackageSDKTool.UI
         ServiceList serviceList;
         KeyValueList mainActivityPropertyList;
         ProviderList providerList;
+        KeyValueList metaList;
         StringList libraryList;
         KeyValueList customJavaList;
 
@@ -35,7 +36,8 @@ namespace APKRepackageSDKTool.UI
         KeyValue currentMainActivityProperty;
         ServiceInfo currentServiceInfo;
         ProviderInfo currentProviderInfo;
-        KeyValue currentJavacontent;
+        KeyValue currentMetaContent;
+        KeyValue currentJavaContent;
 
         #region 属性
 
@@ -310,6 +312,35 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private KeyValueList MetaList
+        {
+            get
+            {
+                if (metaList == null)
+                {
+                    metaList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.metaInfoList.Count; i++)
+                    {
+                        metaList.Add(EditorData.CurrentSDKConfig.metaInfoList[i]);
+                    }
+                }
+
+                return metaList;
+            }
+
+            set
+            {
+                metaList = value;
+                metaList.Change();
+
+                EditorData.CurrentSDKConfig.metaInfoList.Clear();
+                for (int i = 0; i < metaList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.metaInfoList.Add(metaList[i]);
+                }
+            }
+        }
+
         #endregion
 
         public SdkEditorWindow()
@@ -323,6 +354,7 @@ namespace APKRepackageSDKTool.UI
             ListBox_ActivtyList.ItemsSource = _ActivityList;
             ListBox_serviceList.ItemsSource = _ServiceInfo;
             ListBox_ProviderList.ItemsSource = _ProviderInfo;
+            ListBox_MetaList.ItemsSource = MetaList;
             ListBox_CustomJava.ItemsSource = CustomJavaList;
             ListBox_CustomLibrary.ItemsSource = LibraryList;
             ListBox_mainPropertyList.ItemsSource = _MainActivityProperty;
@@ -513,18 +545,18 @@ namespace APKRepackageSDKTool.UI
             {
                 if (customJavaList[i].key == Name)
                 {
-                    currentJavacontent = customJavaList[i];
+                    currentJavaContent = customJavaList[i];
                 }
             }
 
-            TextBox_ClassTemplate.Text = currentJavacontent.value;
+            TextBox_ClassTemplate.Text = currentJavaContent.value;
         }
 
         private void TextBox_ClassTemplate_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (currentJavacontent != null)
+            if (currentJavaContent != null)
             {
-                currentJavacontent.value = TextBox_ClassTemplate.Text;
+                currentJavaContent.value = TextBox_ClassTemplate.Text;
 
                 //Encoding utf8 = Encoding.UTF8;
                 //Encoding gb2312 = Encoding.GetEncoding("GB2312");
@@ -720,6 +752,7 @@ namespace APKRepackageSDKTool.UI
             }
 
             TextBox_serviceContent.Text = currentServiceInfo.Content;
+            TextBox_serviceContent.IsEnabled = true;
         }
 
         private void TextBox_serviceContent_TextChanged(object sender, TextChangedEventArgs e)
@@ -791,6 +824,67 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region META
+
+        private void Button_ClickAddMeta(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_MetaName.Text))
+            {
+                KeyValue kv = new KeyValue();
+                kv.key = TextBox_MetaName.Text;
+
+                MetaList.Add(kv);
+
+                MetaList = MetaList;
+
+                TextBox_MetaName.Text = "";
+            }
+        }
+
+        private void Button_ClickDeleteMeta(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            for (int i = 0; i < MetaList.Count; i++)
+            {
+                if (MetaList[i].key == key)
+                {
+                    MetaList.RemoveAt(i);
+                }
+            }
+
+            MetaList = MetaList;
+        }
+
+        private void ListBox_MetaList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lb = sender as ListBox;
+
+            string Key = (string)lb.SelectedValue;
+
+            for (int i = 0; i < MetaList.Count; i++)
+            {
+                if (MetaList[i].key == Key)
+                {
+                    currentMetaContent = MetaList[i];
+                }
+            }
+
+            TextBox_MetaContent.Text = currentMetaContent.value;
+            TextBox_MetaContent.IsEnabled = true;
+        }
+
+        private void TextBox_MetaContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentMetaContent.value = tb.Text;
+        }
+
+        #endregion
+
         #endregion
 
         #region 类声明
@@ -858,16 +952,12 @@ namespace APKRepackageSDKTool.UI
             public bool IsChick { get => isChick; set => isChick = value; }
         }
 
-
-
-
-
-
         #endregion
 
         private void Button_ClickInfo(object sender, RoutedEventArgs e)
         {
-            string content = "{PackageName}会自动替换成包名";
+            string content = "{PackageName}会自动替换成包名\n";
+            content += "{字段名}会自动替换成对应字段";
 
             MessageBox.Show(content);
         }

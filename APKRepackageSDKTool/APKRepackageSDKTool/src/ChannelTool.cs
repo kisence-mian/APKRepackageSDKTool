@@ -102,7 +102,7 @@ namespace APKRepackageSDKTool
             string xmlPath = filePath + "\\AndroidManifest.xml";
             string xml = FileTool.ReadStringByFile(xmlPath);
 
-            xml = xml.Replace("com.unity3d.player.UnityPlayerActivity", "sdkInterface.MainActivity");
+            xml = xml.Replace("com.unity3d.player.UnityPlayerActivity", "sdkInterface.activity.MainActivity");
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
@@ -426,13 +426,35 @@ namespace APKRepackageSDKTool
             xmlDoc.Save(xmlPath);
         }
 
-        void AddProvider(string filePath, ProviderInfo info,ChannelInfo channelInfo)
+        void AddProvider(string filePath, ProviderInfo info,ChannelInfo channelInfo, SDKInfo SDKinfo)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
             string xml = FileTool.ReadStringByFile(xmlPath);
 
             int index = xml.IndexOf("</application>");
-            xml = xml.Insert(index, compileTool.ReplaceKeyWord(info.content, channelInfo));
+
+            string content = compileTool.ReplaceKeyWord(info.content, channelInfo);
+            content = compileTool.ReplaceKeyWordbySDKInfo(content, SDKinfo);
+
+            xml = xml.Insert(index, content);
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            xmlDoc.Save(xmlPath);
+        }
+
+        void AddMeta(string filePath, KeyValue kv, ChannelInfo channelInfo,SDKInfo info)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            int index = xml.IndexOf("</application>");
+
+            //替换关键字和配置
+            string content = compileTool.ReplaceKeyWord(kv.value, channelInfo);
+            content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
+
+            xml = xml.Insert(index, content);
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
@@ -639,7 +661,14 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < config.providerInfoList.Count; i++)
             {
                 OutPut("添加Provider " + info.sdkName + " " + config.providerInfoList[i].name);
-                AddProvider(filePath, config.providerInfoList[i], channelInfo);
+                AddProvider(filePath, config.providerInfoList[i], channelInfo, info);
+            }
+
+            //添加Meta字段
+            for (int i = 0; i < config.metaInfoList.Count; i++)
+            {
+                OutPut("添加Meta " + info.sdkName + " " + config.metaInfoList[i].key);
+                AddMeta(filePath, config.metaInfoList[i], channelInfo, info);
             }
 
             //修改ApplicationName
@@ -724,12 +753,69 @@ namespace APKRepackageSDKTool
                 //只拷贝这三个目录
                 if(dirName.Contains("assets")
                     || dirName.Contains("lib")
-                     || dirName.Contains("res")
                     )
                 {
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
                 }
+
+                //合并res文件
+                if(dirName.Contains("res"))
+                {
+                    FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName, RepeatHandle);
+                }
             }
+        }
+
+        void RepeatHandle(string fileA,string fileB)
+        {
+            OutPut("合并文件 " + fileA + " ->" + fileB);
+
+            //只支持合并xml
+            if(fileA.Contains("xml") && fileB.Contains("xml"))
+            {
+                AppadnXML(fileA, fileB);
+            }
+            else
+            {
+                ErrorOutPut("不支持的合并类型" + fileA + " ->" + fileB);
+            }
+        }
+
+        void AppadnXML(string fileA, string fileB)
+        {
+            XmlDocument doca = new XmlDocument();
+            doca.Load(fileA);
+
+            XmlDocument docb = new XmlDocument();
+            docb.Load(fileB);
+
+            // 分别获取两个文档的根元素，以便于合并
+            XmlElement rootA = doca.DocumentElement;
+            XmlElement rootB = docb.DocumentElement;
+
+            // 创建一个合并的 document
+            XmlDocument result = new XmlDocument();
+
+            // 创建根元素
+            XmlElement root = result.CreateElement(rootB.Name);
+            result.AppendChild(root);
+
+            foreach (XmlNode node in rootA.ChildNodes)
+            {
+                // 先导入节点
+                XmlNode n = result.ImportNode(node, true);
+                // 然后，插入指定的位置
+                root.AppendChild(n);
+            }
+
+            // 同上
+            foreach (XmlNode node in rootB.ChildNodes)
+            {
+                XmlNode n = result.ImportNode(node, true);
+                root.AppendChild(n);
+            }
+
+            result.Save(fileB);
         }
 
 
@@ -754,8 +840,8 @@ namespace APKRepackageSDKTool
                     }
                     else
                     {
-                        //最小SDKVersion取所有SDK设置中最小的
-                        if(config.minSDKversion < minSDKVersion)
+                        //最小SDKVersion取所有SDK设置中最大的
+                        if(config.minSDKversion > minSDKVersion)
                         {
                             minSDKVersion = config.minSDKversion;
                         }

@@ -99,7 +99,7 @@ namespace APKRepackageSDKTool
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
                         ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
 
-                        string apktool_version = "apktool_2.3.1";
+                        string apktool_version = "apktool";
 
                         //MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
                         //channelTool.YMLLogic(aimPath);

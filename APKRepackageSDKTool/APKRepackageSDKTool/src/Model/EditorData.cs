@@ -454,6 +454,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> mainActivityPropertyList = new List<KeyValue>();
         public List<ServiceInfo> serviceInfoList = new List<ServiceInfo>();
         public List<ProviderInfo> providerInfoList = new List<ProviderInfo>();
+        public List<KeyValue> metaInfoList = new List<KeyValue>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -515,6 +516,7 @@ namespace APKRepackageSDKTool
         public List<string> CustomJavaLibrary { get => customJavaLibrary; set => customJavaLibrary = value; }
         public List<ProviderInfo> ProviderInfoList { get => providerInfoList; set => providerInfoList = value; }
         public List<KeyValue> MainActivityPropertyList { get => mainActivityPropertyList; set => mainActivityPropertyList = value; }
+        public List<KeyValue> MetaInfoList { get => metaInfoList; set => metaInfoList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
