@@ -184,12 +184,29 @@ namespace APKRepackageSDKTool
             if (info.Length == 1)
             {
                 nd = xmlDoc.CreateElement("uses-permission");
-                nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
+                //如果有“.”则认为是自定义权限，全文输入，否则补全权限
+                if (info[0].Contains("."))
+                {
+                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", info[0]);
+                }
+                else
+                {
+                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
+                }
             }
             else
             {
                 nd = xmlDoc.CreateElement("uses-permission-sdk-" + info[1]);
-                nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
+
+                //如果有“.”则认为是自定义权限，全文输入，否则补全权限
+                if (info[0].Contains("."))
+                {
+                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", info[0]);
+                }
+                else
+                {
+                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
+                }
             }
 
             manifest.AppendChild(nd);
