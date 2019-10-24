@@ -120,6 +120,10 @@ namespace APKRepackageSDKTool
                         //MakeProgress("混淆DLL", i, channelList.Count, channelInfo.Name);
                         //channelTool.ConfusionDLL(aimPath);
 
+                        //重新生成R表
+                        MakeProgress("重新生成R表", i, channelList.Count, channelInfo.Name);
+                        channelTool.Rebuild_R_Table(aimPath);
+
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
                         cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath);

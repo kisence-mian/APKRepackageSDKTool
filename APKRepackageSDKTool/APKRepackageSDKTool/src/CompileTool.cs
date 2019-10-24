@@ -34,6 +34,7 @@ public class CompileTool
         FileTool.CreatPath(JavaTempPath);
 
         CmdService cmd = new CmdService(OutPut, errorCallBack);
+
         //Jar to dex
         cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath,true,true);
 
@@ -91,11 +92,6 @@ public class CompileTool
         //删除临时目录
         FileTool.DeleteDirectory(JavaCompileTempPath);
         Directory.Delete(JavaCompileTempPath);
-    }
-
-    void GenerateCompileEnvironment(SDKConfig sdkConfig,ChannelInfo channelInfo, string filePath)
-    {
-        //生成
     }
 
     public string ReplaceKeyWord(string oldContent, ChannelInfo channelInfo)

@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("android.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.0.3.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.3.1.jar")]

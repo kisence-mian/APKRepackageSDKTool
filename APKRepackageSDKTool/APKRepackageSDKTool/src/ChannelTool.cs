@@ -95,6 +95,7 @@ namespace APKRepackageSDKTool
         {
             errorCallBack?.Invoke(content);
         }
+
         #region AndroidManifest 修改
 
         private void ChangeMainActity(string filePath)
@@ -430,13 +431,16 @@ namespace APKRepackageSDKTool
             xmlDoc.Save(xmlPath);
         }
 
-        void AddService(string filePath, ServiceInfo info)
+        void AddService(string filePath, ServiceInfo info, ChannelInfo channelInfo, SDKInfo SDKinfo)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
             string xml = FileTool.ReadStringByFile(xmlPath);
 
+            string content = compileTool.ReplaceKeyWord(info.content, channelInfo);
+            content = compileTool.ReplaceKeyWordbySDKInfo(content, SDKinfo);
+
             int index = xml.IndexOf("</application>");
-            xml = xml.Insert(index, info.content);
+            xml = xml.Insert(index, content);
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
@@ -497,6 +501,56 @@ namespace APKRepackageSDKTool
         }
 
         #endregion
+
+        #endregion
+
+        #region 重新生成R表
+
+        public void Rebuild_R_Table(string aimPath)
+        {
+            OutPut("创建临时目录");
+            String R_Path = PathTool.GetCurrentPath() + "/R_path/";
+
+            FileTool.CreatPath(R_Path);
+            //OutPut("生成R文件");
+            //OutPut("生成的R文件的jar");
+            //OutPut("生成 dex文件");
+            //OutPut("生成smali文件");
+            //OutPut("替换smali文件");
+
+            //String androidPath = @"D:\AndroidSDK\platforms\android-28\android.jar";
+            string manifest = aimPath + "/AndroidManifest.xml";
+            string resPath = aimPath + "/res";
+
+            CmdService cmd = new CmdService(OutPut, errorCallBack);
+            //生成R文件
+            cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + "");
+            //编译R.java文件
+            OutPut("FindRPath " + FindRPath(R_Path));
+
+            cmd.Execute("javac -source 1.6 -target 1.6 " + FindRPath(R_Path),true,true);
+
+            //生成的R文件的jar
+            cmd.Execute("jar cvf ./R.jar ./com",path: R_Path);
+ 
+            //Jar to dex
+            cmd.Execute("java -jar dx.jar --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+
+            //dex to smali
+            cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + aimPath + "/smali ./R_path/classes.dex");
+
+            FileTool.SafeDeleteDirectory(R_Path);
+            Directory.Delete(R_Path);
+
+            //cmd.Execute("java -jar baksmali-2.1.3.jar classes.dex");
+        }
+
+        String FindRPath(string path)
+        {
+            //递归寻找目标文件路径并输出
+            return FileTool.GetAllFileNamesByPath(path, new string[] { "java" })[0];
+        }
+
 
         #endregion
 
@@ -671,7 +725,7 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < config.serviceInfoList.Count; i++)
             {
                 OutPut("添加Service " + info.sdkName + " " + config.serviceInfoList[i].name);
-                AddService(filePath, config.serviceInfoList[i]);
+                AddService(filePath, config.serviceInfoList[i], channelInfo , info);
             }
 
             //添加Provider
@@ -783,6 +837,11 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public void MergeXMLFile(string PathA, string PathB)
+        {
+            FileTool.CopyDirectory(PathA, PathB , RepeatHandle);
+        }
+
         void RepeatHandle(string fileA,string fileB)
         {
             OutPut("合并文件 " + fileA + " ->" + fileB);
@@ -821,6 +880,7 @@ namespace APKRepackageSDKTool
             {
                 // 先导入节点
                 XmlNode n = result.ImportNode(node, true);
+                //if(root.SelectNodes())
                 // 然后，插入指定的位置
                 root.AppendChild(n);
             }
@@ -834,8 +894,6 @@ namespace APKRepackageSDKTool
 
             result.Save(fileB);
         }
-
-
 
         #endregion
 

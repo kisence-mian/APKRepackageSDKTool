@@ -24,7 +24,7 @@ namespace APKRepackageSDKTool
             this.errorCallBack = errorCallBack;
         }
 
-        public void Execute(string content, bool ignoreWarning = false, bool ignoreError = false)
+        public void Execute(string content, bool ignoreWarning = false, bool ignoreError = false,string path = null)
         {
             this.ignoreError = ignoreError;
             this.ignoreWarning = ignoreWarning;
@@ -49,6 +49,13 @@ namespace APKRepackageSDKTool
 
                 process.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
                 process.ErrorDataReceived += new DataReceivedEventHandler(ErrorReceived);
+
+                if (path != null)
+                {
+                    string disk = path.Split(':')[0];
+                    process.StandardInput.WriteLine(disk + ":");
+                    process.StandardInput.WriteLine("cd " + path);
+                }
 
                 process.StandardInput.WriteLine(content);
                 process.StandardInput.WriteLine("exit");

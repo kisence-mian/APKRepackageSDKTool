@@ -21,8 +21,8 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        const int c_totalStep = 6;
-        int currentTotalStep = 6;
+        const int c_totalStep = 8;
+        int currentTotalStep = 8;
 
         RepackageManager repackageManager = new RepackageManager();
         bool isBuilding = false;
@@ -45,6 +45,9 @@ namespace APKRepackageSDKTool
 
         public MainWindow()
         {
+            //ChannelTool ct = new ChannelTool(null, null);
+            //ct.MergeXMLFile(@"E:\文件\发布物料\艾鲁大陆\渠道\华为\hmssdk-eclipse-2.6.3.306\HMSSdkGame\res", @"E:\Project\Library\SDKLibrary\HuaWei\res");
+
             InitializeComponent();
 
             apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
