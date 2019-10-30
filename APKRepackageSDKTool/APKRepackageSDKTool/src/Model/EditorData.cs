@@ -450,11 +450,13 @@ namespace APKRepackageSDKTool
         public int targetSDKVersion;
         public string applicationName;
 
+        public List<KeyValue> xmlHeadList = new List<KeyValue>();
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
         public List<KeyValue> mainActivityPropertyList = new List<KeyValue>();
         public List<ServiceInfo> serviceInfoList = new List<ServiceInfo>();
         public List<ProviderInfo> providerInfoList = new List<ProviderInfo>();
         public List<KeyValue> metaInfoList = new List<KeyValue>();
+        public List<KeyValue> usesList = new List<KeyValue>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -517,6 +519,8 @@ namespace APKRepackageSDKTool
         public List<ProviderInfo> ProviderInfoList { get => providerInfoList; set => providerInfoList = value; }
         public List<KeyValue> MainActivityPropertyList { get => mainActivityPropertyList; set => mainActivityPropertyList = value; }
         public List<KeyValue> MetaInfoList { get => metaInfoList; set => metaInfoList = value; }
+        public List<KeyValue> XmlHeadList { get => xmlHeadList; set => xmlHeadList = value; }
+        public List<KeyValue> UsesList { get => usesList; set => usesList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

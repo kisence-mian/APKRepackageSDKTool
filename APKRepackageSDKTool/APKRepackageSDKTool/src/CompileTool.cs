@@ -1,8 +1,10 @@
 ﻿using APKRepackageSDKTool;
+using Mono.Web;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -99,6 +101,8 @@ public class CompileTool
         string result = oldContent;
         result = result.Replace("{PackageName}", channelInfo.PackageName);
 
+        result = RemoveSpecialCode(result);
+
         return result;
     }
 
@@ -110,6 +114,20 @@ public class CompileTool
         {
             result = result.Replace("{"+ SDKinfo.sdkConfig[i].key + "}", SDKinfo.sdkConfig[i].value);
         }
+
+        result = RemoveSpecialCode(result);
+
         return result;
+    }
+
+    public string RemoveSpecialCode(string oldContent)
+    {
+        return Encoding.UTF8.GetString(Encoding.Default.GetBytes(oldContent)).Replace("?","");
+
+        return HttpUtility.UrlEncode(oldContent, Encoding.UTF8);
+
+        //Encoding utf8 = Encoding.UTF8;
+        //String code = HttpUtility.UrlEncode(oldContent, utf8);
+        //return HttpUtility.UrlDecode(code); 
     }
 }

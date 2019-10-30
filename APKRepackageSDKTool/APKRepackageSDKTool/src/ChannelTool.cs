@@ -116,6 +116,8 @@ namespace APKRepackageSDKTool
             string xmlPath = filePath + "\\AndroidManifest.xml";
             string xml = FileTool.ReadStringByFile(xmlPath);
 
+            packageName = compileTool.RemoveSpecialCode(packageName);
+
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
 
@@ -261,6 +263,25 @@ namespace APKRepackageSDKTool
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
             xmlDoc.Save(xmlPath);
+        }
+
+        void AddXMLHead(string filePath, KeyValue info, SDKInfo sdkInfo, ChannelInfo channelInfo)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+
+            //替换关键字
+            string newContent = compileTool.ReplaceKeyWord(info.value, channelInfo);
+            newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
+
+            string xml = FileTool.ReadStringByFile(xmlPath);
+            int index = xml.IndexOf("<manifest") + 10;
+            xml = xml.Insert(index, newContent + " "); //最后加一个空格
+
+            //直接保存
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            xmlDoc.Save(xmlPath);
+
         }
 
         void AddActivity(string filePath, ActivityInfo info,SDKInfo sdkInfo,ChannelInfo channelInfo)
@@ -482,6 +503,24 @@ namespace APKRepackageSDKTool
             xmlDoc.Save(xmlPath);
         }
 
+        void AddUses(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+            string xml = FileTool.ReadStringByFile(xmlPath);
+
+            int index = xml.IndexOf("</manifest>");
+
+            //替换关键字和配置
+            string content = compileTool.ReplaceKeyWord(kv.value, channelInfo);
+            content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
+
+            xml = xml.Insert(index, content);
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            xmlDoc.Save(xmlPath);
+        }
+
         void ChangeApplicationName(string filePath,string applicationName)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
@@ -523,21 +562,38 @@ namespace APKRepackageSDKTool
             string resPath = aimPath + "/res";
 
             CmdService cmd = new CmdService(OutPut, errorCallBack);
+
+            OutPut("生成R.java文件");
+
+            OutPut("R_Path " + R_Path + " resPath " + resPath + " manifest " + manifest);
+
             //生成R文件
             cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + "");
-            //编译R.java文件
-            OutPut("FindRPath " + FindRPath(R_Path));
 
-            cmd.Execute("javac -source 1.6 -target 1.6 " + FindRPath(R_Path),true,true);
+            if(FindRPath(R_Path) != null)
+            {
+                //GBK转码
+                //string java = FileTool.ReadStringByFile(FindRPath(R_Path));
+                //java = compileTool.RemoveSpecialCode(java);
+                //FileTool.WriteStringByFile(FindRPath(R_Path),java);
 
-            //生成的R文件的jar
-            cmd.Execute("jar cvf ./R.jar ./com",path: R_Path);
- 
-            //Jar to dex
-            cmd.Execute("java -jar dx.jar --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+                //编译R.java文件
+                cmd.Execute("javac -encoding UTF-8 -source 1.6 -target 1.6 " + FindRPath(R_Path), true, true);
 
-            //dex to smali
-            cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + aimPath + "/smali ./R_path/classes.dex");
+                //生成的R文件的jar
+                cmd.Execute("jar cvf ./R.jar ./com", path: R_Path);
+
+                //Jar to dex
+                cmd.Execute("java -jar dx.jar --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+
+                //dex to smali
+                cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + aimPath + "/smali ./R_path/classes.dex");
+            }
+            else
+            {
+                throw new Exception("R文件生成失败！ 请检查清单文件是否正确！");
+            }
+
 
             FileTool.SafeDeleteDirectory(R_Path);
             Directory.Delete(R_Path);
@@ -547,8 +603,16 @@ namespace APKRepackageSDKTool
 
         String FindRPath(string path)
         {
-            //递归寻找目标文件路径并输出
-            return FileTool.GetAllFileNamesByPath(path, new string[] { "java" })[0];
+            try
+            {
+                //递归寻找目标文件路径并输出
+                return FileTool.GetAllFileNamesByPath(path, new string[] { "java" })[0];
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
+
         }
 
 
@@ -707,6 +771,13 @@ namespace APKRepackageSDKTool
             OutPut("拷贝资源文件 " + info.sdkName);
             CopyFile(filePath,info);
 
+            //添加标签头
+            for (int i = 0; i < config.XmlHeadList.Count; i++)
+            {
+                OutPut("添加AddXMLHead " + info.sdkName + " " + config.ActivityInfoList[i].name);
+                AddXMLHead(filePath, config.XmlHeadList[i], info, channelInfo);
+            }
+
             //添加Activity
             for (int i = 0; i < config.ActivityInfoList.Count; i++)
             {
@@ -740,6 +811,13 @@ namespace APKRepackageSDKTool
             {
                 OutPut("添加Meta " + info.sdkName + " " + config.metaInfoList[i].key);
                 AddMeta(filePath, config.metaInfoList[i], channelInfo, info);
+            }
+
+            //添加Uses字段
+            for (int i = 0; i < config.usesList.Count; i++)
+            {
+                OutPut("添加Uses " + info.sdkName + " " + config.usesList[i].key);
+                AddUses(filePath, config.usesList[i], channelInfo, info);
             }
 
             //修改ApplicationName
@@ -796,6 +874,11 @@ namespace APKRepackageSDKTool
                 {
                     //权限去重
                     string permission = config.permissionList[j];
+
+                    //替换关键字
+                    permission = compileTool.ReplaceKeyWord(permission, info);
+                    permission = compileTool.ReplaceKeyWordbySDKInfo(permission, info.sdkList[i]);
+
                     if (!permissionList.Contains(permission))
                     {
                         permissionList.Add(permission);

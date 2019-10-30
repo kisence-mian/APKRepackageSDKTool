@@ -31,6 +31,8 @@ namespace APKRepackageSDKTool.UI
         KeyValueList metaList;
         StringList libraryList;
         KeyValueList customJavaList;
+        KeyValueList manifestHeadList;
+        KeyValueList usesList;
 
         ActivityInfo currentActivityInfo;
         KeyValue currentMainActivityProperty;
@@ -38,6 +40,8 @@ namespace APKRepackageSDKTool.UI
         ProviderInfo currentProviderInfo;
         KeyValue currentMetaContent;
         KeyValue currentJavaContent;
+        KeyValue currentManifestHeadContent;
+        KeyValue currentUsesContent;
 
         #region 属性
 
@@ -341,6 +345,64 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private KeyValueList ManifestHeadList
+        {
+            get
+            {
+                if (manifestHeadList == null)
+                {
+                    manifestHeadList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.xmlHeadList.Count; i++)
+                    {
+                        manifestHeadList.Add(EditorData.CurrentSDKConfig.xmlHeadList[i]);
+                    }
+                }
+
+                return manifestHeadList;
+            }
+
+            set
+            {
+                manifestHeadList = value;
+                manifestHeadList.Change();
+
+                EditorData.CurrentSDKConfig.xmlHeadList.Clear();
+                for (int i = 0; i < manifestHeadList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.xmlHeadList.Add(manifestHeadList[i]);
+                }
+            }
+        }
+
+        private KeyValueList UsesList
+        {
+            get
+            {
+                if (usesList == null)
+                {
+                    usesList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.usesList.Count; i++)
+                    {
+                        usesList.Add(EditorData.CurrentSDKConfig.usesList[i]);
+                    }
+                }
+
+                return usesList;
+            }
+
+            set
+            {
+                usesList = value;
+                usesList.Change();
+
+                EditorData.CurrentSDKConfig.usesList.Clear();
+                for (int i = 0; i < usesList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.usesList.Add(usesList[i]);
+                }
+            }
+        }
+
         #endregion
 
         public SdkEditorWindow()
@@ -358,6 +420,8 @@ namespace APKRepackageSDKTool.UI
             ListBox_CustomJava.ItemsSource = CustomJavaList;
             ListBox_CustomLibrary.ItemsSource = LibraryList;
             ListBox_mainPropertyList.ItemsSource = _MainActivityProperty;
+            ListBox_ManifestHeadList.ItemsSource = ManifestHeadList;
+            ListBox_UsesList.ItemsSource = UsesList;
 
             BindingEnum();
 
@@ -566,6 +630,67 @@ namespace APKRepackageSDKTool.UI
 
                 //currentJavacontent.value = utf8.GetString(gb);
             }
+        }
+
+        #endregion
+
+        #region ManifestXMLHead
+
+        private void TextBox_ManifestHeadContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentManifestHeadContent.value = tb.Text;
+        }
+
+        private void Button_ClickDeleteManifestHead(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            for (int i = 0; i < ManifestHeadList.Count; i++)
+            {
+                if (ManifestHeadList[i].key == key)
+                {
+                    ManifestHeadList.RemoveAt(i);
+                }
+            }
+
+            ManifestHeadList = ManifestHeadList;
+        }
+
+        private void Button_ClickAddManifestHead(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_ManifestHeadName.Text))
+            {
+                KeyValue kv = new KeyValue();
+                kv.key = TextBox_ManifestHeadName.Text;
+
+                ManifestHeadList.Add(kv);
+
+                ManifestHeadList = ManifestHeadList;
+
+                TextBox_ManifestHeadName.Text = "";
+            }
+        }
+
+        private void ListBox_ManifestHeadList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lb = sender as ListBox;
+
+            string Key = (string)lb.SelectedValue;
+
+            for (int i = 0; i < ManifestHeadList.Count; i++)
+            {
+                if (ManifestHeadList[i].key == Key)
+                {
+                    currentManifestHeadContent = ManifestHeadList[i];
+                }
+            }
+
+            TextBox_ManifestHeadContent.Text = currentManifestHeadContent.value;
+            TextBox_ManifestHeadContent.IsEnabled = true;
         }
 
         #endregion
@@ -856,6 +981,12 @@ namespace APKRepackageSDKTool.UI
             }
 
             MetaList = MetaList;
+
+            if (key == currentMetaContent.key)
+            {
+                TextBox_MetaContent.IsEnabled = false;
+                currentMetaContent.value = "";
+            }
         }
 
         private void ListBox_MetaList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -882,6 +1013,75 @@ namespace APKRepackageSDKTool.UI
 
             currentMetaContent.value = tb.Text;
         }
+
+        #endregion
+
+        #region Uses设置
+
+
+        private void TextBox_UsesContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentUsesContent.value = tb.Text;
+        }
+
+        private void Button_ClickAddUsesHead(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_UsesName.Text))
+            {
+                KeyValue kv = new KeyValue();
+                kv.key = TextBox_UsesName.Text;
+
+                UsesList.Add(kv);
+
+                UsesList = UsesList;
+
+                TextBox_UsesName.Text = "";
+            }
+        }
+
+        private void Button_ClickDeleteUsesHead(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            for (int i = 0; i < UsesList.Count; i++)
+            {
+                if (UsesList[i].key == key)
+                {
+                    UsesList.RemoveAt(i);
+                }
+            }
+
+            UsesList = UsesList;
+
+            if(key == currentUsesContent.key)
+            {
+                TextBox_UsesContent.IsEnabled = false;
+                currentUsesContent.value = "";
+            }
+        }
+
+        private void ListBox_UsesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lb = sender as ListBox;
+
+            string Key = (string)lb.SelectedValue;
+
+            for (int i = 0; i < UsesList.Count; i++)
+            {
+                if (UsesList[i].key == Key)
+                {
+                    currentUsesContent = UsesList[i];
+                }
+            }
+
+            TextBox_UsesContent.Text = currentUsesContent.value;
+            TextBox_UsesContent.IsEnabled = true;
+        }
+
 
         #endregion
 
@@ -961,7 +1161,6 @@ namespace APKRepackageSDKTool.UI
 
             MessageBox.Show(content);
         }
-
 
     }
 }
