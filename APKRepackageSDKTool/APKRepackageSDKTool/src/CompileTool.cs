@@ -101,8 +101,6 @@ public class CompileTool
         string result = oldContent;
         result = result.Replace("{PackageName}", channelInfo.PackageName);
 
-        result = RemoveSpecialCode(result);
-
         return result;
     }
 
@@ -114,8 +112,6 @@ public class CompileTool
         {
             result = result.Replace("{"+ SDKinfo.sdkConfig[i].key + "}", SDKinfo.sdkConfig[i].value);
         }
-
-        result = RemoveSpecialCode(result);
 
         return result;
     }

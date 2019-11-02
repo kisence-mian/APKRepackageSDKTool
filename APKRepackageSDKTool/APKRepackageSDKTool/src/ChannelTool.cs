@@ -769,7 +769,7 @@ namespace APKRepackageSDKTool
 
             //拷贝资源文件
             OutPut("拷贝资源文件 " + info.sdkName);
-            CopyFile(filePath,info);
+            CopyFile(filePath,info, channelInfo);
 
             //添加标签头
             for (int i = 0; i < config.XmlHeadList.Count; i++)
@@ -894,7 +894,7 @@ namespace APKRepackageSDKTool
             }
         }
 
-        void CopyFile(string filePath,SDKInfo info)
+        void CopyFile(string filePath,SDKInfo info, ChannelInfo channelInfo)
         {
             string SDKPath = EditorData.SdkLibPath + "\\" + info.sdkName;
 
@@ -916,6 +916,15 @@ namespace APKRepackageSDKTool
                 if(dirName.Contains("res"))
                 {
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName, RepeatHandle);
+
+                    //递归替换关键字
+                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "xml", (file) =>
+                    {
+                        String content = FileTool.ReadStringByFile(file);
+                        content = compileTool.ReplaceKeyWord(content, channelInfo);
+
+                        FileTool.WriteStringByFile(file,content);
+                    });
                 }
             }
         }

@@ -173,7 +173,6 @@ namespace APKRepackageSDKTool
                 this.content = content + " " + channelName + " ( " + (currentChannel + 1)+ " / "+ totalChannel + " )";
                 progress = step;
                 step++;
-
                 callBack?.Invoke(progress, this.content, this.content);
             }
         }
