@@ -76,7 +76,9 @@ public class CompileTool
             string p = JavaCompileLibPath + "\\" + FileTool.GetFileNameByPath(sdkConfig.customJavaLibrary[i]);
             libs += p + ";";
             FileTool.CreatFilePath(p);
-            File.Copy(sdkConfig.customJavaLibrary[i], p, true);
+
+            string libPath = EditorData.SdkLibPath + sdkConfig.customJavaLibrary[i];
+            File.Copy(libPath, p, true);
         }
 
         //创建导出目录

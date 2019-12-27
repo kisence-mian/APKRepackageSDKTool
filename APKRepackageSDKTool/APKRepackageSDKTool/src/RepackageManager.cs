@@ -135,6 +135,7 @@ namespace APKRepackageSDKTool
                             + " -digestalg SHA1 -sigalg MD5withRSA"
                             + " -storepass " + channelInfo.KeyStorePassWord
                             + " -keystore " + channelInfo.KeyStorePath
+                            + " -sigFile CERT"  //强制将RSA文件更名为CERT
                             + " " + apkPath
                             + " " + channelInfo.KeyStoreAlias
                             );

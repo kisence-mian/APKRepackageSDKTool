@@ -538,12 +538,21 @@ namespace APKRepackageSDKTool.UI
                 Filter = "Jar Files (*.*)|*.*"
             };
             var result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                LibraryList.Add(openFileDialog.FileName);
-            }
 
-            LibraryList = LibraryList;
+            if(openFileDialog.FileName.Contains(EditorData.SdkLibPath))
+            {
+                if (result == true)
+                {
+                    string path = openFileDialog.FileName.Replace(EditorData.SdkLibPath, "");
+
+                    LibraryList.Add(path);
+                    LibraryList = LibraryList;
+                }
+            }
+            else
+            {
+                MessageBox.Show("导入的Jar包必须是SDKLibrary的子路径 \n" + EditorData.SdkLibPath);
+            }
         }
 
         private void Button_CustomJavaLibrary_Delete(object sender, RoutedEventArgs e)

@@ -214,42 +214,47 @@ namespace APKRepackageSDKTool
 
         public static void UpdateTotalSDKInfo()
         {
-            //遍历SDKPath下的全部文件夹，排除Config文件夹
-
-            if (!string.IsNullOrEmpty(SdkLibPath))
+            try
             {
-                if(totalSDKConfig == null)
+                //遍历SDKPath下的全部文件夹，排除Config文件夹
+                if (!string.IsNullOrEmpty(SdkLibPath))
                 {
-                    totalSDKConfig = new TotalSDKConfig();
+                    if (totalSDKConfig == null)
+                    {
+                        totalSDKConfig = new TotalSDKConfig();
+                    }
+                    else
+                    {
+                        totalSDKConfig.Clear();
+                    }
+
+                    string[] dires = Directory.GetDirectories(SdkLibPath);
+                    for (int i = 0; i < dires.Length; i++)
+                    {
+                        if (!dires[i].Contains("Interface")
+                            && !dires[i].Contains("git")
+                             && !dires[i].Contains("svn")
+                            && !dires[i].Contains("Source")
+                            )
+                        {
+                            //读取每个文件夹中的config.json，以获取对应的设置要求
+                            string configPath = dires[i] + "\\config.json";
+
+                            SDKConfig info = LoadSDKConfig(FileTool.GetDirectoryName(dires[i]), configPath);
+
+                            totalSDKConfig.Add(info);
+                        }
+                    }
+
+                    TotalSDKInfo = totalSDKConfig;
                 }
                 else
                 {
-                    totalSDKConfig.Clear();
+                    totalSDKConfig = null;
                 }
-
-                string[] dires = Directory.GetDirectories(SdkLibPath);
-                for (int i = 0; i < dires.Length; i++)
-                {
-                    if (!dires[i].Contains("Interface")
-                        && !dires[i].Contains("git")
-                         && !dires[i].Contains("svn")
-                        && !dires[i].Contains("Source")
-                        )
-                    {
-                        //读取每个文件夹中的config.json，以获取对应的设置要求
-                        string configPath = dires[i] + "\\config.json";
-
-                        SDKConfig info = LoadSDKConfig(FileTool.GetDirectoryName(dires[i]),configPath);
-
-                        totalSDKConfig.Add(info);
-                    }
-                }
-
-                TotalSDKInfo = totalSDKConfig;
-            }
-            else
+            }catch(Exception)
             {
-                totalSDKConfig = null;
+                MessageBox.Show("读取SDKLibrary出错，请确保配置了正确的SDKLibrary路径 ：" + SdkLibPath);
             }
         }
 
@@ -450,6 +455,8 @@ namespace APKRepackageSDKTool
         public int targetSDKVersion;
         public string applicationName;
 
+        public bool force32bit; //强制32位执行
+
         public List<KeyValue> xmlHeadList = new List<KeyValue>();
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
         public List<KeyValue> mainActivityPropertyList = new List<KeyValue>();
@@ -521,6 +528,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> MetaInfoList { get => metaInfoList; set => metaInfoList = value; }
         public List<KeyValue> XmlHeadList { get => xmlHeadList; set => xmlHeadList = value; }
         public List<KeyValue> UsesList { get => usesList; set => usesList = value; }
+        public bool Force32bit { get => force32bit; set => force32bit = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

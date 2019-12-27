@@ -68,6 +68,9 @@ namespace APKRepackageSDKTool
                     OutPut("放入SDK " + info.sdkList[i].sdkName);
                     PutSDK(filePath, info.sdkList[i], info);
                 }
+
+                //强制32位模式
+                Force32Bit(filePath, info);
             }
 
             OutPut("写配置清单");
@@ -905,11 +908,24 @@ namespace APKRepackageSDKTool
                 string dirName = FileTool.GetDirectoryName(dir.FullName);
 
                 //只拷贝这三个目录
-                if(dirName.Contains("assets")
-                    || dirName.Contains("lib")
-                    )
+                if(dirName.Contains("lib"))
                 {
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
+                }
+
+                if(dirName.Contains("assets"))
+                {
+                    FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
+
+                    //递归替换关键字
+                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "ini", (file) =>
+                    {
+                        String content = FileTool.ReadStringByFile(file);
+                        content = compileTool.ReplaceKeyWord(content, channelInfo);
+                        content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
+
+                        FileTool.WriteStringByFile(file, content);
+                    });
                 }
 
                 //合并res文件
@@ -1032,6 +1048,50 @@ namespace APKRepackageSDKTool
                 }
             }
             ChangeSDKVersion(filePath, minSDKVersion, targetSDKVersion);
+        }
+
+        #endregion
+
+        #region 强制32位模式
+
+        void Force32Bit(string filePath, ChannelInfo info)
+        {
+            //强制32位模式
+            bool force32bit = false;
+
+            for (int i = 0; i < info.sdkList.Count; i++)
+            {
+                //OutPut("强制32位模式 " + info.sdkList[i].sdkName + " " + config.force32bit);
+
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkList[i].sdkName);
+                force32bit |= config.force32bit;
+            }
+
+            if (force32bit)
+            {
+                OutPut("强制32位模式");
+
+                //将 armeabi-v7a 的库移动到 armeabi 中去
+                FileTool.CopyDirectory(filePath + "/lib/armeabi-v7a", filePath + " /lib/armeabi");
+
+                Delete(filePath + "/lib/armeabi-v7a");
+                Delete(filePath + "/lib/arm64-v8a");
+            }
+
+            OutPut("删除不必要的的库");
+            Delete(filePath + "/lib/x86");
+            Delete(filePath + "/lib/x86_64");
+            Delete(filePath + "/lib/mips");
+            Delete(filePath + "/lib/mips64");
+        }
+
+        void Delete(String path)
+        {
+            if (Directory.Exists(path))
+            {
+                FileTool.DeleteDirectory(path);
+                Directory.Delete(path);
+            }
         }
 
         #endregion

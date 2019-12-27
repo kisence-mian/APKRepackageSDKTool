@@ -179,9 +179,6 @@
     <Content Include="DotNETReactor\dlls\B1Plus.UI.BaseApplications_Secure\B1Plus.UI.BaseApplications.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="DotNETReactor\dotNET_Reactor.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="DotNETReactor\Help\License Agreement.html" />
     <Resource Include="DotNETReactor\icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

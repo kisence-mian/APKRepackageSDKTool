@@ -16,7 +16,6 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/dlls/b1plus.ui.baseapplications.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/dlls/b1plus.ui.baseapplications_secure/b1plus.ui.baseapplications.d" +
     "ll")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/dotnet_reactor.exe")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/help/license%20agreement.html")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/irisskin2.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/tools/hid/hid.exe")]
