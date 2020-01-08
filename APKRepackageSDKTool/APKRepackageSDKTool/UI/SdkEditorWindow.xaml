@@ -28,7 +28,7 @@
                     <Label Content="Java类名" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                     <TextBox Height="23" Margin="94,12,10,0" TextWrapping="Wrap" Text="{Binding Path=ClassName,Mode=TwoWay}" VerticalAlignment="Top"/>
                     <Label Content="SDK类型" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top"/>
-                    <ListBox x:Name="ListBox_SDKType" HorizontalAlignment="Left" Margin="94,73,0,10" Width="207">
+                    <ListBox x:Name="ListBox_SDKType" Margin="94,73,10,106">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -42,6 +42,7 @@
                     </ListBox>
                     <Label Content="SDKName" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
                     <TextBox Height="23" Margin="94,40,10,0" TextWrapping="Wrap" Text="{Binding SdkName, Mode=TwoWay}" VerticalAlignment="Top"/>
+                    <Button x:Name="Button_InputAAR" Content="从AAR导入" Margin="94,0,447,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAAR_Click"/>
 
                 </Grid>
             </TabItem>
@@ -61,7 +62,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid >
-                                    <Label Content="{Binding Path=Key}" Width="140" HorizontalAlignment="Left" />
+                                    <Label Content="{Binding Path=Key}" MinWidth="200" HorizontalAlignment="Left" />
                                     <TextBox Text="{Binding Path=Value}" MinWidth="200" HorizontalAlignment="Right" Margin="150,0,50,0" />
                                     <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Key}" Click="Button_ClickDelete"/>
                                 </Grid>

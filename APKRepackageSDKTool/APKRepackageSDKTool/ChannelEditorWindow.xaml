@@ -7,6 +7,19 @@
         mc:Ignorable="d"
         Title="渠道设置" Height="451.449" Width="808.25">
     <Grid x:Name="Grid_root">
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Label">
+                            <Border Padding="{TemplateBinding Padding}">
+                                <ContentPresenter RecognizesAccessKey="False"></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
         <Label Content="渠道名" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox Height="18" Margin="61,17,0,0" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172"/>
         <TabControl Margin="10,40,10,10">

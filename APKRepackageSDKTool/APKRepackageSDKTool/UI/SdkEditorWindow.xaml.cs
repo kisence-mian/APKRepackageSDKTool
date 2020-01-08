@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace APKRepackageSDKTool.UI
 {
@@ -1094,6 +1097,278 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region 从AAR中导入
+
+        private void Button_InputAAR_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;  // 这里一定要设置true，不然就是选择文件
+
+            string path = "";
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                path = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+            string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+
+            //路径有效性判断
+
+            //提取jar
+            string jarResult = ExtractJar(path, aimPath, FileTool.GetFileNameByPath(path));
+
+            //提取Manifest
+            string manifestResult = ExtractManifest(path);
+
+            string repeatAssets = "";
+            //复制assets
+            if (Directory.Exists(path + "/assets"))
+            {
+                FileTool.CopyDirectory(path + "/assets", aimPath + "/assets", (pathA,pathB)=>{
+                    repeatAssets += FileTool.GetFileNameByPath(pathA) + "\n";
+                });
+            }
+
+            //合并res
+            if (Directory.Exists(path + "/res"))
+            {
+                ChannelTool ct = new ChannelTool(null, null);
+                ct.MergeXMLFile(path + "/res", aimPath + "/res");
+            }
+
+            MessageBox.Show("提取完毕 \n Jar:\n" + jarResult + "\n Manifest : \n" + manifestResult + "\n RepeatAssets:\n" + repeatAssets);
+        }
+
+        void FileRepeatError(string a,string b)
+        {
+
+        }
+
+        string ExtractJar(string sourcePath,string aimPath,string className)
+        {
+            String result = "";
+            string[] paths = Directory.GetFiles(sourcePath);
+            foreach (var item in paths)
+            {
+                try
+                {
+                    string fileName = FileTool.GetFileNameByPath(item);
+
+                    if (fileName == "classes.jar")
+                    {
+                        fileName = className + ".jar";
+                    }
+
+                    if (item.EndsWith(".jar"))
+                    {
+                        File.Copy(item, aimPath + "/" + fileName);
+
+                        result += fileName + "\n";
+                    }
+                }
+                catch (Exception e)
+                {
+                    result += "Error " + e;
+                }
+            }
+
+            string[] dires = Directory.GetDirectories(sourcePath);
+            for (int i = 0; i < dires.Length; i++)
+            {
+                result += ExtractJar(dires[i], aimPath, className);
+            }
+
+            return result;
+        }
+
+        string ExtractManifest(string sourcePath)
+        {
+            string result = "";
+            sourcePath += "/AndroidManifest.xml";
+
+            XmlDocument doca = new XmlDocument();
+            doca.Load(sourcePath);
+
+            XmlNode manifest = doca.SelectSingleNode("manifest");
+            XmlNode application = manifest.SelectSingleNode("application");
+
+            for (int i = 0; i < manifest.ChildNodes.Count; i++)
+            {
+                XmlNode node = manifest.ChildNodes[i];
+
+                //跳过注释
+                if (node.NodeType == XmlNodeType.Comment)
+                {
+                    continue;
+                }
+
+                XmlElement ele = (XmlElement)node;
+
+                //权限
+                if (ele.Name == "uses-permission")
+                {
+                    string permissionString = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android").Replace("android.permission.", "");
+
+                    if (!Permission.Contains(permissionString))
+                    {
+                        Permission.Add(permissionString);
+                        Permission = Permission;
+
+                        result += "permission " +  permissionString + "\n";
+                    }
+                }
+                //meta以及其他
+                else if (ele.Name == "meta")
+                {
+                    if (!HasMeta(ele.OuterXml))
+                    {
+                        //Meta
+                        KeyValue metaKV = new KeyValue();
+                        metaKV.key = ele.OuterXml;
+                        metaKV.value = ele.OuterXml;
+
+                        MetaList.Add(metaKV);
+                        MetaList = MetaList;
+
+                        result += ele.Name + " " + ele.OuterXml + "\n";
+                    }
+                }
+            }
+
+            if(application != null)
+            for (int i = 0; i < application.ChildNodes.Count; i++)
+            {
+                XmlNode node = application.ChildNodes[i];
+
+                //跳过注释
+                if(node.NodeType == XmlNodeType.Comment)
+                {
+                    continue;
+                }
+
+                XmlElement ele = (XmlElement)node;
+
+                //Activity
+                if (ele.Name == "activity")
+                {
+                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+
+                    if(!HasActivity(name))
+                    {
+                        ActivityInfo activityInfo = new ActivityInfo();
+
+                        activityInfo.mainActivity = false;
+                        activityInfo.name = name;
+                        activityInfo.content = ele.OuterXml;
+
+                        _ActivityList.Add(activityInfo);
+                        _ActivityList = _ActivityList;
+
+                        result += "Activity " + name + "\n";
+                    }
+                }
+
+                //Service
+                if (ele.Name == "service")
+                {
+                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+
+                    if(!HasService(name))
+                    {
+                        //Service
+                        ServiceInfo serviceInfo = new ServiceInfo();
+
+                        serviceInfo.name = name;
+                        serviceInfo.content = ele.OuterXml;
+
+                        _ServiceInfo.Add(serviceInfo);
+                        _ServiceInfo = _ServiceInfo;
+
+                        result += "Service " + name + "\n";
+                    }
+                }
+
+                if (ele.Name == "provider")
+                {
+                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+
+                    if (!HasProvider(name))
+                    {
+                        //Provider
+                        ProviderInfo providerInfo = new ProviderInfo();
+
+                        providerInfo.name = name;
+                        providerInfo.content = ele.OuterXml;
+
+                        _ProviderInfo.Add(providerInfo);
+
+                        _ProviderInfo = _ProviderInfo;
+                        result += "Provider " + name + "\n";
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        bool HasActivity(string  name)
+        {
+            for (int i = 0; i < _ActivityList.Count; i++)
+            {
+                if(_ActivityList[i].name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        bool HasService(string name)
+        {
+            for (int i = 0; i < _ServiceInfo.Count; i++)
+            {
+                if (_ServiceInfo[i].name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool HasProvider(string name)
+        {
+            for (int i = 0; i < _ProviderInfo.Count; i++)
+            {
+                if (_ProviderInfo[i].name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool HasMeta(string value)
+        {
+            for (int i = 0; i < MetaList.Count; i++)
+            {
+                if (MetaList[i].value == value)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        #endregion
+
         #endregion
 
         #region 类声明
@@ -1170,6 +1445,5 @@ namespace APKRepackageSDKTool.UI
 
             MessageBox.Show(content);
         }
-
     }
 }

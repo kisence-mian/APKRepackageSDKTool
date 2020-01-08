@@ -45,9 +45,6 @@ namespace APKRepackageSDKTool
 
         public MainWindow()
         {
-            //ChannelTool ct = new ChannelTool(null, null);
-            //ct.MergeXMLFile(@"E:\文件\发布物料\艾鲁大陆\渠道\华为\hmssdk-eclipse-2.6.3.306\HMSSdkGame\res", @"E:\Project\Library\SDKLibrary\HuaWei\res");
-
             InitializeComponent();
 
             apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
@@ -337,8 +334,6 @@ namespace APKRepackageSDKTool
                 ListBox_channel.ItemsSource = null;
             }
         }
-
-
 
         #endregion
 

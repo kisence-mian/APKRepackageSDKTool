@@ -977,30 +977,44 @@ namespace APKRepackageSDKTool
             XmlElement rootA = doca.DocumentElement;
             XmlElement rootB = docb.DocumentElement;
 
-            // 创建一个合并的 document
-            XmlDocument result = new XmlDocument();
-
-            // 创建根元素
-            XmlElement root = result.CreateElement(rootB.Name);
-            result.AppendChild(root);
-
             foreach (XmlNode node in rootA.ChildNodes)
             {
-                // 先导入节点
-                XmlNode n = result.ImportNode(node, true);
-                //if(root.SelectNodes())
-                // 然后，插入指定的位置
-                root.AppendChild(n);
+                //判重
+                if(!IsRepeatNode(rootB, node))
+                {
+                    // 先导入节点
+                    XmlNode n = docb.ImportNode(node, true);
+
+                    // 然后，插入指定的位置
+                    rootB.AppendChild(n);
+                }
             }
 
-            // 同上
-            foreach (XmlNode node in rootB.ChildNodes)
+            docb.Save(fileB);
+        }
+
+        bool IsRepeatNode(XmlElement root, XmlNode node)
+        {
+            for (int i = 0; i < root.ChildNodes.Count; i++)
             {
-                XmlNode n = result.ImportNode(node, true);
-                root.AppendChild(n);
+                XmlNode tmp = root.ChildNodes[i];
+
+                //跳过注释
+                if(tmp.NodeType == XmlNodeType.Comment)
+                {
+                    return true;
+                }
+
+                XmlElement ele = (XmlElement)tmp;
+
+                if(ele.Name == node.Name 
+                    && ele.OuterXml == node .OuterXml)
+                {
+                    return true;
+                }
             }
 
-            result.Save(fileB);
+            return false;
         }
 
         #endregion
