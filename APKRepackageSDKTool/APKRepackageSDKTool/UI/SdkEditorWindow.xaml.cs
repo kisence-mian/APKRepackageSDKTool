@@ -1114,12 +1114,14 @@ namespace APKRepackageSDKTool.UI
             {
                 return;
             }
+
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+            string aarName = FileTool.GetFileNameByPath(path);
 
             //路径有效性判断
 
             //提取jar
-            string jarResult = ExtractJar(path, aimPath, FileTool.GetFileNameByPath(path));
+            string jarResult = ExtractJar(path, aimPath, aarName);
 
             //提取Manifest
             string manifestResult = ExtractManifest(path);
@@ -1138,6 +1140,9 @@ namespace APKRepackageSDKTool.UI
             {
                 ChannelTool ct = new ChannelTool(null, null);
                 ct.MergeXMLFile(path + "/res", aimPath + "/res");
+
+                //生成R表
+                ct.BuildRTable(path,aarName,aimPath);
             }
 
             MessageBox.Show("提取完毕 \n Jar:\n" + jarResult + "\n Manifest : \n" + manifestResult + "\n RepeatAssets:\n" + repeatAssets);
@@ -1229,7 +1234,7 @@ namespace APKRepackageSDKTool.UI
                         //Meta
                         KeyValue metaKV = new KeyValue();
                         metaKV.key = ele.OuterXml;
-                        metaKV.value = ele.OuterXml;
+                        metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
 
                         MetaList.Add(metaKV);
                         MetaList = MetaList;
@@ -1263,7 +1268,7 @@ namespace APKRepackageSDKTool.UI
 
                         activityInfo.mainActivity = false;
                         activityInfo.name = name;
-                        activityInfo.content = ele.OuterXml;
+                        activityInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"","");
 
                         _ActivityList.Add(activityInfo);
                         _ActivityList = _ActivityList;
@@ -1283,7 +1288,7 @@ namespace APKRepackageSDKTool.UI
                         ServiceInfo serviceInfo = new ServiceInfo();
 
                         serviceInfo.name = name;
-                        serviceInfo.content = ele.OuterXml;
+                        serviceInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
 
                         _ServiceInfo.Add(serviceInfo);
                         _ServiceInfo = _ServiceInfo;
@@ -1302,16 +1307,15 @@ namespace APKRepackageSDKTool.UI
                         ProviderInfo providerInfo = new ProviderInfo();
 
                         providerInfo.name = name;
-                        providerInfo.content = ele.OuterXml;
+                        providerInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "").Replace("${ApplicationID}","{PackageName}");
 
-                        _ProviderInfo.Add(providerInfo);
+                            _ProviderInfo.Add(providerInfo);
 
                         _ProviderInfo = _ProviderInfo;
                         result += "Provider " + name + "\n";
                     }
                 }
             }
-
             return result;
         }
 

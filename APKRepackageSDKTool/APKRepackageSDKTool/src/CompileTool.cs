@@ -37,11 +37,16 @@ public class CompileTool
 
         CmdService cmd = new CmdService(OutPut, errorCallBack);
 
+        OutPut("放入Jar :" + jarName);
+
         //Jar to dex
-        cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath,true,true);
+        cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath , true,true);
 
         //dex to smali
-        cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath);
+        //cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath);
+
+        //dex to smali
+        cmd.Execute("java -jar baksmali-2.3.4.jar d " + tempPath  + " -o " + smaliPath);
 
         //删除临时目录
         FileTool.DeleteDirectory(JavaTempPath);
