@@ -571,7 +571,7 @@ namespace APKRepackageSDKTool
             //OutPut("R_Path " + R_Path + " resPath " + resPath + " manifest " + manifest);
 
             //生成R文件
-            cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + "");
+            cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
 
             if(FindRPath(R_Path) != null)
             {
@@ -606,6 +606,47 @@ namespace APKRepackageSDKTool
             Directory.Delete(R_Path);
 
             //cmd.Execute("java -jar baksmali-2.1.3.jar classes.dex");
+        }
+
+        public void BuildRTable(string aimPath,string name,string sdkPath)
+        {
+            String R_Path = aimPath + "/R_path/";
+
+            FileTool.CreatPath(R_Path);
+
+            //String androidPath = @"D:\AndroidSDK\platforms\android-28\android.jar";
+            string manifest = aimPath + "/AndroidManifest.xml";
+            string resPath = aimPath + "/res";
+
+            CmdService cmd = new CmdService(OutPut, errorCallBack);
+
+            //生成R文件
+            cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
+
+            if (FindRPath(R_Path) != null)
+            {
+                string javaPath = FindRPath(R_Path);
+                string jarPath = R_Path + "/"+ name + "_R.jar";
+
+                //编译R.java文件
+                cmd.Execute("javac -encoding UTF-8 -source 1.6 -target 1.6 " + javaPath, true, true);
+
+                //删除掉java文件
+                FileTool.DeleteFile(javaPath);
+
+                //生成的R文件的jar
+                cmd.Execute("jar cvf ./"+ name + "_R.jar ./com", path: R_Path);
+
+                //复制R文件导库
+                File.Copy(jarPath, sdkPath +"/"+ name + "_R.jar");
+            }
+            else
+            {
+                throw new Exception("R文件生成失败！ 请检查清单文件是否正确！");
+            }
+
+            FileTool.SafeDeleteDirectory(R_Path);
+            Directory.Delete(R_Path);
         }
 
         String FindRPath(string path)
@@ -1006,7 +1047,7 @@ namespace APKRepackageSDKTool
                 //跳过注释
                 if(tmp.NodeType == XmlNodeType.Comment)
                 {
-                    return true;
+                    continue;
                 }
 
                 XmlElement ele = (XmlElement)tmp;
@@ -1151,7 +1192,174 @@ namespace APKRepackageSDKTool
             Directory.Delete(outDir);
         }
 
-        #endregion 
+        #endregion
+
+        #region 分包
+
+        public void SplitDex(string aimPath)
+        {
+            string smaliPath = aimPath.Replace("\\","/") + "/smali";
+
+            //拷贝android-support-multidex.jar
+            string interfacePath = EditorData.SdkLibPath + "\\Interface\\android-support-multidex.jar";
+            compileTool.Jar2Smali(interfacePath, aimPath);
+
+            List<string> list = FileTool.GetAllFileNamesByPath(smaliPath, new string[] { "smali" });
+
+            Dictionary<string, string> allMethod = new Dictionary<string, string>();
+
+            int maxFuncNum = 65535;
+            int currentFuncNum = 0;
+
+            int currentIndex = 1;
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace("\\", "/");
+                if(JudgeMainDex(list[i]))
+                {
+                    currentFuncNum += CalcSmaliMethodCountBySmali(list[i], allMethod);
+
+                    //OutPut("主Dex：" + list[i] + " funcnum:" + currentFuncNum);
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace("\\", "/");
+                //剔除所有不需要分包的类
+                if (JudgeMainDex(list[i]))
+                {
+                    continue;
+                }
+
+                //计算当前有多少方法
+                currentFuncNum += CalcSmaliMethodCountBySmali(list[i], allMethod);
+
+                //OutPut("普通Dex：" + list[i] + " funcnum:" + currentFuncNum);
+
+                if (currentFuncNum > maxFuncNum)
+                {
+                    currentFuncNum = 0;
+                    currentIndex++;
+
+                    string newPath = smaliPath + "_classes" + currentIndex;
+                    FileTool.CreatPath(newPath);
+
+                    //OutPut("超过上限：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
+                }
+
+                if (currentIndex > 1)
+                {
+                    string newPath = smaliPath + "_classes" + currentIndex;
+                    string targetPath = newPath + "" + list[i].Replace(smaliPath, "");
+                    FileTool.CreatFilePath(targetPath);
+                    File.Move(list[i], targetPath);
+
+                    //OutPut("分包：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
+                }
+            }
+        }
+        const string c_NoneMethod = "None";
+
+        bool JudgeMainDex(string path)
+        {
+            if(path.Contains(@"/android/support/multidex"))
+            {
+                return true;
+            }
+            else if(path.Contains("sdkInterface"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 计算method数量
+        /// </summary>
+        /// <param name="smaliPath"></param>
+        /// <param name="allMethod"></param>
+        /// <returns></returns>
+        public int CalcSmaliMethodCountBySmali(string smaliPath,Dictionary<string,string> allMethod)
+        {
+            int count = 0;
+            string content = FileTool.ReadStringByFile(smaliPath);
+
+            //Dictionary<string, string> allMethod = new Dictionary<string, string>();
+
+            string[] lines = content.Split('\n');
+            string className = ParseClassName(lines[0].Trim());
+
+            //OutPut("smaliPath " + smaliPath + " " + lines.Length);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i].Trim();
+                string method = c_NoneMethod;
+
+                if(line.StartsWith(".method"))
+                {
+                    method = ParseMethodDefault(className, line);
+
+                    //OutPut("StartsWith method " + line);
+                }
+                else if(line.StartsWith("invoke-"))
+                {
+                    method = ParseMethodInvoke(className, line);
+                }
+
+                if(method == c_NoneMethod)
+                {
+                    continue;
+                }
+
+                if(!allMethod.ContainsKey(method))
+                {
+                    allMethod.Add(method,method);
+                    count++;
+                }
+            }
+
+            //OutPut("method " + count);
+
+            return count;
+        }
+
+        string ParseClassName(string line)
+        {
+            if(line.StartsWith(".class"))
+            {
+                return c_NoneMethod;
+            }
+
+            string[] blocks = line.Split(' ');
+            return blocks[blocks.Length - 1];
+        }
+
+        string ParseMethodDefault(string className,string line)
+        {
+            if(!line.StartsWith(".method"))
+            {
+                return c_NoneMethod;
+            }
+
+            string[] blocks = line.Split(' ');
+            return className + "->" + blocks[blocks.Length - 1];
+        }
+
+        string ParseMethodInvoke(string className, string line)
+        {
+            if (!line.StartsWith("invoke-"))
+            {
+                return c_NoneMethod;
+            }
+
+            string[] blocks = line.Split(' ');
+            return className + "->" + blocks[blocks.Length - 1];
+        }
+        #endregion
 
     }
 

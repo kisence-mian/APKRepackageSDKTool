@@ -21,8 +21,8 @@ namespace APKRepackageSDKTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        const int c_totalStep = 8;
-        int currentTotalStep = 8;
+        const int c_totalStep = 9;
+        int currentTotalStep = 9;
 
         RepackageManager repackageManager = new RepackageManager();
         bool isBuilding = false;
@@ -59,6 +59,13 @@ namespace APKRepackageSDKTool
 
             //再显示该游戏的所有渠道
             UpdateChannel();
+
+            //测试代码
+            //ChannelTool ct = new ChannelTool(OutPut, OutPut);
+            //Dictionary<string, string> am = new Dictionary<string, string>();
+            //ct.SplitDex(@"E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\CPH20200114_1540");
+
+            //ct.CalcSmaliMethodCountBySmali(@"E:/Project/Tool/APKRepackageSDKTool/APKRepackageSDKTool/APKRepackageSDKTool/bin/Debug/CPH20200114_1540/smali/com/google/android/gms/internal/ads/zzbwc.smali", am);
         }
 
         #region 点击事件
@@ -285,6 +292,21 @@ namespace APKRepackageSDKTool
 
             line++;
             this.output += "<Error>[" + line + "]" + output + "\n";
+            isBuilding = false;
+            progress = 0;
+
+            Action ac = new Action(UpdateContent);
+            Dispatcher.BeginInvoke(ac);
+
+            repackageManager.CancelRepack();
+        }
+
+        void OutPut(string output)
+        {
+            this.content = "日志：";
+
+            line++;
+            this.output += "<Log>[" + line + "]" + output + "\n";
             isBuilding = false;
             progress = 0;
 

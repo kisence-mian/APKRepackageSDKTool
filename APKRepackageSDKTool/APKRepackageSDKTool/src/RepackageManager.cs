@@ -101,9 +101,6 @@ namespace APKRepackageSDKTool
 
                         string apktool_version = "apktool";
 
-                        //MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
-                        //channelTool.YMLLogic(aimPath);
-
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
                         cmd.Execute("java -jar "+ apktool_version + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
@@ -115,6 +112,10 @@ namespace APKRepackageSDKTool
                         //移除过长的YML
                         MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
                         channelTool.YMLLogic(aimPath);
+
+                        //分包
+                        MakeProgress("分包", i, channelList.Count, channelInfo.Name);
+                        channelTool.SplitDex(aimPath);
 
                         ////混淆DLL
                         //MakeProgress("混淆DLL", i, channelList.Count, channelInfo.Name);
@@ -147,8 +148,8 @@ namespace APKRepackageSDKTool
                         //删除临时目录
                         MakeProgress("删除临时目录", i, channelList.Count, channelInfo.Name);
 
-                        FileTool.SafeDeleteDirectory(aimPath);
-                        Directory.Delete(aimPath);
+                        //FileTool.SafeDeleteDirectory(aimPath);
+                        //Directory.Delete(aimPath);
 
                         MakeProgress("完成", i, channelList.Count, channelInfo.Name);
                     }
