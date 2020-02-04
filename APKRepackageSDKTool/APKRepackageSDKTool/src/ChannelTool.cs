@@ -568,7 +568,7 @@ namespace APKRepackageSDKTool
 
             OutPut("生成R.java文件");
 
-            OutPut("R_Path " + R_Path + " resPath " + resPath + " manifest " + manifest);
+            //OutPut("R_Path " + R_Path + " resPath " + resPath + " manifest " + manifest);
 
             //生成R文件
             cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + "");
@@ -580,15 +580,19 @@ namespace APKRepackageSDKTool
                 //java = compileTool.RemoveSpecialCode(java);
                 //FileTool.WriteStringByFile(FindRPath(R_Path),java);
 
+                OutPut("编译R.java文件");
                 //编译R.java文件
-                cmd.Execute("javac -encoding UTF-8 -source 1.6 -target 1.6 " + FindRPath(R_Path), true, true);
+                cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + FindRPath(R_Path), true, true);
 
+                OutPut("生成的R文件的jar");
                 //生成的R文件的jar
                 cmd.Execute("jar cvf ./R.jar ./com", path: R_Path);
 
+                OutPut("Jar to dex");
                 //Jar to dex
                 cmd.Execute("java -jar dx.jar --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
 
+                OutPut("dex to smali");
                 //dex to smali
                 cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + aimPath + "/smali ./R_path/classes.dex");
             }
