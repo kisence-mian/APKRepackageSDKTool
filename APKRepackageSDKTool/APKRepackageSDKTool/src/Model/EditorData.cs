@@ -27,6 +27,12 @@ namespace APKRepackageSDKTool
         static SDKConfig currentSDKConfig;
 
         static string sdkLibPath;
+        static string androidSdkPath;
+
+        static string buildToolVersion;
+
+        public static bool isOutPutCMD = false;      //输出原始命令
+        public static bool isAutoInstall = false;      //自动安装
 
         #region 属性
 
@@ -124,6 +130,66 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public static string AndroidSdkPath {
+            get
+            {
+                JudgeInit();
+                return androidSdkPath;
+            }
+
+            set
+            {
+                androidSdkPath = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "AndroidSDKPath", androidSdkPath);
+            }
+        }
+
+        public static string BuildToolVersion 
+        { 
+            get
+            {
+                JudgeInit();
+                return buildToolVersion;
+            }
+
+            set
+            {
+                buildToolVersion = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "BuildToolVersion", buildToolVersion);
+            }
+        }
+
+        public static bool IsOutPutCMD 
+        { 
+            get
+            {
+                JudgeInit();
+                return isOutPutCMD;
+            }
+
+            set
+            {
+                isOutPutCMD = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "IsOutPutCMD", isOutPutCMD);
+            }
+
+        }
+
+        public static bool IsAutoInstall 
+        { 
+            get
+            {
+                JudgeInit();
+                return isAutoInstall;
+            }
+
+            set
+            {
+                isAutoInstall = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "IsAutoInstall", isAutoInstall);
+            }
+        }
+
         #endregion
 
         #region 初始化
@@ -143,7 +209,12 @@ namespace APKRepackageSDKTool
                     gameList.Add(item);
                 }
 
-                SdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", null);
+                sdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", null);
+                androidSdkPath = RecordManager.GetRecord(c_ConfigRecord, "AndroidSDKPath", null);
+                buildToolVersion = RecordManager.GetRecord(c_ConfigRecord, "BuildToolVersion", null);
+
+                isOutPutCMD = RecordManager.GetRecord(c_ConfigRecord, "IsOutPutCMD", false);
+                isAutoInstall = RecordManager.GetRecord(c_ConfigRecord, "IsAutoInstall", false);
 
                 UpdateTotalSDKInfo();
             }
@@ -293,6 +364,58 @@ namespace APKRepackageSDKTool
             }
         }
         #endregion
+
+        #region AndroidSDK
+
+        public static string GetAndroidJarPath(int apiLevel)
+        {
+            return androidSdkPath + "\\platforms\\android-" + apiLevel + "\\android.jar";
+        }
+
+        /// <summary>
+        /// 获取android sdk dxjar 的路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetDxPath()
+        {
+            return androidSdkPath + "\\build-tools\\"+ buildToolVersion + "\\lib\\dx.jar";
+        }
+
+        /// <summary>
+        /// 获取android sdk d8jar 的路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetD8Path()
+        {
+            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\lib\\d8.jar";
+        }
+
+        /// <summary>
+        /// 获取android sdk apksignerjar 的路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetApksignerPath()
+        {
+            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\lib\\apksigner.jar";
+        }
+
+        public static string GetAAPTPath()
+        {
+            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\aapt.exe";
+        }
+
+        public static string GetAAPT2Path()
+        {
+            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\aapt2.exe";
+        }
+
+        public static string GetZipalignPath()
+        {
+            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\zipalign.exe";
+        }
+
+
+        #endregion
     }
 
     #region 声明
@@ -349,6 +472,7 @@ namespace APKRepackageSDKTool
         public string appBanner;
 
         public bool isLog;  //输出日志
+        public bool isDeleteTempPath = true;  //删除临时目录
 
         public string apktoolVersion = "apktool";
 
@@ -370,6 +494,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> PropertiesList { get => propertiesList; set => propertiesList = value; }
         public string ApktoolVersion { get => apktoolVersion; set => apktoolVersion = value; }
         public bool IsLog { get => isLog; set => isLog = value; }
+        public bool IsDeleteTempPath { get => isDeleteTempPath; set => isDeleteTempPath = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

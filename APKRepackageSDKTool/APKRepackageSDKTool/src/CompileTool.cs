@@ -40,7 +40,7 @@ public class CompileTool
         OutPut("放入Jar :" + jarName);
 
         //Jar to dex
-        cmd.Execute("java -jar dx.jar --dex --output=" + tempPath + " " + jarPath , true,true);
+        cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
 
         //dex to smali
         //cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath);
@@ -93,7 +93,7 @@ public class CompileTool
         cmd.Execute("javac  -classpath " + libs + " " + JavaCompileSrcPath + "\\*.java -d " + classFilePath);
 
         //class to dex
-        cmd.Execute("java -jar dx.jar --verbose --dex --output=" + dexFilePath + " " + classFilePath);
+        cmd.Execute("java -jar " + EditorData.GetDxPath() + " --verbose --dex --output=" + dexFilePath + " " + classFilePath);
 
         //dex to smali
         cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + dexFilePath);
@@ -127,7 +127,7 @@ public class CompileTool
     {
         return Encoding.UTF8.GetString(Encoding.Default.GetBytes(oldContent)).Replace("?","");
 
-        return HttpUtility.UrlEncode(oldContent, Encoding.UTF8);
+        //return HttpUtility.UrlEncode(oldContent, Encoding.UTF8);
 
         //Encoding utf8 = Encoding.UTF8;
         //String code = HttpUtility.UrlEncode(oldContent, utf8);

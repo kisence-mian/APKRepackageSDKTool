@@ -81,3 +81,6 @@ D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug
 D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\APKRepackageSDKTool.csproj.CopyComplete
 D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\APKRepackageSDKTool.exe
 D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\APKRepackageSDKTool.pdb
+D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\baksmali-2.3.4.jar
+D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\UI\OutPutWindow.g.cs
+D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\UI\OutPutWindow.baml

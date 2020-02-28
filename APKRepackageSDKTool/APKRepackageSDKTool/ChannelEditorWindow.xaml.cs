@@ -225,10 +225,30 @@ namespace APKRepackageSDKTool
             _PropertiesList = _PropertiesList;
         }
 
-        #endregion
+        private void Button_QuickAddConfigKey(object sender, RoutedEventArgs e)
+        {
+            AddConfig(SDKInterfaceDefine.PropertiesKey_ChannelName, EditorData.CurrentChannel.Name);
+            AddConfig(SDKInterfaceDefine.PropertiesKey_SelectNetworkPath, "https://xxx");
+            AddConfig(SDKInterfaceDefine.PropertiesKey_UpdateDownLoadPath, "https://xxx");
+            AddConfig(SDKInterfaceDefine.PropertiesKey_StoreName, EditorData.CurrentChannel.Name);
+            AddConfig(SDKInterfaceDefine.PropertiesKey_LoginPlatform, "Tourist|AccountLogin|" + EditorData.CurrentChannel.Name);
+            AddConfig(SDKInterfaceDefine.PropertiesKey_NetworkID, "0");
+        }
+
+        void AddConfig(string key, string value)
+        {
+            KeyValue kv = new KeyValue();
+            kv.Key = key;
+            kv.value = value;
+
+            _PropertiesList.Add(kv);
+
+            _PropertiesList = _PropertiesList;
+        }
 
         #endregion
 
+        #endregion
 
         class SelectInfo : List<KeyValue>, INotifyCollectionChanged
         {
@@ -251,6 +271,7 @@ namespace APKRepackageSDKTool
                 CollectionChanged?.Invoke(this, e);
             }
         }
+
 
     }
 }

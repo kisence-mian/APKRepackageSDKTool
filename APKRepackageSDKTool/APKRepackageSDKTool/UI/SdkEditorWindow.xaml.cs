@@ -455,6 +455,8 @@ namespace APKRepackageSDKTool.UI
 
         #region 点击事件
 
+        #region 自定义字段
+
         private void Button_ClickSave(object sender, RoutedEventArgs e)
         {
             EditorData.SaveSDKConfig(EditorData.CurrentSDKConfig);
@@ -515,6 +517,8 @@ namespace APKRepackageSDKTool.UI
 
             Permission = Permission;
         }
+
+        #endregion
 
         #region 自定义Java类
 
@@ -1099,6 +1103,29 @@ namespace APKRepackageSDKTool.UI
 
         #region 从AAR中导入
 
+        private void Button_InputAARGroup_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;  // 这里一定要设置true，不然就是选择文件
+
+            string path = "";
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                path = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            string[] dires = Directory.GetDirectories(path);
+            for (int i = 0; i < dires.Length; i++)
+            {
+                ExtractAAR(dires[i]);
+            }
+        }
+
         private void Button_InputAAR_Click(object sender, RoutedEventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
@@ -1115,43 +1142,86 @@ namespace APKRepackageSDKTool.UI
                 return;
             }
 
+            ExtractAAR(path);
+        }
+
+        private void Button_GenerateRTable_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;  // 这里一定要设置true，不然就是选择文件
+
+            string path = "";
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                path = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            OutPutWindow opw = new OutPutWindow();
+
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
+
+            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+            opw.Show();
+
+            //生成R表
+            string rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
+
+            opw.ReceviceOutPut(rebuildRTable);
+        }
+
+
+
+
+        void ExtractAAR(string path)
+        {
+            string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+            string aarName = FileTool.GetFileNameByPath(path);
+
+            OutPutWindow opw = new OutPutWindow();
+            opw.Show();
 
             //路径有效性判断
 
             //提取jar
             string jarResult = ExtractJar(path, aimPath, aarName);
 
+            opw.ReceviceOutPut(jarResult);
+
             //提取Manifest
             string manifestResult = ExtractManifest(path);
+
+            opw.ReceviceOutPut(manifestResult);
 
             string repeatAssets = "";
             //复制assets
             if (Directory.Exists(path + "/assets"))
             {
-                FileTool.CopyDirectory(path + "/assets", aimPath + "/assets", (pathA,pathB)=>{
+                FileTool.CopyDirectory(path + "/assets", aimPath + "/assets", (pathA, pathB) => {
                     repeatAssets += FileTool.GetFileNameByPath(pathA) + "\n";
+
+                    opw.ReceviceOutPut(repeatAssets);
                 });
             }
 
+            string rebuildRTable = "";
             //合并res
             if (Directory.Exists(path + "/res"))
             {
-                ChannelTool ct = new ChannelTool(null, null);
+                ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
                 ct.MergeXMLFile(path + "/res", aimPath + "/res");
 
                 //生成R表
-                ct.BuildRTable(path,aarName,aimPath);
+                rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
+                opw.ReceviceOutPut(rebuildRTable);
             }
-
-            MessageBox.Show("提取完毕 \n Jar:\n" + jarResult + "\n Manifest : \n" + manifestResult + "\n RepeatAssets:\n" + repeatAssets);
         }
 
-        void FileRepeatError(string a,string b)
-        {
-
-        }
 
         string ExtractJar(string sourcePath,string aimPath,string className)
         {
@@ -1449,5 +1519,7 @@ namespace APKRepackageSDKTool.UI
 
             MessageBox.Show(content);
         }
+
+
     }
 }

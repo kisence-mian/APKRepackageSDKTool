@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="src\CmdService.cs" />
     <Compile Include="src\CompileTool.cs" />
+    <Compile Include="src\Define\SDKInterfaceDefine.cs" />
     <Compile Include="src\DeJson.cs" />
     <Compile Include="src\FileTool.cs" />
     <Compile Include="src\MiniJSON.cs" />
@@ -89,6 +90,9 @@
     <Compile Include="src\RepackageManager.cs" />
     <Compile Include="src\YML\YML.cs" />
     <Compile Include="src\YML\YmlTool.cs" />
+    <Compile Include="UI\OutPutWindow.xaml.cs">
+      <DependentUpon>OutPutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\SdkEditorWindow.xaml.cs">
       <DependentUpon>SdkEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -112,6 +116,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\OutPutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\SdkEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,6 +186,9 @@
     </Content>
     <Content Include="baksmali-2.1.3.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="baksmali-2.3.4.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DotNETReactor\dlls\B1Plus.UI.BaseApplications.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

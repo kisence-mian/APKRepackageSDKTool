@@ -7,54 +7,81 @@
         mc:Ignorable="d"
         Title="APK重打包工具" Height="476.859" Width="865.35">
     <Grid>
-        <Grid Margin="10,10,0,38" HorizontalAlignment="Left" Width="432">
-            <TextBox x:Name="Text_APKPath" Margin="91,12,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
-            <Label Content="APK目录" Margin="10,10,0,0" HorizontalAlignment="Left" Width="58" Height="25" VerticalAlignment="Top"/>
-            <Button Content="浏览" Margin="347,13,10,0" Click="Button_ClickSelectAPK" Height="19" VerticalAlignment="Top"/>
-            <Label Content="SDK库目录" Margin="10,40,0,0" HorizontalAlignment="Left" Width="71" Height="25" VerticalAlignment="Top" RenderTransformOrigin="0.524,-1.24"/>
+        <TabControl Margin="0,0,0,0">
+            <TabItem Header="打包">
+                <Grid >
+                    <Grid Margin="0,0,0,30" HorizontalAlignment="Left" Width="432">
+                        <TextBox x:Name="Text_APKPath" Margin="90,5,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                        <Label Content="APK目录" Margin="10,5,0,0" HorizontalAlignment="Left" Width="58"  VerticalAlignment="Top"/>
+                        <Button Content="浏览" Margin="345,5,10,0" Click="Button_ClickSelectAPK" Height="19" VerticalAlignment="Top"/>
 
-            <TextBox x:Name="Text_APKExportPath" Margin="91,70,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
-            <Button Content="浏览" Margin="347,43,10,0" Click="Button_ClickSelectSDKLibPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
+                        <TextBox x:Name="Text_APKExportPath" Margin="90,29,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                        <Label Content="导出目录" Margin="10,29,0,0" HorizontalAlignment="Left" Width="81" VerticalAlignment="Top"/>
+                        <Button Content="浏览" Margin="345,29,10,0" Click="Button_ClickSelectExportPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
 
-            <Button x:Name="Button_Repack" Content="重打包" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
-            <Label Content="APK导出目录" Margin="10,70,0,0" HorizontalAlignment="Left" Width="81" Height="25" VerticalAlignment="Top"/>
-            <TextBox x:Name="Text_SDKLibPath" Margin="91,42,90,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="23" VerticalAlignment="Top"/>
-            <Button Content="浏览" Margin="347,70,10,0" Click="Button_ClickSelectExportPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526"/>
-            <Border x:Name="ListBox_Channel" BorderBrush="Black" BorderThickness="1" Margin="10,153,10,45">
-                <ListBox x:Name="ListBox_channel" AlternationCount="1000">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid >
-                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <Button Content="编辑" Click="Button_ClickEditor" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}" Margin="0,0,50,0"/>
-                                <Button Content="删除" Click="Button_ClickDeleteChannel" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Border>
-            <Button Content="新增渠道" Margin="0,0,90,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClickAddChannel"/>
-            <Label Content="渠道选择" Margin="10,123,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
-            <Label Content="项目选择" Margin="10,98,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
-            <ComboBox x:Name="ComboBox_gameList" HorizontalAlignment="Left" Margin="91,100,0,0" VerticalAlignment="Top" Width="251" 
+
+                        <Button x:Name="Button_Repack" Content="重打包" Margin="0,0,10,5" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
+
+                        <Border x:Name="ListBox_Channel" BorderBrush="Black" BorderThickness="1" Margin="10,100,10,40">
+                            <ListBox x:Name="ListBox_channel" AlternationCount="1000" Margin="0,0,0,0">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid >
+                                            <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsChecked}" MouseDoubleClick="CheckBox_MouseDoubleClick" Tag="{Binding Path=Name}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                            <Button Content="编辑" Click="Button_ClickEditor" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}" Margin="0,0,50,0"/>
+                                            <Button Content="删除" Click="Button_ClickDeleteChannel" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+                        <Button Content="新增渠道" Margin="0,0,90,5" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClickAddChannel"/>
+                        <Label Content="渠道选择" Margin="10,77,0,0" HorizontalAlignment="Left" Width="103" Height="25" VerticalAlignment="Top"/>
+                        <Label Content="项目选择" Margin="10,53,0,0" HorizontalAlignment="Left" Width="76" Height="25" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="ComboBox_gameList" Margin="90,53,90,0" VerticalAlignment="Top" 
                       DisplayMemberPath="GameName"
                       SelectedValuePath="GameName"
-                      SelectionChanged="ComboBox_gameList_Selected"
+                      SelectionChanged="ComboBox_gameList_Selected" Height="19"
                       />
-            <Button Content="编辑" HorizontalAlignment="Left" Margin="347,101,0,0" VerticalAlignment="Top" Width="75" Click="Button_ClickEditorGame"/>
-            <TextBox x:Name="Text_AddChannel" Margin="10,0,171,10" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="30" VerticalAlignment="Bottom"/>
-        </Grid>
-        <ProgressBar x:Name="Progress_repackage" Margin="10,0,10,10" Height="17" VerticalAlignment="Bottom"/>
-        <Label x:Name="Text_progressName" Content="准备" Margin="10,0,10,7" Height="24" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
-        <Grid Margin="447,20,10,38">
-            <Label Content="输出" Margin="10,10,0,0" RenderTransformOrigin="0.021,0.189" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="194" Grid.ColumnSpan="2"/>
-            <Button Content="清空" Margin="0,10,10,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="Button_ClickClean" Grid.Column="1" />
-            <TextBox x:Name="Text_output" Margin="10,40,3,10" TextWrapping="Wrap" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto"/>
-        </Grid>
+                        <Button Content="编辑" Margin="345,53,10,0" VerticalAlignment="Top" Click="Button_ClickEditorGame" Height="19"/>
+                        <TextBox x:Name="Text_AddChannel" Margin="10,0,171,5" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="30" VerticalAlignment="Bottom"/>
+
+                    </Grid>
+                    <ProgressBar x:Name="Progress_repackage" Margin="10,0,10,10" Height="17" VerticalAlignment="Bottom"/>
+                    <Label x:Name="Text_progressName" Content="准备" Margin="10,0,10,7" Height="24" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
+                    <Grid Margin="430,0,0,30">
+                        <Label Content="输出" Margin="0,5,0,0" RenderTransformOrigin="0.021,0.189" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="194" Grid.ColumnSpan="2"/>
+                        <Button Content="清空" Margin="0,5,10,0" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="Button_ClickClean" />
+                        <TextBox x:Name="Text_output" Margin="0,29,10,5" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="首选项">
+                <Grid>
+                    <Label Content="SDK库 目录" Margin="10,10,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top" RenderTransformOrigin="0.524,-1.24"/>
+                    <Button Content="浏览" Margin="0,10,10,0" Click="Button_ClickSelectSDKLibPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526" HorizontalAlignment="Right" Width="96"/>
+                    <TextBox x:Name="Text_SDKLibPath" Margin="130,10,110,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+
+                    <Label Content="Android SDK 目录" Margin="10,34,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_AndroidAPKPath" Margin="130,34,110,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                    <Button Content="浏览" Margin="0,34,10,0" Click="Button_ClickAndroidSDKPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526" HorizontalAlignment="Right" Width="96"/>
+
+                    <Label Content="Build Tool 版本" Margin="10,58,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_BuildToolVersion" TextChanged="Text_BuildToolVersion_TextChanged" Margin="130,58,400,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                    <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
+
+                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
+
+
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

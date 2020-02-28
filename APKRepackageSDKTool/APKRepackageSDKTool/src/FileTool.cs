@@ -429,6 +429,8 @@ public class FileTool
 
     public static string GetDirectoryName(string path)
     {
+        path = path.Replace('/','\\');
+
         string[] paths = path.Split('\\');
         return paths[paths.Length - 1];
     }

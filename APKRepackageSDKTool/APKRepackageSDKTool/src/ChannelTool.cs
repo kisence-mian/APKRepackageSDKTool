@@ -21,6 +21,7 @@ namespace APKRepackageSDKTool
         OutPutCallBack errorCallBack;
 
         CompileTool compileTool;
+
         public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
         {
             this.callBack = callBack;
@@ -571,7 +572,7 @@ namespace APKRepackageSDKTool
             //OutPut("R_Path " + R_Path + " resPath " + resPath + " manifest " + manifest);
 
             //生成R文件
-            cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
+            cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(29) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
 
             if(FindRPath(R_Path) != null)
             {
@@ -584,13 +585,17 @@ namespace APKRepackageSDKTool
                 //编译R.java文件
                 cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + FindRPath(R_Path), true, true);
 
+
+                //取第一个文件夹名作为命令开头
+                string fileName = FileTool.GetDirectoryName( Directory.GetDirectories(R_Path)[0]);
+
                 OutPut("生成的R文件的jar");
                 //生成的R文件的jar
-                cmd.Execute("jar cvf ./R.jar ./com", path: R_Path);
+                cmd.Execute("jar cvf ./R.jar ./" + fileName, path: R_Path);
 
                 OutPut("Jar to dex");
                 //Jar to dex
-                cmd.Execute("java -jar dx.jar --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+                cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
 
                 OutPut("dex to smali");
                 //dex to smali
@@ -608,8 +613,10 @@ namespace APKRepackageSDKTool
             //cmd.Execute("java -jar baksmali-2.1.3.jar classes.dex");
         }
 
-        public void BuildRTable(string aimPath,string name,string sdkPath)
+        public string BuildRTable(string aimPath,string name,string sdkPath)
         {
+            string result = "";
+
             String R_Path = aimPath + "/R_path/";
 
             FileTool.CreatPath(R_Path);
@@ -621,7 +628,7 @@ namespace APKRepackageSDKTool
             CmdService cmd = new CmdService(OutPut, errorCallBack);
 
             //生成R文件
-            cmd.Execute("aapt package -f -I android.jar -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
+            cmd.Execute(EditorData.GetAAPTPath() +" package -f -I " + EditorData.GetAndroidJarPath(29) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
 
             if (FindRPath(R_Path) != null)
             {
@@ -629,24 +636,36 @@ namespace APKRepackageSDKTool
                 string jarPath = R_Path + "/"+ name + "_R.jar";
 
                 //编译R.java文件
-                cmd.Execute("javac -encoding UTF-8 -source 1.6 -target 1.6 " + javaPath, true, true);
+                cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + javaPath, true, true);
 
                 //删除掉java文件
                 FileTool.DeleteFile(javaPath);
 
-                //生成的R文件的jar
-                cmd.Execute("jar cvf ./"+ name + "_R.jar ./com", path: R_Path);
+                cmd.Execute("cd " + R_Path);
 
-                //复制R文件导库
-                File.Copy(jarPath, sdkPath +"/"+ name + "_R.jar");
+                //取第一个文件夹名作为命令开头
+                string fileName = FileTool.GetDirectoryName(Directory.GetDirectories(R_Path)[0]);
+
+                //生成的R文件的jar
+                cmd.Execute("jar cvf ./"+ name + "_R.jar ./"+ fileName, path: R_Path);
+
+                if(File.Exists(jarPath))
+                {
+                    //复制R文件到库
+                    File.Copy(jarPath, sdkPath + "/" + name + "_R.jar",true);
+
+                    result = "R文件生成完成！ ";
+                }
             }
             else
             {
-                throw new Exception("R文件生成失败！ 请检查清单文件是否正确！");
+                result = "R文件生成失败！ 请检查清单文件是否正确！";
             }
 
-            FileTool.SafeDeleteDirectory(R_Path);
-            Directory.Delete(R_Path);
+            //FileTool.SafeDeleteDirectory(R_Path);
+            //Directory.Delete(R_Path);
+
+            return result;
         }
 
         String FindRPath(string path)
@@ -656,11 +675,10 @@ namespace APKRepackageSDKTool
                 //递归寻找目标文件路径并输出
                 return FileTool.GetAllFileNamesByPath(path, new string[] { "java" })[0];
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return null;
             }
-
         }
 
 
@@ -1003,6 +1021,11 @@ namespace APKRepackageSDKTool
             if(fileA.Contains("xml") && fileB.Contains("xml"))
             {
                 AppadnXML(fileA, fileB);
+            }
+            else if (fileA.Contains("png") && fileB.Contains("png"))
+            {
+                //跳过PNG
+                OutPut("跳过PNG 合并" + fileA);
             }
             else
             {

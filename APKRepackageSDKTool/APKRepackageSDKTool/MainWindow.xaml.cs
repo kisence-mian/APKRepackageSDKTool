@@ -116,6 +116,20 @@ namespace APKRepackageSDKTool
             EditorData.SdkLibPath = m_Dir;
         }
 
+        private void Button_ClickAndroidSDKPath(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
+            DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+            this.Text_AndroidAPKPath.Text = m_Dir;
+            EditorData.AndroidSdkPath = m_Dir;
+        }
+
         /// <summary>
         /// 点击重打包
         /// </summary>
@@ -231,6 +245,10 @@ namespace APKRepackageSDKTool
             cew.ShowDialog();
         }
 
+        private void Button_ClickSave(object sender, RoutedEventArgs e)
+        {
+        }
+
         #endregion
 
         #region 界面改变事件
@@ -261,6 +279,11 @@ namespace APKRepackageSDKTool
             {
                 Button_Repack.Content = "重打包";
             }
+        }
+
+        private void Text_BuildToolVersion_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorData.BuildToolVersion = Text_BuildToolVersion.Text;
         }
 
         #endregion
@@ -333,8 +356,13 @@ namespace APKRepackageSDKTool
             Text_APKExportPath.Text = exportPath;
             Text_APKPath.Text = apkPath;
             Text_SDKLibPath.Text = EditorData.SdkLibPath;
+            Text_AndroidAPKPath.Text = EditorData.AndroidSdkPath;
+            Text_BuildToolVersion.Text = EditorData.BuildToolVersion;
 
-            if(progress == currentTotalStep)
+            CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
+            CheckBox_IsAutoInstall.IsChecked = EditorData.IsAutoInstall;
+
+            if (progress >= currentTotalStep)
             {
                 isBuilding = false;
             }
@@ -359,6 +387,14 @@ namespace APKRepackageSDKTool
 
         #endregion
 
+        private void ChexkBox_IsPutCMD_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorData.IsOutPutCMD = CheckBox_IsPutCMD.IsChecked ?? true;
+        }
 
+        private void ChexkBox_IsAutoInstall_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorData.IsAutoInstall = CheckBox_IsAutoInstall.IsChecked ?? true;
+        }
     }
 }

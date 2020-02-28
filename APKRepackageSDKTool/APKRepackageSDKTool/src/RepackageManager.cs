@@ -66,7 +66,22 @@ namespace APKRepackageSDKTool
                     {
                         ChannelInfo channelInfo = channelList[i];
 
-                        if(string.IsNullOrEmpty(channelInfo.keyStorePath))
+                        if (string.IsNullOrEmpty(EditorData.AndroidSdkPath))
+                        {
+                            throw new Exception("AndroidSdkPath 不能为空！");
+                        }
+
+                        if (string.IsNullOrEmpty(EditorData.SdkLibPath))
+                        {
+                            throw new Exception("SdkLibPath 不能为空！");
+                        }
+
+                        if (string.IsNullOrEmpty(EditorData.BuildToolVersion))
+                        {
+                            throw new Exception("BuildToolVersion 不能为空！");
+                        }
+
+                        if (string.IsNullOrEmpty(channelInfo.keyStorePath))
                         {
                             throw new Exception("keyStore 不能为空！");
                         }
@@ -143,13 +158,28 @@ namespace APKRepackageSDKTool
 
                         //进行字节对齐并导出到最终目录
                         MakeProgress("进行字节对齐并导出到最终目录", i, channelList.Count, channelInfo.Name);
-                        cmd.Execute("zipalign -f  4 " + apkPath + " " + finalPath);
+                        cmd.Execute(EditorData.GetZipalignPath() + " -f  4 " + apkPath + " " + finalPath);
 
-                        //删除临时目录
-                        MakeProgress("删除临时目录", i, channelList.Count, channelInfo.Name);
+                        if(EditorData.IsAutoInstall)
+                        {
+                            //自动安装
+                            MakeProgress("自动安装", i, channelList.Count, channelInfo.Name);
+                            cmd.Execute("adb install -r " + finalPath);
+                        }
 
-                        //FileTool.SafeDeleteDirectory(aimPath);
-                        //Directory.Delete(aimPath);
+                        if(channelInfo.IsDeleteTempPath)
+                        {
+                            //删除临时目录
+                            MakeProgress("删除临时目录", i, channelList.Count, channelInfo.Name);
+                            FileTool.SafeDeleteDirectory(aimPath);
+                            Directory.Delete(aimPath);
+                        }
+                        else
+                        {
+                            //删除临时目录
+                            MakeProgress("跳过删除临时目录", i, channelList.Count, channelInfo.Name);
+                        }
+
 
                         MakeProgress("完成", i, channelList.Count, channelInfo.Name);
                     }
