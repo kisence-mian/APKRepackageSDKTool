@@ -142,7 +142,7 @@ namespace APKRepackageSDKTool
 
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
-                        cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath);
+                        cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath,true,true);
 
                         //进行签名
                         MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);
@@ -164,7 +164,7 @@ namespace APKRepackageSDKTool
                         {
                             //自动安装
                             MakeProgress("自动安装", i, channelList.Count, channelInfo.Name);
-                            cmd.Execute("adb install -r " + finalPath);
+                            cmd.Execute("adb install -r " + finalPath,true,true);
                         }
 
                         if(channelInfo.IsDeleteTempPath)

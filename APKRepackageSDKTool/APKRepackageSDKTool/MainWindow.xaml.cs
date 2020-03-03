@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APKRepackageSDKTool.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -249,6 +250,8 @@ namespace APKRepackageSDKTool
         {
         }
 
+
+
         #endregion
 
         #region 界面改变事件
@@ -395,6 +398,18 @@ namespace APKRepackageSDKTool
         private void ChexkBox_IsAutoInstall_Checked(object sender, RoutedEventArgs e)
         {
             EditorData.IsAutoInstall = CheckBox_IsAutoInstall.IsChecked ?? true;
+        }
+
+        private void Button_ClickTest(object sender, RoutedEventArgs e)
+        {
+            string aimPath = PathTool.GetCurrentPath() + "\\20200226_1";
+
+            OutPutWindow opw = new OutPutWindow();
+            opw.Show();
+
+            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+
+            ct.Rebuild_R_Table(aimPath);
         }
     }
 }

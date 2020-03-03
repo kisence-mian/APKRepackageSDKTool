@@ -147,6 +147,15 @@ public class FileTool
                 }
             }
         }
+
+        try
+        {
+            Directory.Delete(path, false);
+        }
+        catch
+        {
+            //Debug.LogError(e.ToString());
+        }
     }
 
     /// <summary>

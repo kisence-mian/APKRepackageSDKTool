@@ -44,7 +44,8 @@
                     <TextBox Height="23" Margin="94,40,10,0" TextWrapping="Wrap" Text="{Binding SdkName, Mode=TwoWay}" VerticalAlignment="Top"/>
                     <Button x:Name="Button_InputAAR" Content="从AAR导入" Margin="94,0,447,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAAR_Click"/>
                     <Button x:Name="Button_InputAARGroup" Content="批量导入AAR" Margin="243,0,298,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAARGroup_Click"/>
-                    <Button x:Name="Button_GenerateRTable" Content="生成R表" Margin="386,0,155,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTable_Click"/>
+                    <Button x:Name="Button_GenerateRTable" Content="导入R表" Margin="386,0,155,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTable_Click"/>
+                    <Button x:Name="Button_GenerateRTableGroup" Content="批量导入R表" Margin="529,0,12,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTableGroup_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="字段设置">

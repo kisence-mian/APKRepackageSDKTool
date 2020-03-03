@@ -564,6 +564,7 @@ namespace APKRepackageSDKTool
             //String androidPath = @"D:\AndroidSDK\platforms\android-28\android.jar";
             string manifest = aimPath + "/AndroidManifest.xml";
             string resPath = aimPath + "/res";
+            string smaliPath = aimPath + "/smali";
 
             CmdService cmd = new CmdService(OutPut, errorCallBack);
 
@@ -573,18 +574,28 @@ namespace APKRepackageSDKTool
 
             //生成R文件
             cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(29) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
+            
+            //aapt2
+            //cmd.Execute(EditorData.GetAAPT2Path() + " link -I " + EditorData.GetAndroidJarPath(29) + " -java " + R_Path + " -A " + resPath + " --manifest " + manifest + " -v");
 
-            if(FindRPath(R_Path) != null)
+            if (FindRPath(R_Path) != null)
             {
                 //GBK转码
                 //string java = FileTool.ReadStringByFile(FindRPath(R_Path));
                 //java = compileTool.RemoveSpecialCode(java);
                 //FileTool.WriteStringByFile(FindRPath(R_Path),java);
 
+                //转换smli文件
+                RTableUtil rt = new RTableUtil();
+                rt.callBack += OutPut;
+                rt.errorCallBack += ErrorOutPut;
+                rt.GenerateRKV(FindRPath(R_Path));
+
+                rt.ReplaceRTable(smaliPath);
+
                 OutPut("编译R.java文件");
                 //编译R.java文件
                 cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + FindRPath(R_Path), true, true);
-
 
                 //取第一个文件夹名作为命令开头
                 string fileName = FileTool.GetDirectoryName( Directory.GetDirectories(R_Path)[0]);
@@ -606,11 +617,13 @@ namespace APKRepackageSDKTool
                 throw new Exception("R文件生成失败！ 请检查清单文件是否正确！");
             }
 
-
             FileTool.SafeDeleteDirectory(R_Path);
-            Directory.Delete(R_Path);
 
             //cmd.Execute("java -jar baksmali-2.1.3.jar classes.dex");
+
+            OutPut("创建临时目录");
+
+
         }
 
         public string BuildRTable(string aimPath,string name,string sdkPath)
@@ -628,12 +641,20 @@ namespace APKRepackageSDKTool
             CmdService cmd = new CmdService(OutPut, errorCallBack);
 
             //生成R文件
-            cmd.Execute(EditorData.GetAAPTPath() +" package -f -I " + EditorData.GetAndroidJarPath(29) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest + " --debug-mode");
+            cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(29) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest + "");
+
+            //aapt2
+            //cmd.Execute(EditorData.GetAAPT2Path() + " link -I " + EditorData.GetAndroidJarPath(29) + " --java " + R_Path + " -A " + resPath + " --manifest " + manifest + " -v");
 
             if (FindRPath(R_Path) != null)
             {
                 string javaPath = FindRPath(R_Path);
                 string jarPath = R_Path + "/"+ name + "_R.jar";
+                string rPath = aimPath + "/R.txt";
+
+                ////替换ID
+                ////有时不同aar包的R.id 会冲突，这里使用aar自带的R.id，进行替换，如果还不行再改
+                //result += RTableUtil.AnalysisRJava(javaPath);
 
                 //编译R.java文件
                 cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + javaPath, true, true);
@@ -654,18 +675,24 @@ namespace APKRepackageSDKTool
                     //复制R文件到库
                     File.Copy(jarPath, sdkPath + "/" + name + "_R.jar",true);
 
-                    result = "R文件生成完成！ ";
+                    result += "R文件生成完成！ ";
                 }
             }
             else
             {
-                result = "R文件生成失败！ 请检查清单文件是否正确！";
+                result += "R文件生成失败！ 请检查清单文件是否正确！";
             }
 
             //FileTool.SafeDeleteDirectory(R_Path);
             //Directory.Delete(R_Path);
 
             return result;
+        }
+
+        void ReplaceRID(string javaFile,string rFile)
+        {
+            //提取R.txt
+            //替换到R.java
         }
 
         String FindRPath(string path)
@@ -680,7 +707,6 @@ namespace APKRepackageSDKTool
                 return null;
             }
         }
-
 
         #endregion
 

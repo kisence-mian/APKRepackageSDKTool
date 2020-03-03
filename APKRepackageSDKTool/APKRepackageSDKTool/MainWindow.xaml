@@ -79,7 +79,7 @@
                     <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
                     <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
 
-
+                    <Button Content="测试" Margin="723,0,10,43" Click="Button_ClickTest" Height="19" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
         </TabControl>

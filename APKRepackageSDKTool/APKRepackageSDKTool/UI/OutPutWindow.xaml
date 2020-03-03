@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="输出" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="TextBox_output" Margin="10" TextWrapping="Wrap" Text=""/>
+        <TextBox x:Name="TextBox_output" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Text=""/>
 
     </Grid>
 </Window>

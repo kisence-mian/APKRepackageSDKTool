@@ -1175,7 +1175,39 @@ namespace APKRepackageSDKTool.UI
             opw.ReceviceOutPut(rebuildRTable);
         }
 
+        private void Button_GenerateRTableGroup_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;  // 这里一定要设置true，不然就是选择文件
 
+            string path = "";
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                path = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            OutPutWindow opw = new OutPutWindow();
+
+            string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+            string aarName = FileTool.GetFileNameByPath(path);
+
+            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+            opw.Show();
+
+            string[] dires = Directory.GetDirectories(path);
+            for (int i = 0; i < dires.Length; i++)
+            {
+                //生成R表
+                string rebuildRTable = ct.BuildRTable(dires[i], aarName, aimPath);
+
+                opw.ReceviceOutPut(rebuildRTable);
+            }
+        }
 
 
         void ExtractAAR(string path)
