@@ -1225,10 +1225,12 @@ namespace APKRepackageSDKTool.UI
 
             opw.ReceviceOutPut(jarResult);
 
-            //提取Manifest
-            string manifestResult = ExtractManifest(path);
-
-            opw.ReceviceOutPut(manifestResult);
+            if(File.Exists(path))
+            {
+                //提取Manifest
+                string manifestResult = ExtractManifest(path);
+                opw.ReceviceOutPut(manifestResult);
+            }
 
             string repeatAssets = "";
             //复制assets

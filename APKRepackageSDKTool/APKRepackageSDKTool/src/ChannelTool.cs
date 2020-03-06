@@ -1027,6 +1027,7 @@ namespace APKRepackageSDKTool
                     {
                         String content = FileTool.ReadStringByFile(file);
                         content = compileTool.ReplaceKeyWord(content, channelInfo);
+                        content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
 
                         FileTool.WriteStringByFile(file,content);
                     });
