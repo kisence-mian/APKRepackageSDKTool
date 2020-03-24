@@ -288,6 +288,25 @@ namespace APKRepackageSDKTool
 
         }
 
+        void AddApplicationHead(string filePath, KeyValue info, SDKInfo sdkInfo, ChannelInfo channelInfo)
+        {
+            string xmlPath = filePath + "\\AndroidManifest.xml";
+
+            //替换关键字
+            string newContent = compileTool.ReplaceKeyWord(info.value, channelInfo);
+            newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
+
+            string xml = FileTool.ReadStringByFile(xmlPath);
+            int index = xml.IndexOf("<application") + 13;
+            xml = xml.Insert(index, newContent + " "); //最后加一个空格
+
+            //直接保存
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            xmlDoc.Save(xmlPath);
+
+        }
+
         void AddActivity(string filePath, ActivityInfo info,SDKInfo sdkInfo,ChannelInfo channelInfo)
         {
             string xmlPath = filePath + "\\AndroidManifest.xml";
@@ -866,8 +885,15 @@ namespace APKRepackageSDKTool
             //添加标签头
             for (int i = 0; i < config.XmlHeadList.Count; i++)
             {
-                OutPut("添加AddXMLHead " + info.sdkName + " " + config.ActivityInfoList[i].name);
+                OutPut("添加XMLHead " + info.sdkName + " " + config.XmlHeadList[i].key);
                 AddXMLHead(filePath, config.XmlHeadList[i], info, channelInfo);
+            }
+
+            //添加Application头
+            for (int i = 0; i < config.ApplicationHeadList.Count; i++)
+            {
+                OutPut("添加ApplicationHead " + info.sdkName + " " + config.ApplicationHeadList[i].Key);
+                AddApplicationHead(filePath, config.ApplicationHeadList[i], info, channelInfo);
             }
 
             //添加Activity

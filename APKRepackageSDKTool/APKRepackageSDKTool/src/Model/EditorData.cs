@@ -589,6 +589,7 @@ namespace APKRepackageSDKTool
         public List<ProviderInfo> providerInfoList = new List<ProviderInfo>();
         public List<KeyValue> metaInfoList = new List<KeyValue>();
         public List<KeyValue> usesList = new List<KeyValue>();
+        public List<KeyValue> applicationHeadList = new List<KeyValue>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -654,6 +655,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> XmlHeadList { get => xmlHeadList; set => xmlHeadList = value; }
         public List<KeyValue> UsesList { get => usesList; set => usesList = value; }
         public bool Force32bit { get => force32bit; set => force32bit = value; }
+        public List<KeyValue> ApplicationHeadList { get => applicationHeadList; set => applicationHeadList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -671,7 +673,6 @@ namespace APKRepackageSDKTool
     {
         public string sdkName;
         public List<KeyValue> sdkConfig;
-
 
         public string SdkName { get => sdkName; set => sdkName = value; }
     }
@@ -694,7 +695,6 @@ namespace APKRepackageSDKTool
 
         public string Content { get => content; set => content = value; }
         public string Name { get => name; set => name = value; }
-
     }
 
     public class ProviderInfo
@@ -726,6 +726,7 @@ namespace APKRepackageSDKTool
         Log = 4,
         Pay = 8,
         Other = 16,
+        RealName = 32,
     }
 
     #endregion

@@ -36,6 +36,7 @@ namespace APKRepackageSDKTool.UI
         KeyValueList customJavaList;
         KeyValueList manifestHeadList;
         KeyValueList usesList;
+        KeyValueList applicationHeadList;
 
         ActivityInfo currentActivityInfo;
         KeyValue currentMainActivityProperty;
@@ -45,6 +46,7 @@ namespace APKRepackageSDKTool.UI
         KeyValue currentJavaContent;
         KeyValue currentManifestHeadContent;
         KeyValue currentUsesContent;
+        KeyValue currentApplicationHead;
 
         #region 属性
 
@@ -296,12 +298,9 @@ namespace APKRepackageSDKTool.UI
 
                         checkList.Add(sc);
                     }
-
                 }
-
                 return checkList;
             }
-
 
             set
             {
@@ -315,7 +314,6 @@ namespace APKRepackageSDKTool.UI
                         EditorData.CurrentSDKConfig.SdkType = EditorData.CurrentSDKConfig.SdkType | checkList[i].type;
                     }
                 }
-
             }
         }
 
@@ -360,7 +358,6 @@ namespace APKRepackageSDKTool.UI
                         manifestHeadList.Add(EditorData.CurrentSDKConfig.xmlHeadList[i]);
                     }
                 }
-
                 return manifestHeadList;
             }
 
@@ -406,6 +403,35 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private KeyValueList ApplicationHeadList
+        {
+            get
+            {
+                if (applicationHeadList == null)
+                {
+                    applicationHeadList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.applicationHeadList.Count; i++)
+                    {
+                        applicationHeadList.Add(EditorData.CurrentSDKConfig.applicationHeadList[i]);
+                    }
+                }
+
+                return applicationHeadList;
+            }
+
+            set
+            {
+                applicationHeadList = value;
+                applicationHeadList.Change();
+
+                EditorData.CurrentSDKConfig.applicationHeadList.Clear();
+                for (int i = 0; i < applicationHeadList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.applicationHeadList.Add(applicationHeadList[i]);
+                }
+            }
+        }
+
         #endregion
 
         public SdkEditorWindow()
@@ -425,6 +451,7 @@ namespace APKRepackageSDKTool.UI
             ListBox_mainPropertyList.ItemsSource = _MainActivityProperty;
             ListBox_ManifestHeadList.ItemsSource = ManifestHeadList;
             ListBox_UsesList.ItemsSource = UsesList;
+            ListBox_ApplicationHeadList.ItemsSource = ApplicationHeadList;
 
             BindingEnum();
 
@@ -778,6 +805,66 @@ namespace APKRepackageSDKTool.UI
         private void CheckBox_main_Unchecked(object sender, RoutedEventArgs e)
         {
             currentActivityInfo.MainActivity = false;
+        }
+
+        #endregion
+
+        #region ApplicationHead
+
+        private void TextBox_ApplicationHeadContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentApplicationHead.value = tb.Text;
+        }
+
+        private void Button_ClickDeleteApplicationHead(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            for (int i = 0; i < ApplicationHeadList.Count; i++)
+            {
+                if (ApplicationHeadList[i].key == key)
+                {
+                    ApplicationHeadList.RemoveAt(i);
+                }
+            }
+
+            ApplicationHeadList = ApplicationHeadList;
+        }
+
+        private void Button_ClickAddApplicationHead(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_ApplicationHeadName.Text))
+            {
+                KeyValue kv = new KeyValue();
+                kv.key = TextBox_ApplicationHeadName.Text;
+
+                ApplicationHeadList.Add(kv);
+                ApplicationHeadList = ApplicationHeadList;
+
+                TextBox_ApplicationHeadName.Text = "";
+            }
+        }
+
+        private void ListBox_ApplicationHeadList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lb = sender as ListBox;
+
+            string Key = (string)lb.SelectedValue;
+
+            for (int i = 0; i < ApplicationHeadList.Count; i++)
+            {
+                if (ApplicationHeadList[i].key == Key)
+                {
+                    currentApplicationHead = ApplicationHeadList[i];
+                }
+            }
+
+            TextBox_ApplicationHeadContent.Text = currentApplicationHead.value;
+            TextBox_ApplicationHeadContent.IsEnabled = true;
         }
 
         #endregion
@@ -1225,11 +1312,15 @@ namespace APKRepackageSDKTool.UI
 
             opw.ReceviceOutPut(jarResult);
 
-            if(File.Exists(path))
+            if(File.Exists(path + "/AndroidManifest.xml"))
             {
                 //提取Manifest
                 string manifestResult = ExtractManifest(path);
                 opw.ReceviceOutPut(manifestResult);
+            }
+            else
+            {
+                opw.ReceviceOutPut("找不到 manifest 文件 " + path + "/AndroidManifest.xml");
             }
 
             string repeatAssets = "";
@@ -1553,7 +1644,5 @@ namespace APKRepackageSDKTool.UI
 
             MessageBox.Show(content);
         }
-
-
     }
 }

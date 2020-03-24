@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\
 APKRepackageSDKTool
 none
 false
 DEBUG;TRACE
-D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\App.xaml
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\App.xaml
 51999068597
 191168421928
 23640788676
-19-224039514
+191102772110
 ChannelEditorWindow.xaml;GameSetting.xaml;MainWindow.xaml;UI\OutPutWindow.xaml;UI\SdkEditorWindow.xaml;
 
 False

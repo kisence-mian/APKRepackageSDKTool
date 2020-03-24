@@ -172,7 +172,6 @@ namespace APKRepackageSDKTool
                             //删除临时目录
                             MakeProgress("删除临时目录", i, channelList.Count, channelInfo.Name);
                             FileTool.SafeDeleteDirectory(aimPath);
-                            Directory.Delete(aimPath);
                         }
                         else
                         {

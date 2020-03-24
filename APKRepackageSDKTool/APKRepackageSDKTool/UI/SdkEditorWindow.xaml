@@ -247,6 +247,31 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem Header="Application 设置">
+                <Grid Background="#FFF9F9F9">
+                    <ListBox x:Name="ListBox_ApplicationHeadList" Margin="10,10,0,36" HorizontalAlignment="Left" Width="190" SelectedValuePath="Key" SelectionChanged="ListBox_ApplicationHeadList_SelectionChanged">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <Label Content="{Binding Path=Key}" Width="140" HorizontalAlignment="Left" />
+                                    <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Key}" Click="Button_ClickDeleteApplicationHead"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Content="新增" HorizontalAlignment="Left" Margin="125,0,0,6" VerticalAlignment="Bottom" Width="75" Click="Button_ClickAddApplicationHead"/>
+                    <TextBox x:Name="TextBox_ApplicationHeadName" HorizontalAlignment="Left" Margin="10,0,0,4" TextWrapping="NoWrap" Text="" Width="110" Height="23" VerticalAlignment="Bottom"/>
+                    <Grid Margin="205,0,0,0">
+                        <TextBox x:Name="TextBox_ApplicationHeadContent" Margin="10,30,10,10" TextWrapping="Wrap" Text="{Binding Path=Content}"  VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextChanged="TextBox_ApplicationHeadContent_TextChanged" IsEnabled="False" />
+                        <Button Content="说明" Margin="0,6,10,0" Click="Button_ClickInfo" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
             <TabItem Header="Uses设置">
                 <Grid Background="#FFF9F9F9">
                     <ListBox x:Name="ListBox_UsesList" Margin="10,10,0,36" HorizontalAlignment="Left" Width="190" SelectedValuePath="Key" SelectionChanged="ListBox_UsesList_SelectionChanged">
