@@ -131,6 +131,20 @@ namespace APKRepackageSDKTool
             EditorData.AndroidSdkPath = m_Dir;
         }
 
+        private void Button_ClickJetifierPath(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
+            DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+            this.Text_jetifierPath.Text = m_Dir;
+            EditorData.JetifierPath = m_Dir;
+        }
+
         /// <summary>
         /// 点击重打包
         /// </summary>
@@ -360,6 +374,7 @@ namespace APKRepackageSDKTool
             Text_APKPath.Text = apkPath;
             Text_SDKLibPath.Text = EditorData.SdkLibPath;
             Text_AndroidAPKPath.Text = EditorData.AndroidSdkPath;
+            Text_jetifierPath.Text = EditorData.JetifierPath;
             Text_BuildToolVersion.Text = EditorData.BuildToolVersion;
 
             CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
@@ -407,7 +422,7 @@ namespace APKRepackageSDKTool
             OutPutWindow opw = new OutPutWindow();
             opw.Show();
 
-            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
 
             ct.Rebuild_R_Table(aimPath);
         }

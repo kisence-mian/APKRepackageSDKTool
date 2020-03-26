@@ -42,10 +42,15 @@
                     </ListBox>
                     <Label Content="SDKName" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
                     <TextBox Height="23" Margin="94,40,10,0" TextWrapping="Wrap" Text="{Binding SdkName, Mode=TwoWay}" VerticalAlignment="Top"/>
-                    <Button x:Name="Button_InputAAR" Content="从AAR导入" Margin="94,0,447,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAAR_Click"/>
-                    <Button x:Name="Button_InputAARGroup" Content="批量导入AAR" Margin="243,0,298,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAARGroup_Click"/>
-                    <Button x:Name="Button_GenerateRTable" Content="导入R表" Margin="386,0,155,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTable_Click"/>
-                    <Button x:Name="Button_GenerateRTableGroup" Content="批量导入R表" Margin="529,0,12,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTableGroup_Click"/>
+                    <Button x:Name="Button_InputAAR" Content="从AAR导入" Margin="94,0,0,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAAR_Click" HorizontalAlignment="Left" Width="138"/>
+                    <Button x:Name="Button_InputAARGroup" Content="批量导入AAR" Margin="243,0,0,82" Height="19" VerticalAlignment="Bottom" Click="Button_InputAARGroup_Click" HorizontalAlignment="Left" Width="138"/>
+                    <Button x:Name="Button_GenerateRTable" Content="导入R表" Margin="386,0,0,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTable_Click" HorizontalAlignment="Left" Width="138"/>
+                    <Button x:Name="Button_GenerateRTableGroup" Content="批量导入R表" Margin="529,0,0,82" Height="19" VerticalAlignment="Bottom" Click="Button_GenerateRTableGroup_Click" HorizontalAlignment="Left" Width="138"/>
+
+                    <CheckBox x:Name="CheckBox_ConvertAndroidX" Content="转换为AndroidX" HorizontalAlignment="Left" Margin="94,0,0,59" VerticalAlignment="Bottom"/>
+                    <Button x:Name="Button_BatchConvertAndroid" Content="批量转换Androidx" Margin="386,0,0,59" Click="Button_BatchConvertAndroid_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="138"/>
+                    <Button x:Name="Button_ConvertAndroid" Content="转换Androidx" Margin="243,0,0,58" Click="Button_ConvertAndroid_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="138"/>
+
                 </Grid>
             </TabItem>
             <TabItem Header="字段设置">

@@ -227,6 +227,22 @@ public class FileTool
         return paths[paths.Length - 1];
     }
 
+    //获取一个文件的目录
+    public static string GetFilePath(string path)
+    {
+        path = path.Replace('\\','/');
+        int dirIndex = path.LastIndexOf("/");
+
+        if (dirIndex != -1)
+        {
+            return path.Remove(dirIndex);
+        }
+        else
+        {
+            return path;
+        }
+    }
+
     #endregion
 
     #region 文件编码

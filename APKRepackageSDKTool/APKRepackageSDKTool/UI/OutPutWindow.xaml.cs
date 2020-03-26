@@ -26,13 +26,22 @@ namespace APKRepackageSDKTool.UI
             InitializeComponent();
         }
 
-
         public void ReceviceOutPut(string output)
         {
             content += output + "\n";
 
             Action ac = new Action(UpdateContent);
             Dispatcher.BeginInvoke(ac);
+        }
+
+        public void ReceviceErrorOutPut(string output)
+        {
+            content += output + "\n";
+
+            Action ac = new Action(UpdateContent);
+            Dispatcher.BeginInvoke(ac);
+
+            Title = "错误输出！";
         }
 
         private void UpdateContent()

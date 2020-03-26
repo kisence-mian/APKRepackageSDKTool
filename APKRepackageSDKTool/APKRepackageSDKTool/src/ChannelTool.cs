@@ -559,7 +559,6 @@ namespace APKRepackageSDKTool
             ele.SetAttribute("name", "http://schemas.android.com/apk/res/android", applicationName);
 
             xmlDoc.Save(xmlPath);
-
         }
 
         #endregion
@@ -1285,8 +1284,8 @@ namespace APKRepackageSDKTool
             Dictionary<string, string> allMethod = new Dictionary<string, string>();
 
             int maxFuncNum = 65535;
+            //int maxFuncNum = 30000;
             int currentFuncNum = 0;
-
             int currentIndex = 1;
 
             for (int i = 0; i < list.Count; i++)
@@ -1438,5 +1437,4 @@ namespace APKRepackageSDKTool
         #endregion
 
     }
-
 }

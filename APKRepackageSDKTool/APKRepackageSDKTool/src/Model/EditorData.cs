@@ -28,6 +28,7 @@ namespace APKRepackageSDKTool
 
         static string sdkLibPath;
         static string androidSdkPath;
+        static string jetifierPath;
 
         static string buildToolVersion;
 
@@ -144,6 +145,21 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public static string JetifierPath {
+
+            get
+            {
+                JudgeInit();
+                return jetifierPath;
+            }
+
+            set
+            {
+                jetifierPath = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "JetifierPath", jetifierPath);
+            }
+        }
+
         public static string BuildToolVersion 
         { 
             get
@@ -190,6 +206,8 @@ namespace APKRepackageSDKTool
             }
         }
 
+
+
         #endregion
 
         #region 初始化
@@ -211,6 +229,7 @@ namespace APKRepackageSDKTool
 
                 sdkLibPath = RecordManager.GetRecord(c_ConfigRecord, "SDKLibPath", null);
                 androidSdkPath = RecordManager.GetRecord(c_ConfigRecord, "AndroidSDKPath", null);
+                jetifierPath = RecordManager.GetRecord(c_ConfigRecord, "JetifierPath", null);
                 buildToolVersion = RecordManager.GetRecord(c_ConfigRecord, "BuildToolVersion", null);
 
                 isOutPutCMD = RecordManager.GetRecord(c_ConfigRecord, "IsOutPutCMD", false);

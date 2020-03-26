@@ -1253,7 +1253,7 @@ namespace APKRepackageSDKTool.UI
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
 
-            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
             opw.Show();
 
             //生成R表
@@ -1283,7 +1283,7 @@ namespace APKRepackageSDKTool.UI
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
 
-            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
             opw.Show();
 
             string[] dires = Directory.GetDirectories(path);
@@ -1301,14 +1301,17 @@ namespace APKRepackageSDKTool.UI
         {
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
+            bool isConvert2AndroidX = CheckBox_ConvertAndroidX.IsChecked ?? false;
 
             OutPutWindow opw = new OutPutWindow();
             opw.Show();
 
+            CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+
             //路径有效性判断
 
             //提取jar
-            string jarResult = ExtractJar(path, aimPath, aarName);
+            string jarResult = ExtractJar(path, aimPath, aarName, isConvert2AndroidX, cot);
 
             opw.ReceviceOutPut(jarResult);
 
@@ -1338,7 +1341,7 @@ namespace APKRepackageSDKTool.UI
             //合并res
             if (Directory.Exists(path + "/res"))
             {
-                ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceOutPut);
+                ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
                 ct.MergeXMLFile(path + "/res", aimPath + "/res");
 
                 //生成R表
@@ -1348,7 +1351,7 @@ namespace APKRepackageSDKTool.UI
         }
 
 
-        string ExtractJar(string sourcePath,string aimPath,string className)
+        string ExtractJar(string sourcePath,string aimPath,string className,bool isConvert2AndroidX, CompileTool ct)
         {
             String result = "";
             string[] paths = Directory.GetFiles(sourcePath);
@@ -1363,9 +1366,24 @@ namespace APKRepackageSDKTool.UI
                         fileName = className + ".jar";
                     }
 
+                    //防止重名
+                    if(item.Contains("libs"))
+                    {
+                        fileName = "Lib_" + fileName;
+                    }
+
                     if (item.EndsWith(".jar"))
                     {
-                        File.Copy(item, aimPath + "/" + fileName);
+                        //转换为AndroidX
+                        if(isConvert2AndroidX)
+                        {
+                            fileName = FileTool.RemoveExpandName(fileName) + "_AndroidX.jar";
+                            ct.Convert2AndroidX(item, aimPath + "/" + fileName);
+                        }
+                        else
+                        {
+                            File.Copy(item, aimPath + "/" + fileName);
+                        }
 
                         result += fileName + "\n";
                     }
@@ -1379,7 +1397,7 @@ namespace APKRepackageSDKTool.UI
             string[] dires = Directory.GetDirectories(sourcePath);
             for (int i = 0; i < dires.Length; i++)
             {
-                result += ExtractJar(dires[i], aimPath, className);
+                result += ExtractJar(dires[i], aimPath, className,isConvert2AndroidX,ct);
             }
 
             return result;
@@ -1568,6 +1586,66 @@ namespace APKRepackageSDKTool.UI
         }
         #endregion
 
+        #region 替换 AndroidX
+        private void Button_BatchConvertAndroid_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;  // 这里一定要设置true，不然就是选择文件
+
+            string path = "";
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                path = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            OutPutWindow opw = new OutPutWindow();
+            opw.Show();
+
+            CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+
+
+            List<string> allJar =  FileTool.GetAllFileNamesByPath(path, new string[] { "jar" }, true);
+            for (int i = 0; i < allJar.Count; i++)
+            {
+                ConvertAndroidX(allJar[i],cot);
+            }
+        }
+
+        private void Button_ConvertAndroid_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "JAR Files (*.jar)|*.jar"
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                OutPutWindow opw = new OutPutWindow();
+                opw.Show();
+
+                CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                ConvertAndroidX(openFileDialog.FileName, cot);
+            }
+        }
+
+        void ConvertAndroidX(string jarPath,CompileTool cot)
+        {
+            string path = FileTool.GetFilePath(jarPath);
+            string name = FileTool.RemoveExpandName(FileTool.GetFileNameByPath(jarPath));
+            string newJarPath = path + "/" + name + "_AndroidX.jar";
+            cot.Convert2AndroidX(jarPath, newJarPath);
+
+            //删除旧目录
+            FileTool.DeleteFile(jarPath);
+        }
+
+        #endregion
+
         #endregion
 
         #region 类声明
@@ -1644,5 +1722,7 @@ namespace APKRepackageSDKTool.UI
 
             MessageBox.Show(content);
         }
+
+
     }
 }

@@ -13,12 +13,15 @@ public class CompileTool
 {
     OutPutCallBack callBack;
     OutPutCallBack errorCallBack;
+    CmdService m_cmd;
 
 
     public CompileTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
     {
         this.callBack = callBack;
         this.errorCallBack = errorCallBack;
+
+        m_cmd = new CmdService(OutPut, errorCallBack);
     }
 
     public void OutPut(string content)
@@ -101,6 +104,19 @@ public class CompileTool
         //删除临时目录
         FileTool.DeleteDirectory(JavaCompileTempPath);
         Directory.Delete(JavaCompileTempPath);
+    }
+
+    public void Convert2AndroidX(string inputJar,string outPutJar)
+    {
+        if(string.IsNullOrEmpty(EditorData.JetifierPath))
+        {
+            errorCallBack("没有配置 Jetifier 路径！请在首选项中配置！");
+        }
+        else
+        {
+            m_cmd.Execute(EditorData.JetifierPath + "/jetifier-standalone.bat  -i " + inputJar + " -o " + outPutJar);
+            callBack(inputJar + " 转换完毕");
+        }
     }
 
     public string ReplaceKeyWord(string oldContent, ChannelInfo channelInfo)

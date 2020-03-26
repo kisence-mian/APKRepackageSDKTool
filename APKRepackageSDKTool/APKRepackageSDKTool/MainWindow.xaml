@@ -21,7 +21,6 @@
 
 
                         <Button x:Name="Button_Repack" Content="重打包" Margin="0,0,10,5" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_ClicRepackageAPK"/>
-
                         <Border x:Name="ListBox_Channel" BorderBrush="Black" BorderThickness="1" Margin="10,100,10,40">
                             <ListBox x:Name="ListBox_channel" AlternationCount="1000" Margin="0,0,0,0">
                                 <ListBox.ItemContainerStyle>
@@ -72,14 +71,17 @@
                     <TextBox x:Name="Text_AndroidAPKPath" Margin="130,34,110,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
                     <Button Content="浏览" Margin="0,34,10,0" Click="Button_ClickAndroidSDKPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526" HorizontalAlignment="Right" Width="96"/>
 
-                    <Label Content="Build Tool 版本" Margin="10,58,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
-                    <TextBox x:Name="Text_BuildToolVersion" TextChanged="Text_BuildToolVersion_TextChanged" Margin="130,58,400,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                    <Label Content="Jetifier 目录" Margin="10,58,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_jetifierPath" Margin="130,58,110,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                    <Button Content="浏览" Margin="0,58,10,0" Click="Button_ClickJetifierPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526" HorizontalAlignment="Right" Width="96"/>
+
+                    <Label Content="Build Tool 版本" Margin="10,82,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_BuildToolVersion" TextChanged="Text_BuildToolVersion_TextChanged" Margin="130,82,400,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+
+                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,128,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
+
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
-
-                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
-
-                    <Button Content="测试" Margin="723,0,10,43" Click="Button_ClickTest" Height="19" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
         </TabControl>
