@@ -792,8 +792,17 @@ namespace APKRepackageSDKTool
 
         void PutSDKInterface(string filePath)
         {
-            string interfacePath = EditorData.SdkLibPath + "\\Interface\\SdkInterface.jar";
-            compileTool.Jar2Smali(interfacePath, filePath);
+            //string interfacePath = EditorData.SdkLibPath + "\\Interface\\SdkInterface.jar";
+            //compileTool.Jar2Smali(interfacePath, filePath);
+
+            string libPath = EditorData.SdkLibPath + "\\Interface";
+
+            List<string> jarList = FileTool.GetAllFileNamesByPath(libPath, new string[] { "jar" }, false);
+
+            for (int i = 0; i < jarList.Count; i++)
+            {
+                compileTool.Jar2Smali(jarList[i], filePath);
+            }
         }
 
         void SaveSDKManifest(string filePath, ChannelInfo info)
@@ -1205,10 +1214,10 @@ namespace APKRepackageSDKTool
             {
                 OutPut("强制32位模式");
 
-                //将 armeabi-v7a 的库移动到 armeabi 中去
-                FileTool.CopyDirectory(filePath + "/lib/armeabi-v7a", filePath + " /lib/armeabi");
+                ////将 armeabi-v7a 的库移动到 armeabi 中去
+                //FileTool.CopyDirectory(filePath + "/lib/armeabi-v7a", filePath + " /lib/armeabi");
 
-                Delete(filePath + "/lib/armeabi-v7a");
+                Delete(filePath + "/lib/armeabi");
                 Delete(filePath + "/lib/arm64-v8a");
             }
 
@@ -1339,6 +1348,7 @@ namespace APKRepackageSDKTool
 
         bool JudgeMainDex(string path)
         {
+            //将重要的类都放到主包里
             if(path.Contains(@"/android/support/multidex"))
             {
                 return true;
@@ -1347,6 +1357,39 @@ namespace APKRepackageSDKTool
             {
                 return true;
             }
+            else if (path.Contains("Service"))
+            {
+                return true;
+            }
+            else if (path.Contains("Receiver"))
+            {
+                return true;
+            }
+            else if (path.Contains("Provider"))
+            {
+                return true;
+            }
+            else if (path.Contains("Activity"))
+            {
+                return true;
+            }
+            else if (path.Contains("Fragment"))
+            {
+                return true;
+            }
+            else if (path.Contains("Exception"))
+            {
+                return true;
+            }
+
+            //else if (path.Contains("rx"))
+            //{
+            //    return true;
+            //}
+            //else if (path.Contains("Subscri"))
+            //{
+            //    return true;
+            //}
 
             return false;
         }

@@ -343,6 +343,11 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem Header="首Dex包设置">
+                <Grid>
+                    
+                </Grid>
+            </TabItem>
             <TabItem Header="其他设置">
                 <Grid>
                     <Label Content="MinSDKVersion" Margin="10,16,0,0" HorizontalAlignment="Left" Width="116" Height="27" VerticalAlignment="Top"/>
@@ -353,10 +358,9 @@
                     <Label Content="Application Name" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding ApplicationName}" Margin="155,88,10,0" VerticalAlignment="Top"/>
 
-                    <CheckBox Content="强制以32位运行 (删除 armeabi 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="10,132,10,173"/>
+                    <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="10,132,10,173"/>
                 </Grid>
             </TabItem>
-
 
 
         </TabControl>

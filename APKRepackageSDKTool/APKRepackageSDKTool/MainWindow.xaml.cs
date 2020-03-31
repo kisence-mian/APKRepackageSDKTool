@@ -262,6 +262,7 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickSave(object sender, RoutedEventArgs e)
         {
+            System.Windows.Forms.MessageBox.Show("保存成功");
         }
 
 
