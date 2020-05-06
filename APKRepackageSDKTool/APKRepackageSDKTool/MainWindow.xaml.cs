@@ -28,6 +28,7 @@ namespace APKRepackageSDKTool
         RepackageManager repackageManager = new RepackageManager();
         bool isBuilding = false;
 
+        string gameName;
         string apkPath;
         string keyStorePath;
         string exportPath;
@@ -48,8 +49,8 @@ namespace APKRepackageSDKTool
         {
             InitializeComponent();
 
-            apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
-            keyStorePath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "keyStorePath", "null");
+            //apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
+            //keyStorePath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "keyStorePath", "null");
             exportPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "exportPath", "null");
             
             UpdateContent();
@@ -84,7 +85,8 @@ namespace APKRepackageSDKTool
             {
                 this.Text_APKPath.Text = openFileDialog.FileName;
                 apkPath = openFileDialog.FileName;
-                RecordManager.SaveRecord(EditorData.c_ConfigRecord, "apkPath", apkPath);
+                //RecordManager.SaveRecord(EditorData.c_ConfigRecord, "apkPath", apkPath);
+                EditorData.SaveAPKPath(gameName,apkPath);
             }
         }
 
@@ -100,7 +102,8 @@ namespace APKRepackageSDKTool
             string m_Dir = m_Dialog.SelectedPath.Trim();
             this.Text_APKExportPath.Text = m_Dir;
             exportPath = m_Dir;
-            RecordManager.SaveRecord(EditorData.c_ConfigRecord, "exportPath", exportPath);
+            //RecordManager.SaveRecord(EditorData.c_ConfigRecord, "exportPath", exportPath);
+            EditorData.SaveExportAPKPath(gameName, exportPath);
         }
 
         private void Button_ClickSelectSDKLibPath(object sender, RoutedEventArgs e)
@@ -395,8 +398,14 @@ namespace APKRepackageSDKTool
                 && ComboBox_gameList.SelectedIndex < EditorData.GameList.Count
                 )
             {
-                EditorData.SetChannelList(EditorData.GameList[ComboBox_gameList.SelectedIndex].GameName);
+                gameName = EditorData.GameList[ComboBox_gameList.SelectedIndex].GameName;
+
+                EditorData.SetChannelList(gameName);
                 ListBox_channel.ItemsSource = EditorData.CurrentGameChannelList;
+
+                //将apk路径保存在game设置中
+                Text_APKExportPath.Text = EditorData.GetExportAPKPath(gameName);
+                Text_APKPath.Text = EditorData.GetAPKPath(gameName);
             }
             else
             {

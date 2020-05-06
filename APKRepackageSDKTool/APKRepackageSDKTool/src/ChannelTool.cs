@@ -285,7 +285,6 @@ namespace APKRepackageSDKTool
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
             xmlDoc.Save(xmlPath);
-
         }
 
         void AddApplicationHead(string filePath, KeyValue info, SDKInfo sdkInfo, ChannelInfo channelInfo)
@@ -304,7 +303,6 @@ namespace APKRepackageSDKTool
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
             xmlDoc.Save(xmlPath);
-
         }
 
         void AddActivity(string filePath, ActivityInfo info,SDKInfo sdkInfo,ChannelInfo channelInfo)
@@ -407,7 +405,8 @@ namespace APKRepackageSDKTool
                         XmlNode action = GetNode(node2, "category");
                         XmlElement ele2 = (XmlElement)action;
 
-                        if (ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
+                        if (ele2 != null 
+                            && ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
                         {
                             ele.RemoveChild(node2);
                             break;
@@ -1063,7 +1062,18 @@ namespace APKRepackageSDKTool
                         content = compileTool.ReplaceKeyWord(content, channelInfo);
                         content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
 
-                        FileTool.WriteStringByFile(file,content);
+                        //去掉不合法的文件名 
+                        //res\drawable\$avd_hide_password__0.xml: Invalid file name: must contain only [a-z0-9_.]
+                        if (file.Contains("$"))
+                        {
+                            string newFile = file.Replace("$", "");
+                            FileTool.WriteStringByFile(newFile, content);
+                            File.Delete(file);
+                        }
+                        else
+                        {
+                            FileTool.WriteStringByFile(file, content);
+                        }
                     });
                 }
             }
@@ -1357,6 +1367,8 @@ namespace APKRepackageSDKTool
             {
                 return true;
             }
+
+
             else if (path.Contains("Service"))
             {
                 return true;
@@ -1382,14 +1394,10 @@ namespace APKRepackageSDKTool
                 return true;
             }
 
-            //else if (path.Contains("rx"))
-            //{
-            //    return true;
-            //}
-            //else if (path.Contains("Subscri"))
-            //{
-            //    return true;
-            //}
+            else if (path.Contains("qq"))
+            {
+                return true;
+            }
 
             return false;
         }

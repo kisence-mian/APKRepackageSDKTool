@@ -87,3 +87,4 @@ D:\Project\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\baksmali-2.3.4.jar
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\UI\OutPutWindow.g.cs
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\UI\OutPutWindow.baml
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\apktool_2.4.1.jar

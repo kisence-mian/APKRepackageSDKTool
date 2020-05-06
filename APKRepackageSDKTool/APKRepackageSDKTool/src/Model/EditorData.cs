@@ -241,6 +241,30 @@ namespace APKRepackageSDKTool
 
         #endregion
 
+        #region APK
+
+        public static string GetAPKPath(string gameName)
+        {
+            return RecordManager.GetRecord(c_GameRecord, gameName+ "_APKPath", "");
+        }
+
+        public static void SaveAPKPath(string gameName,string apkPath)
+        {
+            RecordManager.SaveRecord(c_GameRecord, gameName + "_APKPath", apkPath);
+        }
+
+        public static string GetExportAPKPath(string gameName)
+        {
+            return RecordManager.GetRecord(c_GameRecord, gameName + "_ExportAPKPath", "");
+        }
+
+        public static void SaveExportAPKPath(string gameName, string apkPath)
+        {
+            RecordManager.SaveRecord(c_GameRecord, gameName + "_ExportAPKPath", apkPath);
+        }
+
+        #endregion
+
         #region ChannelList
 
         public static void SetChannelList(string gameName)
@@ -490,6 +514,7 @@ namespace APKRepackageSDKTool
         public string appIcon;
         public string appBanner;
 
+        public bool isDecodeResource = true; //只修改manifest文件
         public bool isLog;  //输出日志
         public bool isDeleteTempPath = true;  //删除临时目录
 
@@ -514,6 +539,7 @@ namespace APKRepackageSDKTool
         public string ApktoolVersion { get => apktoolVersion; set => apktoolVersion = value; }
         public bool IsLog { get => isLog; set => isLog = value; }
         public bool IsDeleteTempPath { get => isDeleteTempPath; set => isDeleteTempPath = value; }
+        public bool IsDecodeResource { get => isDecodeResource; set => isDecodeResource = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

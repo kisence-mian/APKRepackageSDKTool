@@ -15,7 +15,6 @@ public class CompileTool
     OutPutCallBack errorCallBack;
     CmdService m_cmd;
 
-
     public CompileTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
     {
         this.callBack = callBack;

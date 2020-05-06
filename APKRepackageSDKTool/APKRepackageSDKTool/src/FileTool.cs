@@ -228,7 +228,7 @@ public class FileTool
     }
 
     //获取一个文件的目录
-    public static string GetFilePath(string path)
+    public static string GetFileDirectory(string path)
     {
         path = path.Replace('\\','/');
         int dirIndex = path.LastIndexOf("/");
@@ -240,6 +240,25 @@ public class FileTool
         else
         {
             return path;
+        }
+    }
+
+    //获取一个文件的父目录
+    public static string GetFileParentDirectory(string path)
+    {
+        path = path.Replace('\\', '/');
+        int dirIndex = path.LastIndexOf("/");
+
+        if (dirIndex != -1)
+        {
+            path =  path.Remove(dirIndex);
+            string[] dires = path.Split('/');
+            return dires[dires.Length - 1];
+        }
+        //根目录
+        else
+        {
+            return "";
         }
     }
 

@@ -547,6 +547,33 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region 首Dex包
+
+        private void Button_ClickDeleteFirstDex(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_FirstDexName.Text))
+            {
+                Permission.Add(TextBox_FirstDexName.Text);
+
+                Permission = Permission;
+
+                TextBox_FirstDexName.Text = "";
+            }
+        }
+
+        private void Button_ClickAddFirstDex(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string key = (string)btn.Tag;
+
+            Permission.Remove(key);
+
+            Permission = Permission;
+        }
+
+        #endregion
+
         #region 自定义Java类
 
         private void CheckBox_customJavaClass_checked(object sender, RoutedEventArgs e)
@@ -1366,8 +1393,11 @@ namespace APKRepackageSDKTool.UI
                         fileName = className + ".jar";
                     }
 
+                    //获取父文件夹的名字，如果是libs才加Lib前缀
+                    string parentsName = FileTool.GetFileParentDirectory(item);
+
                     //防止重名
-                    if(item.Contains("libs"))
+                    if(parentsName == "libs")
                     {
                         fileName = "Lib_" + fileName;
                     }
@@ -1635,7 +1665,7 @@ namespace APKRepackageSDKTool.UI
 
         void ConvertAndroidX(string jarPath,CompileTool cot)
         {
-            string path = FileTool.GetFilePath(jarPath);
+            string path = FileTool.GetFileDirectory(jarPath);
             string name = FileTool.RemoveExpandName(FileTool.GetFileNameByPath(jarPath));
             string newJarPath = path + "/" + name + "_AndroidX.jar";
             cot.Convert2AndroidX(jarPath, newJarPath);
@@ -1715,6 +1745,8 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region 提示按钮
+
         private void Button_ClickInfo(object sender, RoutedEventArgs e)
         {
             string content = "{PackageName}会自动替换成包名\n";
@@ -1723,6 +1755,16 @@ namespace APKRepackageSDKTool.UI
             MessageBox.Show(content);
         }
 
+        private void Button_MianActivityInfo_Click(object sender, RoutedEventArgs e)
+        {
+            string content =  "{PackageName}会自动替换成包名\n";
+            content += "{字段名}会自动替换成对应字段\n\n";
 
+            content += "Manifest中同名的字段将被替换\n";
+
+            MessageBox.Show(content);
+        }
+
+        #endregion
     }
 }

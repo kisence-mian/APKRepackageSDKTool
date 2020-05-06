@@ -114,11 +114,19 @@ namespace APKRepackageSDKTool
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
                         ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
 
-                        string apktool_version = "apktool";
+                        string apktool_version = "apktool_2.4.1";
 
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
-                        cmd.Execute("java -jar "+ apktool_version + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
+                        if(channelInfo.isDecodeResource)
+                        {
+                            cmd.Execute("java -jar " + apktool_version + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath);
+                        }
+                        //不反编译资源
+                        else
+                        {
+                            cmd.Execute("java -jar " + apktool_version + ".jar d -f -r " + repackageInfo.apkPath + " -o " + aimPath + " --force-manifest");
+                        }
 
                         //执行对应的文件操作
                         MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
@@ -138,7 +146,10 @@ namespace APKRepackageSDKTool
 
                         //重新生成R表
                         MakeProgress("重新生成R表", i, channelList.Count, channelInfo.Name);
-                        channelTool.Rebuild_R_Table(aimPath);
+                        if (channelInfo.isDecodeResource)
+                        {
+                            channelTool.Rebuild_R_Table(aimPath);
+                        }
 
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);

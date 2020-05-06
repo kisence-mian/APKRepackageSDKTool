@@ -12,6 +12,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.0.3.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.3.1.jar")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.4.1.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.1.3.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.3.4.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/dlls/b1plus.ui.baseapplications.dll")]
