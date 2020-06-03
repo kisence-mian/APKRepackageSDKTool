@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\App.xaml
-51999068597
+620835400
 20353878104
-27-1029232810
+291718640933
 191102772110
-ChannelEditorWindow.xaml;GameSetting.xaml;MainWindow.xaml;UI\OutPutWindow.xaml;UI\SdkEditorWindow.xaml;
+ChannelEditorWindow.xaml;GameSetting.xaml;MainWindow.xaml;UI\LanguageWindow.xaml;UI\OutPutWindow.xaml;UI\SdkEditorWindow.xaml;
 
-False
+True
 

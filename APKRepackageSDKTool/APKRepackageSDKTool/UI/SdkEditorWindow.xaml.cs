@@ -1333,47 +1333,54 @@ namespace APKRepackageSDKTool.UI
             OutPutWindow opw = new OutPutWindow();
             opw.Show();
 
-            CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-
-            //路径有效性判断
-
-            //提取jar
-            string jarResult = ExtractJar(path, aimPath, aarName, isConvert2AndroidX, cot);
-
-            opw.ReceviceOutPut(jarResult);
-
-            if(File.Exists(path + "/AndroidManifest.xml"))
+            try
             {
-                //提取Manifest
-                string manifestResult = ExtractManifest(path);
-                opw.ReceviceOutPut(manifestResult);
+                CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+
+                //路径有效性判断
+
+                //提取jar
+                string jarResult = ExtractJar(path, aimPath, aarName, isConvert2AndroidX, cot);
+
+                opw.ReceviceOutPut(jarResult);
+
+                if (File.Exists(path + "/AndroidManifest.xml"))
+                {
+                    //提取Manifest
+                    string manifestResult = ExtractManifest(path);
+                    opw.ReceviceOutPut(manifestResult);
+                }
+                else
+                {
+                    opw.ReceviceOutPut("找不到 manifest 文件 " + path + "/AndroidManifest.xml");
+                }
+
+                string repeatAssets = "";
+                //复制assets
+                if (Directory.Exists(path + "/assets"))
+                {
+                    FileTool.CopyDirectory(path + "/assets", aimPath + "/assets", (pathA, pathB) => {
+                        repeatAssets += FileTool.GetFileNameByPath(pathA) + "\n";
+
+                        opw.ReceviceOutPut(repeatAssets);
+                    });
+                }
+
+                string rebuildRTable = "";
+                //合并res
+                if (Directory.Exists(path + "/res"))
+                {
+                    ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                    ct.MergeXMLFile(path + "/res", aimPath + "/res");
+
+                    //生成R表
+                    rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
+                    opw.ReceviceOutPut(rebuildRTable);
+                }
             }
-            else
+            catch( Exception e)
             {
-                opw.ReceviceOutPut("找不到 manifest 文件 " + path + "/AndroidManifest.xml");
-            }
-
-            string repeatAssets = "";
-            //复制assets
-            if (Directory.Exists(path + "/assets"))
-            {
-                FileTool.CopyDirectory(path + "/assets", aimPath + "/assets", (pathA, pathB) => {
-                    repeatAssets += FileTool.GetFileNameByPath(pathA) + "\n";
-
-                    opw.ReceviceOutPut(repeatAssets);
-                });
-            }
-
-            string rebuildRTable = "";
-            //合并res
-            if (Directory.Exists(path + "/res"))
-            {
-                ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-                ct.MergeXMLFile(path + "/res", aimPath + "/res");
-
-                //生成R表
-                rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
-                opw.ReceviceOutPut(rebuildRTable);
+                opw.ReceviceOutPut(e.ToString());
             }
         }
 
@@ -1412,7 +1419,7 @@ namespace APKRepackageSDKTool.UI
                         }
                         else
                         {
-                            File.Copy(item, aimPath + "/" + fileName);
+                            File.Copy(item, aimPath + "/" + fileName,true);
                         }
 
                         result += fileName + "\n";

@@ -25,6 +25,8 @@ namespace APKRepackageSDKTool
         SelectInfo selectInfo = new SelectInfo();
         PropertiesList propertiesList;
 
+        static ChannelInfo s_CopyChannelInfo;
+
         private SelectInfo CurrentSelectInfo
         {
             get => selectInfo;
@@ -42,11 +44,7 @@ namespace APKRepackageSDKTool
             {
                 if(propertiesList == null)
                 {
-                    propertiesList = new PropertiesList();
-                    for (int i = 0; i < EditorData.CurrentChannel.PropertiesList.Count; i++)
-                    {
-                        propertiesList.Add(EditorData.CurrentChannel.PropertiesList[i]);
-                    }
+                    ResetPropertiesList();
                 }
 
                 return propertiesList;
@@ -67,7 +65,11 @@ namespace APKRepackageSDKTool
         public ChannelEditorWindow()
         {
             InitializeComponent();
+            UpdateUI();
+        }
 
+        void UpdateUI()
+        {
             Grid_root.DataContext = EditorData.CurrentChannel;
 
             PasswordBox_keyStore.Password = EditorData.CurrentChannel.KeyStorePassWord;
@@ -76,6 +78,15 @@ namespace APKRepackageSDKTool
             ListBox_SDKList.ItemsSource = EditorData.TotalSDKInfo;
             ListBox_SdkConfigList.ItemsSource = CurrentSelectInfo;
             ListBox_PropertiesList.ItemsSource = _PropertiesList;
+        }
+
+        void ResetPropertiesList()
+        {
+            propertiesList = new PropertiesList();
+            for (int i = 0; i < EditorData.CurrentChannel.PropertiesList.Count; i++)
+            {
+                propertiesList.Add(EditorData.CurrentChannel.PropertiesList[i]);
+            }
         }
 
         #region 点击事件
@@ -129,8 +140,7 @@ namespace APKRepackageSDKTool
             EditorData.CurrentChannel.KeyStorePassWord = PasswordBox_keyStore.Password;
             EditorData.CurrentChannel.KeyStoreAliasPassWord = PasswordBox_alias.Password;
 
-            EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
-            MessageBox.Show("保存成功");
+            Save();
         }
 
         private void Button_Click_AddSDK(object sender, RoutedEventArgs e)
@@ -242,7 +252,6 @@ namespace APKRepackageSDKTool
             kv.value = value;
 
             _PropertiesList.Add(kv);
-
             _PropertiesList = _PropertiesList;
         }
 
@@ -272,6 +281,105 @@ namespace APKRepackageSDKTool
             }
         }
 
+        private void Button_Click_Copy(object sender, RoutedEventArgs e)
+        {
+            s_CopyChannelInfo = (ChannelInfo)EditorData.CurrentChannel.Clone();
 
+            string content = Serializer.Serialize(s_CopyChannelInfo);
+
+            Clipboard.SetDataObject(content, true);
+
+            MessageBox.Show("LanguageWindow.currentLanuage.Count " + EditorData.CurrentChannel.appNameLanguages.Count);
+            MessageBox.Show("复制成功");
+        }
+
+        private void Button_Click_paste(object sender, RoutedEventArgs e)
+        {
+            if(s_CopyChannelInfo == null)
+            {
+                string content = Clipboard.GetText();
+                if (!string.IsNullOrEmpty(content))
+                {
+                    try
+                    {
+                        Deserializer des = new Deserializer();
+                        ChannelInfo info = des.Deserialize<ChannelInfo>(content);
+
+                        PasteChannel(info);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("剪贴板格式错误");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("剪贴板无内容");
+                }
+            }
+            else
+            {
+                PasteChannel(s_CopyChannelInfo);
+
+                //string name = EditorData.CurrentChannel.channelName;
+                //EditorData.CurrentChannel = s_CopyChannelInfo;
+                //EditorData.CurrentChannel.Name = name;
+
+                //for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
+                //{
+                //    if (EditorData.CurrentGameChannelList[i].channelName == name)
+                //    {
+                //        EditorData.CurrentGameChannelList[i] = EditorData.CurrentChannel;
+                //    }
+                //}
+
+                //EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+
+                //ResetPropertiesList();
+                //UpdateUI();
+                //MessageBox.Show("粘贴成功");
+            }
+        }
+
+        void PasteChannel(ChannelInfo info)
+        {
+            string name = EditorData.CurrentChannel.channelName;
+            EditorData.CurrentChannel = info;
+            EditorData.CurrentChannel.Name = name;
+
+            for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
+            {
+                if (EditorData.CurrentGameChannelList[i].channelName == name)
+                {
+                    EditorData.CurrentGameChannelList[i] = EditorData.CurrentChannel;
+                }
+            }
+
+            EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+
+            ResetPropertiesList();
+            UpdateUI();
+            MessageBox.Show("粘贴成功");
+        }
+
+        private void Button_Click_EditorLanguage(object sender, RoutedEventArgs e)
+        {
+            //if(EditorData.CurrentChannel.AppNameLanguages == null)
+            //{
+            //    EditorData.CurrentChannel.AppNameLanguages = new KeyValueList();
+            //}
+
+            LanguageWindow.SetLanguage(EditorData.CurrentChannel.AppNameLanguages);
+            LanguageWindow.saveCallBack = Save;
+
+            LanguageWindow cew = new LanguageWindow();
+            cew.ShowDialog();
+        }
+
+        void Save()
+        {
+            EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+            MessageBox.Show("保存成功");
+        }
     }
 }

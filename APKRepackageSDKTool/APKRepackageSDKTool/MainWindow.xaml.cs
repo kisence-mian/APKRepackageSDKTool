@@ -47,20 +47,29 @@ namespace APKRepackageSDKTool
 
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            //apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
-            //keyStorePath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "keyStorePath", "null");
-            exportPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "exportPath", "null");
-            
-            UpdateContent();
+                //apkPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "apkPath", "null");
+                //exportPath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "exportPath", "null");
+                keyStorePath = RecordManager.GetRecord(EditorData.c_ConfigRecord, "keyStorePath", "null");
 
-            //展示到游戏选择界面上
-            ComboBox_gameList.ItemsSource = EditorData.GameList;
-            ComboBox_gameList.SelectedIndex = RecordManager.GetRecord(EditorData.c_ConfigRecord, "index", -1);
+                //展示到游戏选择界面上
+                ComboBox_gameList.ItemsSource = EditorData.GameList;
+                ComboBox_gameList.SelectedIndex = RecordManager.GetRecord(EditorData.c_ConfigRecord, "index", -1);
 
-            //再显示该游戏的所有渠道
-            UpdateChannel();
+                //再显示该游戏的所有渠道
+                UpdateChannel();
+
+                //更新界面
+                UpdateContent();
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show("启动出错："+ex.ToString());
+            }
+
 
             //测试代码
             //ChannelTool ct = new ChannelTool(OutPut, OutPut);
@@ -231,15 +240,22 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickAddChannel(object sender, RoutedEventArgs e)
         {
-            if (Text_AddChannel.Text != "")
+            try
             {
-                ChannelInfo ci3 = new ChannelInfo();
-                ci3.Name = Text_AddChannel.Text;
+                if (Text_AddChannel.Text != "")
+                {
+                    ChannelInfo ci3 = new ChannelInfo();
+                    ci3.Name = Text_AddChannel.Text;
 
-                EditorData.CurrentGameChannelList.Add(ci3);
-                EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
+                    EditorData.CurrentGameChannelList.Add(ci3);
+                    EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
 
-                Text_AddChannel.Text = "";
+                    Text_AddChannel.Text = "";
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.ToString());
             }
         }
 
@@ -374,6 +390,9 @@ namespace APKRepackageSDKTool
 
             Text_progressName.Content = content;
 
+            exportPath = EditorData.GetExportAPKPath(gameName);
+            apkPath = EditorData.GetAPKPath(gameName);
+
             Text_APKExportPath.Text = exportPath;
             Text_APKPath.Text = apkPath;
             Text_SDKLibPath.Text = EditorData.SdkLibPath;
@@ -399,13 +418,15 @@ namespace APKRepackageSDKTool
                 )
             {
                 gameName = EditorData.GameList[ComboBox_gameList.SelectedIndex].GameName;
+                exportPath = EditorData.GetExportAPKPath(gameName);
+                apkPath = EditorData.GetAPKPath(gameName);
 
                 EditorData.SetChannelList(gameName);
                 ListBox_channel.ItemsSource = EditorData.CurrentGameChannelList;
 
                 //将apk路径保存在game设置中
-                Text_APKExportPath.Text = EditorData.GetExportAPKPath(gameName);
-                Text_APKPath.Text = EditorData.GetAPKPath(gameName);
+                Text_APKExportPath.Text = exportPath;
+                Text_APKPath.Text = apkPath;
             }
             else
             {
@@ -436,5 +457,10 @@ namespace APKRepackageSDKTool
 
             ct.Rebuild_R_Table(aimPath);
         }
+
+        //private void ComboBox_gameList_Selected(object sender, SelectionChangedEventArgs e)
+        //{
+        //    UpdateChannel();
+        //}
     }
 }

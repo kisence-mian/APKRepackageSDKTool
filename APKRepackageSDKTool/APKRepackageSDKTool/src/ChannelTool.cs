@@ -44,6 +44,16 @@ namespace APKRepackageSDKTool
                 ChangeAppName(filePath, info.AppName);
             }
 
+            if (info.appNameLanguages.Count > 0)
+            {
+                for (int i = 0; i < info.appNameLanguages.Count; i++)
+                {
+                    KeyValue kv = info.appNameLanguages[i];
+                    OutPut("替换appName " + kv.key + " " + kv.value);
+                    ChangeAppNameByLanguage(filePath, kv.key, kv.value);
+                }
+            }
+
             if (!string.IsNullOrEmpty(info.AppIcon))
             {
                 OutPut("替换appIcon");
@@ -156,6 +166,47 @@ namespace APKRepackageSDKTool
             }
 
             xmlDoc.Save(xmlPath);
+        }
+
+        public void ChangeAppNameByLanguage(string filePath,string language, string appName)
+        {
+            //判断文件是否存在
+            string xmlPath = filePath + "\\res\\values-"+ language + "\\strings-"+ language + ".xml";
+            //存在就直接改
+            if (File.Exists(xmlPath))
+            {
+                string xml = FileTool.ReadStringByFile(xmlPath);
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(xml);
+
+                XmlNode resources = xmlDoc.SelectSingleNode("resources");
+
+                //遍历String表，替换App_name
+                for (int i = 0; i < resources.ChildNodes.Count; i++)
+                {
+                    XmlNode node = resources.ChildNodes[i];
+                    XmlElement nodeEle = (XmlElement)node;
+                    if (node.Name == "string"
+                        && nodeEle.GetAttribute("name") == "app_name")
+                    {
+                        nodeEle.InnerText = appName;
+                        break;
+                    }
+                }
+
+                xmlDoc.Save(xmlPath);
+            }
+            //不存在就创建一份
+            else
+            {
+                //创建路径
+                FileTool.CreateFilePath(xmlPath);
+                //写入文件
+                string content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <string name=\"app_name\">appName</string>\n</resources>";
+                content = content.Replace("appName", appName);
+                FileTool.WriteStringByFile(xmlPath, content);
+            }
         }
 
         /// <summary>
@@ -364,7 +415,7 @@ namespace APKRepackageSDKTool
                         XmlNode action = GetNode(node2, "category");
                         XmlElement ele2 = (XmlElement)action;
 
-                        if (ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
+                        if (ele2!= null && ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
                         {
                             //增加属性
                             ele.SetAttribute(kv.key, "http://schemas.android.com/apk/res/android", newValue);
@@ -571,7 +622,7 @@ namespace APKRepackageSDKTool
             OutPut("创建临时目录");
             String R_Path = PathTool.GetCurrentPath() + "/R_path/";
 
-            FileTool.CreatPath(R_Path);
+            FileTool.CreatePath(R_Path);
             //OutPut("生成R文件");
             //OutPut("生成的R文件的jar");
             //OutPut("生成 dex文件");
@@ -649,7 +700,7 @@ namespace APKRepackageSDKTool
 
             String R_Path = aimPath + "/R_path/";
 
-            FileTool.CreatPath(R_Path);
+            FileTool.CreatePath(R_Path);
 
             //String androidPath = @"D:\AndroidSDK\platforms\android-28\android.jar";
             string manifest = aimPath + "/AndroidManifest.xml";
@@ -1338,7 +1389,7 @@ namespace APKRepackageSDKTool
                     currentIndex++;
 
                     string newPath = smaliPath + "_classes" + currentIndex;
-                    FileTool.CreatPath(newPath);
+                    FileTool.CreatePath(newPath);
 
                     //OutPut("超过上限：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
                 }
@@ -1347,7 +1398,7 @@ namespace APKRepackageSDKTool
                 {
                     string newPath = smaliPath + "_classes" + currentIndex;
                     string targetPath = newPath + "" + list[i].Replace(smaliPath, "");
-                    FileTool.CreatFilePath(targetPath);
+                    FileTool.CreateFilePath(targetPath);
                     File.Move(list[i], targetPath);
 
                     //OutPut("分包：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);

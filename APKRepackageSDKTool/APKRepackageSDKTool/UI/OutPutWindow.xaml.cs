@@ -19,7 +19,7 @@ namespace APKRepackageSDKTool.UI
     /// </summary>
     public partial class OutPutWindow : Window
     {
-
+        bool isError = false;
         string content = "";
         public OutPutWindow()
         {
@@ -41,11 +41,15 @@ namespace APKRepackageSDKTool.UI
             Action ac = new Action(UpdateContent);
             Dispatcher.BeginInvoke(ac);
 
-            Title = "错误输出！";
+            isError = true;
         }
 
         private void UpdateContent()
         {
+            if(isError)
+            {
+                Title = "错误输出！";
+            }
 
             TextBox_output.Text = content;
         }

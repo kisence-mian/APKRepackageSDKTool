@@ -35,7 +35,7 @@ public class CompileTool
         string jarName = FileTool.GetFileNameByPath(jarPath);
         string tempPath = JavaTempPath + "\\" + jarName;
 
-        FileTool.CreatPath(JavaTempPath);
+        FileTool.CreatePath(JavaTempPath);
 
         CmdService cmd = new CmdService(OutPut, errorCallBack);
 
@@ -82,14 +82,14 @@ public class CompileTool
         {
             string p = JavaCompileLibPath + "\\" + FileTool.GetFileNameByPath(sdkConfig.customJavaLibrary[i]);
             libs += p + ";";
-            FileTool.CreatFilePath(p);
+            FileTool.CreateFilePath(p);
 
             string libPath = EditorData.SdkLibPath + sdkConfig.customJavaLibrary[i];
             File.Copy(libPath, p, true);
         }
 
         //创建导出目录
-        FileTool.CreatPath(classFilePath);
+        FileTool.CreatePath(classFilePath);
 
         //Java to class
         cmd.Execute("javac  -classpath " + libs + " " + JavaCompileSrcPath + "\\*.java -d " + classFilePath);

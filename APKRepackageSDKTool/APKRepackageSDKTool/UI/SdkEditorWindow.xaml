@@ -218,7 +218,7 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
-                                        <Label Content="{Binding Path=Name}" Width="140" HorizontalAlignment="Left" />
+                                        <Label Content="{Binding Path=Name}" HorizontalAlignment="Left" />
                                         <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=Name}" Click="Button_ClickDeleteProvider"/>
                                     </Grid>
                                 </DataTemplate>

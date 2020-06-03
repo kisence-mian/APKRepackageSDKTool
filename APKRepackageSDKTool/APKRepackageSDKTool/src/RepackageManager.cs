@@ -190,7 +190,7 @@ namespace APKRepackageSDKTool
                             MakeProgress("跳过删除临时目录", i, channelList.Count, channelInfo.Name);
                         }
 
-
+                        System.Diagnostics.Process.Start("Explorer", "/select," + finalPath);
                         MakeProgress("完成", i, channelList.Count, channelInfo.Name);
                     }
                 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,7 +12,6 @@ using static APKRepackageSDKTool.SDKConfig;
 
 namespace APKRepackageSDKTool
 {
-
     public static class EditorData
     {
         static Deserializer des = new Deserializer();
@@ -511,6 +512,7 @@ namespace APKRepackageSDKTool
 
         public string packageName; //包名
         public string appName;
+        public List<KeyValue> appNameLanguages = new List<KeyValue>();
         public string appIcon;
         public string appBanner;
 
@@ -540,6 +542,7 @@ namespace APKRepackageSDKTool
         public bool IsLog { get => isLog; set => isLog = value; }
         public bool IsDeleteTempPath { get => isDeleteTempPath; set => isDeleteTempPath = value; }
         public bool IsDecodeResource { get => isDecodeResource; set => isDecodeResource = value; }
+        public List<KeyValue> AppNameLanguages { get => appNameLanguages; set => appNameLanguages = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -547,6 +550,13 @@ namespace APKRepackageSDKTool
         {
             NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
             CollectionChanged?.Invoke(this, e);
+        }
+
+        public ChannelInfo Clone()
+        {
+            Deserializer des = new Deserializer();
+            string content =  Serializer.Serialize(this);
+            return des.Deserialize<ChannelInfo>(content);
         }
 
         public SDKInfo GetSDKInfo(string sdkName)

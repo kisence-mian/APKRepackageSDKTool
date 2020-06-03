@@ -14,18 +14,18 @@ public class FileTool
     /// 判断有没有这个文件路径，如果没有则创建它(路径会去掉文件名)
     /// </summary>
     /// <param name="filepath"></param>
-    public static void CreatFilePath(string filepath)
+    public static void CreateFilePath(string filepath)
     {
         string newPathDir = Path.GetDirectoryName(filepath);
 
-        CreatPath(newPathDir);
+        CreatePath(newPathDir);
     }
 
     /// <summary>
     /// 判断有没有这个路径，如果没有则创建它
     /// </summary>
     /// <param name="filepath"></param>
-    public static void CreatPath(string path)
+    public static void CreatePath(string path)
     {
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
@@ -530,7 +530,7 @@ public class FileTool
     {
         try
         {
-            FileTool.CreatFilePath(path);
+            FileTool.CreateFilePath(path);
             File.WriteAllBytes(path, byt);
         }
         catch (Exception e)

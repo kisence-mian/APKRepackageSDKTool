@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="src\CmdService.cs" />
     <Compile Include="src\CompileTool.cs" />
+    <Compile Include="src\Define\KeyValueList.cs" />
     <Compile Include="src\Define\SDKInterfaceDefine.cs" />
     <Compile Include="src\DeJson.cs" />
     <Compile Include="src\FileTool.cs" />
@@ -91,6 +92,9 @@
     <Compile Include="src\RTableUtil.cs" />
     <Compile Include="src\YML\YML.cs" />
     <Compile Include="src\YML\YmlTool.cs" />
+    <Compile Include="UI\LanguageWindow.xaml.cs">
+      <DependentUpon>LanguageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\OutPutWindow.xaml.cs">
       <DependentUpon>OutPutWindow.xaml</DependentUpon>
     </Compile>
@@ -117,6 +121,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\LanguageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\OutPutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
