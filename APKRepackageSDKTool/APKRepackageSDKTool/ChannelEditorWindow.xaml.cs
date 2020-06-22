@@ -320,24 +320,6 @@ namespace APKRepackageSDKTool
             else
             {
                 PasteChannel(s_CopyChannelInfo);
-
-                //string name = EditorData.CurrentChannel.channelName;
-                //EditorData.CurrentChannel = s_CopyChannelInfo;
-                //EditorData.CurrentChannel.Name = name;
-
-                //for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
-                //{
-                //    if (EditorData.CurrentGameChannelList[i].channelName == name)
-                //    {
-                //        EditorData.CurrentGameChannelList[i] = EditorData.CurrentChannel;
-                //    }
-                //}
-
-                //EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
-
-                //ResetPropertiesList();
-                //UpdateUI();
-                //MessageBox.Show("粘贴成功");
             }
         }
 
@@ -364,11 +346,6 @@ namespace APKRepackageSDKTool
 
         private void Button_Click_EditorLanguage(object sender, RoutedEventArgs e)
         {
-            //if(EditorData.CurrentChannel.AppNameLanguages == null)
-            //{
-            //    EditorData.CurrentChannel.AppNameLanguages = new KeyValueList();
-            //}
-
             LanguageWindow.SetLanguage(EditorData.CurrentChannel.AppNameLanguages);
             LanguageWindow.saveCallBack = Save;
 

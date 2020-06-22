@@ -32,6 +32,7 @@ namespace APKRepackageSDKTool
         static string jetifierPath;
 
         static string buildToolVersion;
+        static int apiLevel;
 
         public static bool isOutPutCMD = false;      //输出原始命令
         public static bool isAutoInstall = false;      //自动安装
@@ -207,7 +208,20 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public static int APILevel {
 
+            get
+            {
+                JudgeInit();
+                return apiLevel;
+            }
+
+            set
+            {
+                apiLevel = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "APILevel", apiLevel);
+            }
+        }
 
         #endregion
 
@@ -232,6 +246,7 @@ namespace APKRepackageSDKTool
                 androidSdkPath = RecordManager.GetRecord(c_ConfigRecord, "AndroidSDKPath", null);
                 jetifierPath = RecordManager.GetRecord(c_ConfigRecord, "JetifierPath", null);
                 buildToolVersion = RecordManager.GetRecord(c_ConfigRecord, "BuildToolVersion", null);
+                apiLevel = RecordManager.GetRecord(c_ConfigRecord, "APILevel", 29);
 
                 isOutPutCMD = RecordManager.GetRecord(c_ConfigRecord, "IsOutPutCMD", false);
                 isAutoInstall = RecordManager.GetRecord(c_ConfigRecord, "IsAutoInstall", false);
@@ -516,7 +531,12 @@ namespace APKRepackageSDKTool
         public string appIcon;
         public string appBanner;
 
-        public bool isDecodeResource = true; //只修改manifest文件
+        public bool isSplitDex = true; //分包
+        public bool isRebuildRTable = true; //重新生成R表
+        public bool isDecodeResource = true; //反编译Resource文件
+        public bool isUseAAPT2 = false; //使用AAPT2
+        public bool isChangeMainActivity = true; //修改ManinActivity
+        public bool isExecuteInvalidFile = true; //处理无效文件
         public bool isLog;  //输出日志
         public bool isDeleteTempPath = true;  //删除临时目录
 
@@ -543,6 +563,11 @@ namespace APKRepackageSDKTool
         public bool IsDeleteTempPath { get => isDeleteTempPath; set => isDeleteTempPath = value; }
         public bool IsDecodeResource { get => isDecodeResource; set => isDecodeResource = value; }
         public List<KeyValue> AppNameLanguages { get => appNameLanguages; set => appNameLanguages = value; }
+        public bool IsSplitDex { get => isSplitDex; set => isSplitDex = value; }
+        public bool IsRebuildRTable { get => isRebuildRTable; set => isRebuildRTable = value; }
+        public bool IsUseAAPT2 { get => isUseAAPT2; set => isUseAAPT2 = value; }
+        public bool IsChangeManiActivity { get => isChangeMainActivity; set => isChangeMainActivity = value; }
+        public bool IsExecuteInvalidFile { get => isExecuteInvalidFile; set => isExecuteInvalidFile = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -645,6 +670,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> metaInfoList = new List<KeyValue>();
         public List<KeyValue> usesList = new List<KeyValue>();
         public List<KeyValue> applicationHeadList = new List<KeyValue>();
+        public List<string> firstDexList = new List<string>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -711,6 +737,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> UsesList { get => usesList; set => usesList = value; }
         public bool Force32bit { get => force32bit; set => force32bit = value; }
         public List<KeyValue> ApplicationHeadList { get => applicationHeadList; set => applicationHeadList = value; }
+        public List<string> FirstDexList { get => firstDexList; set => firstDexList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -734,7 +761,7 @@ namespace APKRepackageSDKTool
 
     public class ActivityInfo 
     {
-        public bool mainActivity = true;
+        public bool mainActivity = false;
         public string name;
         public string content;
 
@@ -782,6 +809,7 @@ namespace APKRepackageSDKTool
         Pay = 8,
         Other = 16,
         RealName = 32,
+        Share = 64,
     }
 
     #endregion

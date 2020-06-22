@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -281,6 +282,10 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickSave(object sender, RoutedEventArgs e)
         {
+            EditorData.SaveAPKPath(gameName, apkPath);
+            EditorData.SaveExportAPKPath(gameName, exportPath);
+            RecordManager.SaveRecord(EditorData.c_ConfigRecord, "index", ComboBox_gameList.SelectedIndex);
+
             System.Windows.Forms.MessageBox.Show("保存成功");
         }
 
@@ -321,6 +326,11 @@ namespace APKRepackageSDKTool
         private void Text_BuildToolVersion_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditorData.BuildToolVersion = Text_BuildToolVersion.Text;
+        }
+
+        private void Text_APILevel_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorData.APILevel = int.Parse(Text_APILevel.Text);
         }
 
         #endregion
@@ -399,6 +409,7 @@ namespace APKRepackageSDKTool
             Text_AndroidAPKPath.Text = EditorData.AndroidSdkPath;
             Text_jetifierPath.Text = EditorData.JetifierPath;
             Text_BuildToolVersion.Text = EditorData.BuildToolVersion;
+            Text_APILevel.Text = EditorData.APILevel.ToString();
 
             CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
             CheckBox_IsAutoInstall.IsChecked = EditorData.IsAutoInstall;
@@ -456,6 +467,12 @@ namespace APKRepackageSDKTool
             ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
 
             ct.Rebuild_R_Table(aimPath);
+        }
+
+        private void Text_APILevel_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex re = new Regex("[^0-9]+");
+            e.Handled = re.IsMatch(e.Text);
         }
 
         //private void ComboBox_gameList_Selected(object sender, SelectionChangedEventArgs e)

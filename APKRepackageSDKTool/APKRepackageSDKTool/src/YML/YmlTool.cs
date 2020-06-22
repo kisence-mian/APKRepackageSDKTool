@@ -10,16 +10,13 @@ namespace APKRepackageSDKTool.src
         YamlStream yaml = new YamlStream();
         YamlMappingNode mapping;
 
-        object yamlObject;
-
-
-        public YmlTool(string path)
-        {
-            string content = FileTool.ReadStringByFile(path);
-            var input = new StringReader(content);
-            yaml.Load(input);
-            mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-        }
+        //public YmlTool(string path)
+        //{
+        //    string content = FileTool.ReadStringByFile(path);
+        //    var input = new StringReader(content);
+        //    yaml.Load(input);
+        //    mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+        //}
 
         public string ReadItemList(string key)
         {

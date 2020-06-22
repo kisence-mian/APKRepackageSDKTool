@@ -99,6 +99,48 @@ public class FileTool
         }
     }
 
+    /// <summary>
+    /// 复制文件夹（及文件夹下所有子文件夹和文件）并且对特定后缀文件进行操作
+    /// </summary>
+    /// <param name="sourcePath">待复制的文件夹路径</param>
+    /// <param name="destinationPath">目标路径</param>
+    public static void CopyDirectoryAndExecute(string sourcePath, string destinationPath,string expandName, FileRepeatErrorHandle repeatCallBack = null, FileRepeatAndExecuteHandle executeHandle = null)
+    {
+        DirectoryInfo info = new DirectoryInfo(sourcePath);
+        Directory.CreateDirectory(destinationPath);
+
+        foreach (FileSystemInfo fsi in info.GetFileSystemInfos())
+        {
+            string destName = Path.Combine(destinationPath, fsi.Name);
+            //Debug.Log(destName);
+
+            if (fsi is FileInfo)          //如果是文件，复制文件
+            {
+                if(fsi.FullName.EndsWith("." + expandName)  && executeHandle != null)
+                {
+                    executeHandle(sourcePath, destinationPath, fsi.FullName, destName);
+                }
+                else
+                {
+                    if (File.Exists(destName) && repeatCallBack != null)
+                    {
+                        repeatCallBack(fsi.FullName, destName);
+                    }
+                    else
+                    {
+                        File.Copy(fsi.FullName, destName);
+                    }
+                }
+            }
+            //如果是文件夹，新建文件夹，递归
+            else
+            {
+                Directory.CreateDirectory(destName);
+                CopyDirectoryAndExecute(fsi.FullName, destName,expandName, repeatCallBack, executeHandle);
+            }
+        }
+    }
+
     #endregion
 
     #region 忽视出错 (会跳过所有出错的操作,一般是用来无视权限)
@@ -118,14 +160,6 @@ public class FileTool
             if (Directory.Exists(pathTmp))
             {
                 SafeDeleteDirectory(pathTmp);
-                try
-                {
-                    Directory.Delete(pathTmp,false);
-                }
-                catch
-                {
-                    //Debug.LogError(e.ToString());
-                }
             }
         }
 
@@ -391,15 +425,15 @@ public class FileTool
                 {
                     if (item.EndsWith("." + expandName))
                     {
-                        handle(item);
+                        handle(path,item);
                     }
                 }
                 else
                 {
-                    handle(item);
+                    handle(path, item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Debug.LogError("RecursionFileExecute Error :" + item + " Exception:" + e.ToString());
             }
@@ -498,7 +532,7 @@ public class FileTool
             sr.Close();
             sr.Dispose();
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
 
@@ -533,7 +567,7 @@ public class FileTool
             FileTool.CreateFilePath(path);
             File.WriteAllBytes(path, byt);
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
     }
@@ -573,5 +607,6 @@ public class FileTool
     #endregion
 }
 
-public delegate void FileExecuteHandle(string filePath);
+public delegate void FileExecuteHandle(string fileDirectory, string filePath);
 public delegate void FileRepeatErrorHandle(string source,string dest);
+public delegate void FileRepeatAndExecuteHandle(string sourceDirectory,string destDirectory, string filePath, string dest);

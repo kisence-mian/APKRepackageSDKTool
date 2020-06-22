@@ -37,6 +37,7 @@ namespace APKRepackageSDKTool.UI
         KeyValueList manifestHeadList;
         KeyValueList usesList;
         KeyValueList applicationHeadList;
+        StringList firstDexList;
 
         ActivityInfo currentActivityInfo;
         KeyValue currentMainActivityProperty;
@@ -432,6 +433,34 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private StringList FirstDexList {
+            get
+            {
+                if (firstDexList == null)
+                {
+                    firstDexList = new StringList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.firstDexList.Count; i++)
+                    {
+                        firstDexList.Add(EditorData.CurrentSDKConfig.firstDexList[i]);
+                    }
+                }
+
+                return firstDexList;
+            }
+
+            set
+            {
+                firstDexList = value;
+                firstDexList.Change();
+
+                EditorData.CurrentSDKConfig.firstDexList.Clear();
+                for (int i = 0; i < firstDexList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.firstDexList.Add(firstDexList[i]);
+                }
+            }
+        }
+
         #endregion
 
         public SdkEditorWindow()
@@ -452,6 +481,7 @@ namespace APKRepackageSDKTool.UI
             ListBox_ManifestHeadList.ItemsSource = ManifestHeadList;
             ListBox_UsesList.ItemsSource = UsesList;
             ListBox_ApplicationHeadList.ItemsSource = ApplicationHeadList;
+            ListBox_FirstDexList.ItemsSource = FirstDexList;
 
             BindingEnum();
 
@@ -551,25 +581,23 @@ namespace APKRepackageSDKTool.UI
 
         private void Button_ClickDeleteFirstDex(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(TextBox_FirstDexName.Text))
-            {
-                Permission.Add(TextBox_FirstDexName.Text);
+            Button btn = sender as Button;
+            string key = (string)btn.Tag;
+            FirstDexList.Remove(key);
 
-                Permission = Permission;
-
-                TextBox_FirstDexName.Text = "";
-            }
+            FirstDexList = FirstDexList;
         }
 
         private void Button_ClickAddFirstDex(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
+            if (!string.IsNullOrEmpty(TextBox_FirstDexName.Text))
+            {
+                FirstDexList.Add(TextBox_FirstDexName.Text);
 
-            string key = (string)btn.Tag;
+                FirstDexList = FirstDexList;
 
-            Permission.Remove(key);
-
-            Permission = Permission;
+                TextBox_FirstDexName.Text = "";
+            }
         }
 
         #endregion

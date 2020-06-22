@@ -121,7 +121,13 @@ public class CompileTool
     public string ReplaceKeyWord(string oldContent, ChannelInfo channelInfo)
     {
         string result = oldContent;
-        result = result.Replace("{PackageName}", channelInfo.PackageName);
+
+        if (channelInfo != null)
+        {
+            result = result.Replace("{PackageName}", channelInfo.PackageName);
+            result = result.Replace("${applicationId}", channelInfo.PackageName);
+            //result = result.Replace("{applicationId}", channelInfo.PackageName);
+        }
 
         return result;
     }
@@ -130,9 +136,12 @@ public class CompileTool
     {
         string result = oldContent;
 
-        for (int i = 0; i < SDKinfo.sdkConfig.Count; i++)
+        if(SDKinfo != null)
         {
-            result = result.Replace("{"+ SDKinfo.sdkConfig[i].key + "}", SDKinfo.sdkConfig[i].value);
+            for (int i = 0; i < SDKinfo.sdkConfig.Count; i++)
+            {
+                result = result.Replace("{" + SDKinfo.sdkConfig[i].key + "}", SDKinfo.sdkConfig[i].value);
+            }
         }
 
         return result;

@@ -76,10 +76,12 @@
                     <Button Content="浏览" Margin="0,58,10,0" Click="Button_ClickJetifierPath" Height="19" VerticalAlignment="Top" RenderTransformOrigin="0.92,0.526" HorizontalAlignment="Right" Width="96"/>
 
                     <Label Content="Build Tool 版本" Margin="10,82,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <Label Content="API Level" Margin="10,106,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
                     <TextBox x:Name="Text_BuildToolVersion" TextChanged="Text_BuildToolVersion_TextChanged" Margin="130,82,400,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_APILevel" TextChanged="Text_APILevel_TextChanged" Margin="130,106,400,0"  PreviewTextInput="Text_APILevel_PreviewTextInput" InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
 
-                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,128,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
 
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
                 </Grid>

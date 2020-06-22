@@ -138,7 +138,10 @@ namespace APKRepackageSDKTool
 
                         //分包
                         MakeProgress("分包", i, channelList.Count, channelInfo.Name);
-                        channelTool.SplitDex(aimPath);
+                        if (channelInfo.IsSplitDex)
+                        {
+                            channelTool.SplitDex(aimPath, channelInfo);
+                        }
 
                         ////混淆DLL
                         //MakeProgress("混淆DLL", i, channelList.Count, channelInfo.Name);
@@ -146,7 +149,7 @@ namespace APKRepackageSDKTool
 
                         //重新生成R表
                         MakeProgress("重新生成R表", i, channelList.Count, channelInfo.Name);
-                        if (channelInfo.isDecodeResource)
+                        if (channelInfo.isDecodeResource && channelInfo.isRebuildRTable)
                         {
                             channelTool.Rebuild_R_Table(aimPath);
                         }
