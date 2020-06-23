@@ -5,68 +5,68 @@ using YamlDotNet.Serialization;
 
 namespace APKRepackageSDKTool.src
 {
-    public class YmlTool
-    {
-        YamlStream yaml = new YamlStream();
-        YamlMappingNode mapping;
+    //public class YmlTool
+    //{
+    //    YamlStream yaml = new YamlStream();
+    //    YamlMappingNode mapping = new YamlMappingNode();
 
-        //public YmlTool(string path)
-        //{
-        //    string content = FileTool.ReadStringByFile(path);
-        //    var input = new StringReader(content);
-        //    yaml.Load(input);
-        //    mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-        //}
+    //    //public YmlTool(string path)
+    //    //{
+    //    //    string content = FileTool.ReadStringByFile(path);
+    //    //    var input = new StringReader(content);
+    //    //    yaml.Load(input);
+    //    //    mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+    //    //}
 
-        public string ReadItemList(string key)
-        {
-            string result = "";
-            YamlSequenceNode items = (YamlSequenceNode)mapping.Children[new YamlScalarNode(key)];
+    //    public string ReadItemList(string key)
+    //    {
+    //        string result = "";
+    //        YamlSequenceNode items = (YamlSequenceNode)mapping.Children[new YamlScalarNode(key)];
 
-            foreach (var entry in items)
-            {
-                YamlScalarNode node = (YamlScalarNode)entry;
+    //        foreach (var entry in items)
+    //        {
+    //            YamlScalarNode node = (YamlScalarNode)entry;
 
-                result += node.Value + "\n";
-            }
+    //            result += node.Value + "\n";
+    //        }
 
-            return result;
-        }
+    //        return result;
+    //    }
 
-        public int ReadItemListCount(string key)
-        {
-            YamlSequenceNode items = (YamlSequenceNode)mapping.Children[new YamlScalarNode(key)];
-            int count = 0;
+    //    public int ReadItemListCount(string key)
+    //    {
+    //        YamlSequenceNode items = (YamlSequenceNode)mapping.Children[new YamlScalarNode(key)];
+    //        int count = 0;
 
-            foreach (var entry in items)
-            {
-                count++;
-            }
+    //        foreach (var entry in items)
+    //        {
+    //            count++;
+    //        }
 
-            return count;
-        }
+    //        return count;
+    //    }
 
-        public void RemoveItemList(string key)
-        {
-            YamlSequenceNode items = (YamlSequenceNode)mapping.Children[new YamlScalarNode(key)];
-        }
+    //    public void RemoveItemList(string key)
+    //    {
+    //        YamlSequenceNode items = (YamlSequenceNode)mapping.Children[new YamlScalarNode(key)];
+    //    }
 
-        public void Modify(string key,string value)
-        {
-            foreach (var entry in mapping.Children)
-            {
-                YamlScalarNode node = (YamlScalarNode)entry.Key;
-                if (node.Value == key)
-                {
-                    YamlScalarNode tmp = (YamlScalarNode)entry.Value;
-                    tmp.Value = value;
-                }
-            }
-        }
+    //    public void Modify(string key,string value)
+    //    {
+    //        foreach (var entry in mapping.Children)
+    //        {
+    //            YamlScalarNode node = (YamlScalarNode)entry.Key;
+    //            if (node.Value == key)
+    //            {
+    //                YamlScalarNode tmp = (YamlScalarNode)entry.Value;
+    //                tmp.Value = value;
+    //            }
+    //        }
+    //    }
 
-        public void Save()
-        {
-            //yaml.Save();
-        }
-    }
+    //    public void Save()
+    //    {
+    //        //yaml.Save();
+    //    }
+    //}
 }

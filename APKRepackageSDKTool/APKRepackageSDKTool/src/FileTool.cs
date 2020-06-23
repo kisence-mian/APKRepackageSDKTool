@@ -425,12 +425,12 @@ public class FileTool
                 {
                     if (item.EndsWith("." + expandName))
                     {
-                        handle(path,item);
+                        handle(item);
                     }
                 }
                 else
                 {
-                    handle(path, item);
+                    handle(item);
                 }
             }
             catch (Exception)
@@ -607,6 +607,6 @@ public class FileTool
     #endregion
 }
 
-public delegate void FileExecuteHandle(string fileDirectory, string filePath);
+public delegate void FileExecuteHandle(string filePath);
 public delegate void FileRepeatErrorHandle(string source,string dest);
 public delegate void FileRepeatAndExecuteHandle(string sourceDirectory,string destDirectory, string filePath, string dest);

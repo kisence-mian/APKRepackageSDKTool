@@ -457,17 +457,17 @@ namespace APKRepackageSDKTool
             EditorData.IsAutoInstall = CheckBox_IsAutoInstall.IsChecked ?? true;
         }
 
-        private void Button_ClickTest(object sender, RoutedEventArgs e)
-        {
-            string aimPath = PathTool.GetCurrentPath() + "\\20200226_1";
+        //private void Button_ClickTest(object sender, RoutedEventArgs e)
+        //{
+        //    string aimPath = PathTool.GetCurrentPath() + "\\20200226_1";
 
-            OutPutWindow opw = new OutPutWindow();
-            opw.Show();
+        //    OutPutWindow opw = new OutPutWindow();
+        //    opw.Show();
 
-            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+        //    ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
 
-            ct.Rebuild_R_Table(aimPath);
-        }
+        //    ct.Rebuild_R_Table(aimPath);
+        //}
 
         private void Text_APILevel_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

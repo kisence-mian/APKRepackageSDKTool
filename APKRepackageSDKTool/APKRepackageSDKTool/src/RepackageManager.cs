@@ -151,7 +151,7 @@ namespace APKRepackageSDKTool
                         MakeProgress("重新生成R表", i, channelList.Count, channelInfo.Name);
                         if (channelInfo.isDecodeResource && channelInfo.isRebuildRTable)
                         {
-                            channelTool.Rebuild_R_Table(aimPath);
+                            channelTool.Rebuild_R_Table(aimPath, channelInfo);
                         }
 
                         //重打包

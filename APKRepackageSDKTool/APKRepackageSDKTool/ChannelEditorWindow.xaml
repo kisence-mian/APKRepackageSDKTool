@@ -139,7 +139,7 @@
                     <CheckBox Content="重新生成R表" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRebuildRTable,Mode=TwoWay}" />
                     <CheckBox Content="修改MainActivity" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="{Binding IsChangeManiActivity,Mode=TwoWay}" />
                     <CheckBox Content="处理无效文件（移除xml文件名和内容中的所有 $ 符号）" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="{Binding IsExecuteInvalidFile,Mode=TwoWay}" />
-                    <CheckBox Content="使用aapt2" HorizontalAlignment="Left" Margin="22,90,0,0" VerticalAlignment="Top" IsChecked="{Binding IsUseAAPT2,Mode=TwoWay}" IsEnabled="False" />
+                    <CheckBox Content="使用aapt2" HorizontalAlignment="Left" Margin="22,90,0,0" VerticalAlignment="Top" IsChecked="{Binding IsUseAAPT2,Mode=TwoWay}" />
                     <CheckBox Content="输出日志" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLog,Mode=TwoWay}" />
                     <CheckBox Content="删除临时目录" HorizontalAlignment="Left" Margin="10,157,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDeleteTempPath, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" />
                     <Button Content="复制渠道配置" Margin="10,0,0,10" VerticalAlignment="Bottom" Click="Button_Click_Copy" HorizontalAlignment="Left" Width="126"/>

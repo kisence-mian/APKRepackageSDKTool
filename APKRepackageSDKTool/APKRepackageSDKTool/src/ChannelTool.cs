@@ -34,7 +34,7 @@ namespace APKRepackageSDKTool
         {
             if(info.IsExecuteInvalidFile)
             {
-                //处理无效文件
+                OutPut("处理无效文件");
                 ExecuteInvalidFile(filePath);
             }
 
@@ -125,7 +125,7 @@ namespace APKRepackageSDKTool
         void ExecuteInvalidFile(string filePath)
         {
             //递归替换关键字
-            FileTool.RecursionFileExecute(filePath + "\\res" , "xml", (dict, file) =>
+            FileTool.RecursionFileExecute(filePath + "\\res" , "xml", (file) =>
             {
                 String content = FileTool.ReadStringByFile(file);
 
@@ -711,43 +711,50 @@ namespace APKRepackageSDKTool
 
         #region 重新生成R表
 
-        public void Rebuild_R_Table(string aimPath)
+        public void Rebuild_R_Table(string aimPath,ChannelInfo channel)
         {
             OutPut("创建临时目录");
-            String R_Path = PathTool.GetCurrentPath() + "/R_path/";
+            String R_Path = PathTool.GetCurrentPath() + "\\R_path\\";
 
             FileTool.CreatePath(R_Path);
-            //OutPut("生成R文件");
-            //OutPut("生成的R文件的jar");
-            //OutPut("生成 dex文件");
-            //OutPut("生成smali文件");
-            //OutPut("替换smali文件");
 
-            //String androidPath = @"D:\AndroidSDK\platforms\android-28\android.jar";
-            string manifest = aimPath + "/AndroidManifest.xml";
-            string resPath = aimPath + "/res";
-            string smaliPath = aimPath + "/smali";
+            string manifest = aimPath + "\\AndroidManifest.xml";
+            string resPath = aimPath + "\\res";
+            string smaliPath = aimPath + "\\smali";
 
             CmdService cmd = new CmdService(OutPut, errorCallBack);
-
             OutPut("生成R.java文件");
 
-            //OutPut("R_Path " + R_Path + " resPath " + resPath + " manifest " + manifest);
-
             //生成R文件
-            cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest);
-            
-            //aapt2
-            //cmd.Execute(EditorData.GetAAPT2Path() + " link -I " + EditorData.GetAndroidJarPath(29) + " -java " + R_Path + " -A " + resPath + " --manifest " + manifest + " -v");
+            if (!channel.IsUseAAPT2)
+            {
+                cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest);
+            }
+            else
+            {
+                //aapt2
+                string tempRes = PathTool.GetCurrentPath() + "\\res.zip";
+                string tempAPK = PathTool.GetCurrentPath() + "\\apk.apk";
 
+                //编译
+                cmd.Execute(EditorData.GetAAPT2Path() + " compile --dir " + resPath + " -o " + tempRes,true,true);
+                //链接
+                cmd.Execute(EditorData.GetAAPT2Path() + " link " 
+                    + tempRes
+                    + " -I " + EditorData.GetAndroidJarPath(29) 
+                    + " --java " + R_Path 
+                    + " --manifest " + manifest 
+                    + " -o " + tempAPK, true, true);
+
+                //删除临时文件
+                File.Delete(tempAPK);
+                File.Delete(tempRes);
+            }
+
+            //转换smli文件
             if (FindRPath(R_Path) != null)
             {
-                //GBK转码
-                //string java = FileTool.ReadStringByFile(FindRPath(R_Path));
-                //java = compileTool.RemoveSpecialCode(java);
-                //FileTool.WriteStringByFile(FindRPath(R_Path),java);
-
-                //转换smli文件
+                //将smli中的R表ID赋值给生成出来的ID,避免出现资源找不到的情况
                 RTableUtil rt = new RTableUtil();
                 rt.callBack += OutPut;
                 rt.errorCallBack += ErrorOutPut;
@@ -768,7 +775,7 @@ namespace APKRepackageSDKTool
 
                 OutPut("Jar to dex");
                 //Jar to dex
-                cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+                cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ");
 
                 OutPut("dex to smali");
                 //dex to smali
@@ -784,8 +791,6 @@ namespace APKRepackageSDKTool
             //cmd.Execute("java -jar baksmali-2.1.3.jar classes.dex");
 
             OutPut("创建临时目录");
-
-
         }
 
         public string BuildRTable(string aimPath,string name,string sdkPath)
@@ -815,7 +820,7 @@ namespace APKRepackageSDKTool
                 string rPath = aimPath + "/R.txt";
 
                 ////替换ID
-                ////有时不同aar包的R.id 会冲突，这里使用aar自带的R.id，进行替换，如果还不行再改
+                ////有时不同aar包的R.id 会冲突，这里使用aar自带的R.id 进行替换，如果还不行再改
                 //result += RTableUtil.AnalysisRJava(javaPath);
 
                 //编译R.java文件
@@ -849,12 +854,6 @@ namespace APKRepackageSDKTool
             //Directory.Delete(R_Path);
 
             return result;
-        }
-
-        void ReplaceRID(string javaFile,string rFile)
-        {
-            //提取R.txt
-            //替换到R.java
         }
 
         String FindRPath(string path)
@@ -936,9 +935,7 @@ namespace APKRepackageSDKTool
 
         void PutSDKInterface(string filePath)
         {
-            //string interfacePath = EditorData.SdkLibPath + "\\Interface\\SdkInterface.jar";
-            //compileTool.Jar2Smali(interfacePath, filePath);
-
+            //将Interface文件夹中的所有jar放到apk中
             string libPath = EditorData.SdkLibPath + "\\Interface";
 
             List<string> jarList = FileTool.GetAllFileNamesByPath(libPath, new string[] { "jar" }, false);
@@ -1185,7 +1182,7 @@ namespace APKRepackageSDKTool
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
 
                     //递归替换关键字
-                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "ini", (dict,file) =>
+                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "ini", (file) =>
                     {
                         String content = FileTool.ReadStringByFile(file);
                         content = compileTool.ReplaceKeyWord(content, channelInfo);
@@ -1203,7 +1200,7 @@ namespace APKRepackageSDKTool
                     //合并xml时在同一文件夹下寻找相同字段去重
 
                     //递归替换关键字
-                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "xml", (dict, file) =>
+                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "xml", (file) =>
                     {
                         String content = FileTool.ReadStringByFile(file);
                         content = compileTool.ReplaceKeyWord(content, channelInfo);
@@ -1240,11 +1237,6 @@ namespace APKRepackageSDKTool
 
         void PutXML(string dict,string aimDict,string filePath,string aimPath)
         {
-            //if (filePath.Contains("values-v21"))
-            //{
-            //    int a = 1 + 2;
-            //}
-
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             XmlElement root = doc.DocumentElement;
@@ -1410,11 +1402,6 @@ namespace APKRepackageSDKTool
                     continue;
                 }
                 XmlElement ele = (XmlElement)tmp;
-
-                if (ele.GetAttribute("name")== "notification_media_narrow_margin")
-                {
-                    string a = "";
-                }
 
                if ((ele.Name == node.Name  || (ele.Name == "item" && ele.GetAttribute("type") == node.Name))
                     && ele.GetAttribute("name") == node.GetAttribute("name")
