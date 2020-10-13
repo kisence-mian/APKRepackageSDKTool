@@ -411,6 +411,7 @@ namespace APKRepackageSDKTool
             Text_BuildToolVersion.Text = EditorData.BuildToolVersion;
             Text_APILevel.Text = EditorData.APILevel.ToString();
 
+            CheckBox_IsTimeStamp.IsChecked = EditorData.IsTimeStamp;
             CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
             CheckBox_IsAutoInstall.IsChecked = EditorData.IsAutoInstall;
 
@@ -446,6 +447,11 @@ namespace APKRepackageSDKTool
         }
 
         #endregion
+
+        private void ChexkBox_IsTimeStamp_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorData.IsTimeStamp = CheckBox_IsTimeStamp.IsChecked ?? true;
+        }
 
         private void ChexkBox_IsPutCMD_Checked(object sender, RoutedEventArgs e)
         {

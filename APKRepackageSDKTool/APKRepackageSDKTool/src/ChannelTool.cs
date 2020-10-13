@@ -400,8 +400,12 @@ namespace APKRepackageSDKTool
             newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
 
             string xml = FileTool.ReadStringByFile(xmlPath);
-            int index = xml.IndexOf("<application") + 13;
-            xml = xml.Insert(index, newContent + " "); //最后加一个空格
+
+            if (!xml.Contains(newContent.Replace(" ","")))
+            {
+                int index = xml.IndexOf("<application") + 13;
+                xml = xml.Insert(index, newContent + " "); //最后加一个空格
+            }
 
             //直接保存
             XmlDocument xmlDoc = new XmlDocument();
@@ -1171,7 +1175,7 @@ namespace APKRepackageSDKTool
             {
                 string dirName = FileTool.GetDirectoryName(dir.FullName);
 
-                //只拷贝这三个目录
+                //只拷贝这四个目录
                 if(dirName.Contains("lib"))
                 {
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
@@ -1206,6 +1210,12 @@ namespace APKRepackageSDKTool
                         content = compileTool.ReplaceKeyWord(content, channelInfo);
                         content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
                     });
+                }
+
+                //合并smali文件
+                if (dirName.Contains("smali"))
+                {
+                    FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
                 }
             }
         }
@@ -1290,11 +1300,6 @@ namespace APKRepackageSDKTool
                 catch (Exception e)
                 {
                     string s = e.ToString();
-                }
-
-                if(ele != null && ele.GetAttribute("name") == "notification_media_narrow_margin" && aimTmp.BaseURI.Contains("dimen"))
-                {
-                    string a = aimTmp.ToString();
                 }
 
                 //判重
@@ -1491,8 +1496,8 @@ namespace APKRepackageSDKTool
             }
 
             OutPut("删除不必要的的库");
-            Delete(filePath + "/lib/x86");
-            Delete(filePath + "/lib/x86_64");
+            //Delete(filePath + "/lib/x86");
+            //Delete(filePath + "/lib/x86_64");
             Delete(filePath + "/lib/mips");
             Delete(filePath + "/lib/mips64");
         }
@@ -1553,14 +1558,17 @@ namespace APKRepackageSDKTool
         {
             string smaliPath = aimPath.Replace("\\", "/") + "/smali";
 
-            //将其他class的合并到主class中再进行分包
-            for (int i = 2; i <= 20; i++)
+            if(info.IsResplitDex)
             {
-                string pathTmp = aimPath.Replace("\\", "/") + "/smali_classes" + i;
-                if(Directory.Exists(pathTmp))
+                //将其他class的合并到主class中再进行分包
+                for (int i = 2; i <= 20; i++)
                 {
-                    FileTool.CopyDirectory(pathTmp, smaliPath, Repeat);
-                    FileTool.SafeDeleteDirectory(pathTmp);
+                    string pathTmp = aimPath.Replace("\\", "/") + "/smali_classes" + i;
+                    if (Directory.Exists(pathTmp))
+                    {
+                        FileTool.CopyDirectory(pathTmp, smaliPath, Repeat);
+                        FileTool.SafeDeleteDirectory(pathTmp);
+                    }
                 }
             }
 

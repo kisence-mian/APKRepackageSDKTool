@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -106,9 +107,22 @@ namespace APKRepackageSDKTool
                         string apkPath = aimPath + "\\dist\\" + fileName;
                         string finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + ".apk";
 
+                        DateTime now = DateTime.Now;
+
                         if (!string.IsNullOrEmpty(channelInfo.suffix))
                         {
-                            finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix + ".apk";
+                            if(EditorData.IsTimeStamp)
+                            {
+                                //移除旧的时间戳
+                                fileName = Regex.Replace(fileName, @"\d+_\d+", "");
+
+                                //加时间戳
+                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + now.ToString("yyyyMMdd_HHmm")+ "_" + channelInfo.suffix + ".apk";
+                            }
+                            else
+                            {
+                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix + ".apk";
+                            }
                         }
 
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);

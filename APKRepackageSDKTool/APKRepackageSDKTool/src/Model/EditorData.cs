@@ -34,6 +34,7 @@ namespace APKRepackageSDKTool
         static string buildToolVersion;
         static int apiLevel;
 
+        public static bool isTimeStamp = false;      //时间戳
         public static bool isOutPutCMD = false;      //输出原始命令
         public static bool isAutoInstall = false;      //自动安装
 
@@ -177,6 +178,22 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public static bool IsTimeStamp
+        {
+            get
+            {
+                JudgeInit();
+                return isTimeStamp;
+            }
+
+            set
+            {
+                isTimeStamp = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "IsTimeStamp", isTimeStamp);
+            }
+
+        }
+
         public static bool IsOutPutCMD 
         { 
             get
@@ -223,6 +240,8 @@ namespace APKRepackageSDKTool
             }
         }
 
+
+
         #endregion
 
         #region 初始化
@@ -250,7 +269,8 @@ namespace APKRepackageSDKTool
 
                 isOutPutCMD = RecordManager.GetRecord(c_ConfigRecord, "IsOutPutCMD", false);
                 isAutoInstall = RecordManager.GetRecord(c_ConfigRecord, "IsAutoInstall", false);
-
+                isTimeStamp = RecordManager.GetRecord(c_ConfigRecord, "IsTimeStamp", false);
+                
                 UpdateTotalSDKInfo();
             }
         }
@@ -532,6 +552,7 @@ namespace APKRepackageSDKTool
         public string appBanner;
 
         public bool isSplitDex = true; //分包
+        public bool isResplitDex = true; //重新分包
         public bool isRebuildRTable = true; //重新生成R表
         public bool isDecodeResource = true; //反编译Resource文件
         public bool isUseAAPT2 = false; //使用AAPT2
@@ -568,6 +589,7 @@ namespace APKRepackageSDKTool
         public bool IsUseAAPT2 { get => isUseAAPT2; set => isUseAAPT2 = value; }
         public bool IsChangeManiActivity { get => isChangeMainActivity; set => isChangeMainActivity = value; }
         public bool IsExecuteInvalidFile { get => isExecuteInvalidFile; set => isExecuteInvalidFile = value; }
+        public bool IsResplitDex { get => isResplitDex; set => isResplitDex = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

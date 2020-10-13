@@ -80,8 +80,9 @@
                     <TextBox x:Name="Text_BuildToolVersion" TextChanged="Text_BuildToolVersion_TextChanged" Margin="130,82,400,0" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
                     <TextBox x:Name="Text_APILevel" TextChanged="Text_APILevel_TextChanged" Margin="130,106,400,0"  PreviewTextInput="Text_APILevel_PreviewTextInput" InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
 
-                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsTimeStamp" Content="APK名称添加时间戳" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsTimeStamp_Checked" Checked="ChexkBox_IsTimeStamp_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
 
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
                 </Grid>

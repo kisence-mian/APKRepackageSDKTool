@@ -431,7 +431,7 @@
                     </ListBox>
                     <Button Content="新增" Margin="0,0,10,10" Height="19" VerticalAlignment="Bottom" Click="Button_ClickAddFirstDex" HorizontalAlignment="Right" Width="75" />
                     <TextBox x:Name="TextBox_FirstDexName" Margin="10,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
-                    <Label Content="java包名包含下列字符串的会被放在第一个Dex包中" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="659"/>
+                    <Label Content="java包名包含下列字符串的会被放在第一个Dex包中,格式为 com/xxx/xxx" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="659"/>
                 </Grid>
             </TabItem>
             <TabItem Header="其他设置">

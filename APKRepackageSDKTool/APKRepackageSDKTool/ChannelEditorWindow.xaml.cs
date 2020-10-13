@@ -288,8 +288,6 @@ namespace APKRepackageSDKTool
             string content = Serializer.Serialize(s_CopyChannelInfo);
 
             Clipboard.SetDataObject(content, true);
-
-            MessageBox.Show("LanguageWindow.currentLanuage.Count " + EditorData.CurrentChannel.appNameLanguages.Count);
             MessageBox.Show("复制成功");
         }
 
