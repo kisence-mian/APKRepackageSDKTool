@@ -136,15 +136,18 @@
                 <Grid Background="#FFF9F9F9">
                     <!--<CheckBox Content="编译资源（解包时不会反编译Resources文件夹，不勾选时请确认SDK没有对res的操作）" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDecodeResource, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" IsEnabled="False" />-->
                     <CheckBox Content="分包" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsSplitDex,Mode=TwoWay}" />
-                        <CheckBox Content="重新分包" HorizontalAlignment="Left" Margin="29,29,0,0" VerticalAlignment="Top" IsChecked="{Binding IsResplitDex,Mode=TwoWay}" />
+                    <CheckBox Content="重新分包" HorizontalAlignment="Left" Margin="29,29,0,0" VerticalAlignment="Top" IsChecked="{Binding IsResplitDex,Mode=TwoWay}" />
                     <CheckBox Content="修改MainActivity" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" IsChecked="{Binding IsChangeManiActivity,Mode=TwoWay}" />
                     <CheckBox Content="处理无效文件（移除xml文件名和内容中的所有 $ 符号）" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" IsChecked="{Binding IsExecuteInvalidFile,Mode=TwoWay}" />
-                    <CheckBox Content="重新生成R表" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRebuildRTable,Mode=TwoWay}" />
-                        <CheckBox Content="使用aapt2" HorizontalAlignment="Left" Margin="28,107,0,0" VerticalAlignment="Top" IsChecked="{Binding IsUseAAPT2,Mode=TwoWay}" />
-                    
-                    
-                    <CheckBox Content="输出日志" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLog,Mode=TwoWay}" />
-                    <CheckBox Content="删除临时目录" HorizontalAlignment="Left" Margin="10,157,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDeleteTempPath, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" />
+
+                    <CheckBox Content="只反编译主Classes文件" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" IsChecked="{Binding IsOnlyMainClasses,Mode=TwoWay}" />
+                    <CheckBox Content="强制反编译清单文件(反编译Resource文件)" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" IsChecked="{Binding IsForceManifest,Mode=TwoWay}"  />
+
+                    <CheckBox Content="重新生成R表" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRebuildRTable,Mode=TwoWay}" />
+                    <CheckBox Content="使用aapt2" HorizontalAlignment="Left" Margin="28,168,0,0" VerticalAlignment="Top" IsChecked="{Binding IsUseAAPT2,Mode=TwoWay}" />
+
+                    <CheckBox Content="输出日志" HorizontalAlignment="Left" Margin="10,198,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLog,Mode=TwoWay}" />
+                    <CheckBox Content="删除临时目录" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDeleteTempPath, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" />
                     <Button Content="复制渠道配置" Margin="10,0,0,10" VerticalAlignment="Bottom" Click="Button_Click_Copy" HorizontalAlignment="Left" Width="126"/>
                     <Button Content="粘贴渠道配置" Margin="155,0,0,10" Click="Button_Click_paste" HorizontalAlignment="Left" Width="126" Height="19" VerticalAlignment="Bottom"/>
                 </Grid>

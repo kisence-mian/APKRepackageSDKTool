@@ -554,7 +554,8 @@ namespace APKRepackageSDKTool
         public bool isSplitDex = true; //分包
         public bool isResplitDex = true; //重新分包
         public bool isRebuildRTable = true; //重新生成R表
-        public bool isDecodeResource = true; //反编译Resource文件
+        public bool isForceManifest = false; //强制反编译清单文件(反编译Resource文件)
+        public bool isOnlyMainClasses = false; //只反编译主Classes文件(解决混淆问题)
         public bool isUseAAPT2 = false; //使用AAPT2
         public bool isChangeMainActivity = true; //修改ManinActivity
         public bool isExecuteInvalidFile = true; //处理无效文件
@@ -582,7 +583,7 @@ namespace APKRepackageSDKTool
         public string ApktoolVersion { get => apktoolVersion; set => apktoolVersion = value; }
         public bool IsLog { get => isLog; set => isLog = value; }
         public bool IsDeleteTempPath { get => isDeleteTempPath; set => isDeleteTempPath = value; }
-        public bool IsDecodeResource { get => isDecodeResource; set => isDecodeResource = value; }
+        public bool IsForceManifest { get => isForceManifest; set => isForceManifest = value; }
         public List<KeyValue> AppNameLanguages { get => appNameLanguages; set => appNameLanguages = value; }
         public bool IsSplitDex { get => isSplitDex; set => isSplitDex = value; }
         public bool IsRebuildRTable { get => isRebuildRTable; set => isRebuildRTable = value; }
@@ -590,6 +591,7 @@ namespace APKRepackageSDKTool
         public bool IsChangeManiActivity { get => isChangeMainActivity; set => isChangeMainActivity = value; }
         public bool IsExecuteInvalidFile { get => isExecuteInvalidFile; set => isExecuteInvalidFile = value; }
         public bool IsResplitDex { get => isResplitDex; set => isResplitDex = value; }
+        public bool IsOnlyMainClasses { get => isOnlyMainClasses; set => isOnlyMainClasses = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -639,7 +641,7 @@ namespace APKRepackageSDKTool
                     return this[i];
                 }
             }
-            throw new Exception("找不到SDK设置！ " + sdkName);
+            throw new Exception("找不到SDK设置！ SdkName ->" + sdkName + "<-");
         }
     }
 
