@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -480,6 +481,26 @@ namespace APKRepackageSDKTool
             Regex re = new Regex("[^0-9]+");
             e.Handled = re.IsMatch(e.Text);
         }
+
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //合并测试功能
+
+        //    OutPutWindow opw = new OutPutWindow();
+
+        //    string sdkPath = @"E:\文件\发布物料\喵星人简史\渠道\OKGAME\okjoy_sdk_ independent_v1.0.3_20210410\OkJoySdkDemo\app\release\apk\res\values";
+        //    string aimPath = @"E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\20210423\res\values";
+
+        //    MergeXMLTool mt = new MergeXMLTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+        //    opw.Show();
+
+        //    var thread =  new Thread(()=> {
+
+        //        //生成R表
+        //        mt.Merge(sdkPath, aimPath);
+        //    });
+        //    thread.Start();
+        //}
 
         //private void ComboBox_gameList_Selected(object sender, SelectionChangedEventArgs e)
         //{

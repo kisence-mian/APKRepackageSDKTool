@@ -1398,8 +1398,13 @@ namespace APKRepackageSDKTool.UI
                 //合并res
                 if (Directory.Exists(path + "/res"))
                 {
+                    MergeResTool mergeRes = new MergeResTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
                     ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-                    ct.MergeXMLFile(path + "/res", aimPath + "/res");
+
+                    mergeRes.Merge(path + "/res", aimPath + "/res");
+
+                    //MergeXMLTool mergeXMLTool = new MergeXMLTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                    //mergeXMLTool.Merge(path + "/res", aimPath + "/res");
 
                     //生成R表
                     rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
@@ -1673,11 +1678,16 @@ namespace APKRepackageSDKTool.UI
 
             CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
 
-
             List<string> allJar =  FileTool.GetAllFileNamesByPath(path, new string[] { "jar" }, true);
             for (int i = 0; i < allJar.Count; i++)
             {
                 ConvertAndroidX(allJar[i],cot);
+            }
+
+            List<string> allAar = FileTool.GetAllFileNamesByPath(path, new string[] { "aar" }, true);
+            for (int i = 0; i < allAar.Count; i++)
+            {
+                ConvertAARAndroidX(allAar[i], cot);
             }
         }
 
@@ -1685,7 +1695,7 @@ namespace APKRepackageSDKTool.UI
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Filter = "JAR Files (*.jar)|*.jar"
+                Filter = "JAR Files (*.jar)|*.jar|AAR Files (*.aar)|*.aar"
             };
             var result = openFileDialog.ShowDialog();
             if (result == true)
@@ -1694,7 +1704,15 @@ namespace APKRepackageSDKTool.UI
                 opw.Show();
 
                 CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-                ConvertAndroidX(openFileDialog.FileName, cot);
+
+                if(FileTool.GetExpandName( openFileDialog.FileName) == "aar")
+                {
+                    ConvertAARAndroidX(openFileDialog.FileName, cot);
+                }
+                else
+                {
+                    ConvertAndroidX(openFileDialog.FileName, cot);
+                }
             }
         }
 
@@ -1703,10 +1721,21 @@ namespace APKRepackageSDKTool.UI
             string path = FileTool.GetFileDirectory(jarPath);
             string name = FileTool.RemoveExpandName(FileTool.GetFileNameByPath(jarPath));
             string newJarPath = path + "/" + name + "_AndroidX.jar";
-            cot.Convert2AndroidX(jarPath, newJarPath);
+            cot.Convert2AndroidX(jarPath ,  newJarPath );
 
             //删除旧目录
             FileTool.DeleteFile(jarPath);
+        }
+
+        void ConvertAARAndroidX(string aarPath, CompileTool cot)
+        {
+            string path = FileTool.GetFileDirectory(aarPath);
+            string name = FileTool.RemoveExpandName(FileTool.GetFileNameByPath(aarPath));
+            string newAarPath = path + "/" + name + "_AndroidX.aar";
+            cot.Convert2AndroidX(aarPath, newAarPath);
+
+            //删除旧目录
+            FileTool.DeleteFile(aarPath);
         }
 
         #endregion
@@ -1796,6 +1825,7 @@ namespace APKRepackageSDKTool.UI
             content += "{字段名}会自动替换成对应字段\n\n";
 
             content += "Manifest中同名的字段将被替换\n";
+            content += "不需要全文输入，只需要填写 key 和 value 即可\n";
 
             MessageBox.Show(content);
         }

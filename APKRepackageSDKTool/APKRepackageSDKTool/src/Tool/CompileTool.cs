@@ -113,7 +113,7 @@ public class CompileTool
         }
         else
         {
-            m_cmd.Execute(EditorData.JetifierPath + "/jetifier-standalone.bat  -i " + inputJar + " -o " + outPutJar);
+            m_cmd.Execute(EditorData.JetifierPath + "/jetifier-standalone.bat  -i \"" + inputJar + "\" -o \"" + outPutJar + "\"");
             callBack(inputJar + " 转换完毕");
         }
     }

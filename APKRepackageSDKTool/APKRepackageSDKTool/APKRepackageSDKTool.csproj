@@ -74,24 +74,26 @@
     <Compile Include="ChannelEditorWindow.xaml.cs">
       <DependentUpon>ChannelEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\ChannelTool.cs" />
+    <Compile Include="src\Tool\ChannelTool.cs" />
     <Compile Include="GameSetting.xaml.cs">
       <DependentUpon>GameSetting.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\CmdService.cs" />
-    <Compile Include="src\CompileTool.cs" />
+    <Compile Include="src\Tool\CmdService.cs" />
+    <Compile Include="src\Tool\CompileTool.cs" />
     <Compile Include="src\Define\KeyValueList.cs" />
     <Compile Include="src\Define\SDKInterfaceDefine.cs" />
-    <Compile Include="src\DeJson.cs" />
-    <Compile Include="src\FileTool.cs" />
-    <Compile Include="src\MiniJSON.cs" />
+    <Compile Include="src\Tool\DeJson.cs" />
+    <Compile Include="src\Tool\FileTool.cs" />
+    <Compile Include="src\Tool\MergeResTool.cs" />
+    <Compile Include="src\Tool\MergeXMLTool.cs" />
+    <Compile Include="src\Tool\MiniJSON.cs" />
     <Compile Include="src\Model\EditorData.cs" />
-    <Compile Include="src\PathTool.cs" />
+    <Compile Include="src\Tool\PathTool.cs" />
     <Compile Include="src\RecordManager.cs" />
     <Compile Include="src\RepackageManager.cs" />
-    <Compile Include="src\RTableUtil.cs" />
-    <Compile Include="src\YML\YML.cs" />
-    <Compile Include="src\YML\YmlTool.cs" />
+    <Compile Include="src\Tool\RTableUtil.cs" />
+    <Compile Include="src\Tool\YML\YML.cs" />
+    <Compile Include="src\Tool\YML\YmlTool.cs" />
     <Compile Include="UI\LanguageWindow.xaml.cs">
       <DependentUpon>LanguageWindow.xaml</DependentUpon>
     </Compile>

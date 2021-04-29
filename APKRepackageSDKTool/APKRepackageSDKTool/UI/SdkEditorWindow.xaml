@@ -161,7 +161,7 @@
                     </Grid>
                     <Grid  Grid.Column="2">
                         <TextBox x:Name="TextBox_mainPropertyContent" Margin="10,34,10,10" TextWrapping="Wrap" TextChanged="TextBox_MainActivityPropertyContent_TextChanged"  VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsEnabled="False"/>
-                        <Button Content="说明" HorizontalAlignment="Left" Margin="364,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_MianActivityInfo_Click"/>
+                        <Button Content="说明（特殊）" HorizontalAlignment="Left" Margin="344,10,0,0" VerticalAlignment="Top" Width="95" Click="Button_MianActivityInfo_Click"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -441,7 +441,7 @@
 
                     <Label Content="TargetSDKVersion" Margin="10,45,342,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=TargetSDKVersion}" Margin="155,45,10,0" VerticalAlignment="Top"/>
-                    <Label Content="Application Name" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
+                    <Label Content="   Name" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding ApplicationName}" Margin="155,88,10,0" VerticalAlignment="Top"/>
 
                     <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="10,132,10,173"/>

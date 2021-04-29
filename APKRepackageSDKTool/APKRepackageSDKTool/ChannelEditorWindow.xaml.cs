@@ -238,11 +238,13 @@ namespace APKRepackageSDKTool
         private void Button_QuickAddConfigKey(object sender, RoutedEventArgs e)
         {
             AddConfig(SDKInterfaceDefine.PropertiesKey_ChannelName, EditorData.CurrentChannel.Name);
-            AddConfig(SDKInterfaceDefine.PropertiesKey_SelectNetworkPath, "https://xxx");
-            AddConfig(SDKInterfaceDefine.PropertiesKey_UpdateDownLoadPath, "https://xxx");
             AddConfig(SDKInterfaceDefine.PropertiesKey_StoreName, EditorData.CurrentChannel.Name);
             AddConfig(SDKInterfaceDefine.PropertiesKey_LoginPlatform, "Tourist|AccountLogin|" + EditorData.CurrentChannel.Name);
-            AddConfig(SDKInterfaceDefine.PropertiesKey_NetworkID, "0");
+
+            AddConfig(SDKInterfaceDefine.PropertiesKey_SelectServerURL, "http://");
+            //AddConfig(SDKInterfaceDefine.PropertiesKey_NetworkID, "0");
+            //AddConfig(SDKInterfaceDefine.PropertiesKey_SelectNetworkPath, "https://xxx");
+            //AddConfig(SDKInterfaceDefine.PropertiesKey_UpdateDownLoadPath, "https://xxx");
         }
 
         void AddConfig(string key, string value)

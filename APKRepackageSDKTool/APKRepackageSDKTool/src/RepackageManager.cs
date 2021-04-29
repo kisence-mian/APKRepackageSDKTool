@@ -177,6 +177,12 @@ namespace APKRepackageSDKTool
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
                         cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath,true,true);
 
+                        //判断apk是否存在
+                        if(!File.Exists(apkPath))
+                        {
+                            throw new Exception("重打包失败！");
+                        }
+
                         //进行签名
                         MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);
                         cmd.Execute("jarsigner" // -verbose
@@ -189,9 +195,16 @@ namespace APKRepackageSDKTool
                             + " " + channelInfo.KeyStoreAlias
                             );
 
-                        //进行字节对齐并导出到最终目录
-                        MakeProgress("进行字节对齐并导出到最终目录", i, channelList.Count, channelInfo.Name);
-                        cmd.Execute(EditorData.GetZipalignPath() + " -f  4 " + apkPath + " " + finalPath);
+                        if(channelInfo.IsZipalign)
+                        {
+                            //进行字节对齐并导出到最终目录
+                            MakeProgress("进行字节对齐并导出到最终目录", i, channelList.Count, channelInfo.Name);
+                            cmd.Execute(EditorData.GetZipalignPath() + " -f  4 " + apkPath + " " + finalPath);
+                        }
+                        else
+                        {
+                            MakeProgress("跳过字节对齐", i, channelList.Count, channelInfo.Name);
+                        }
 
                         if(EditorData.IsAutoInstall)
                         {

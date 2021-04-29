@@ -557,9 +557,11 @@ namespace APKRepackageSDKTool
         public bool isForceManifest = false; //强制反编译清单文件(反编译Resource文件)
         public bool isOnlyMainClasses = false; //只反编译主Classes文件(解决混淆问题)
         public bool isUseAAPT2 = false; //使用AAPT2
+        public bool isChangeMainApplication = false; //修改ManinApplication
         public bool isChangeMainActivity = true; //修改ManinActivity
         public bool isExecuteInvalidFile = true; //处理无效文件
         public bool isLog;  //输出日志
+        public bool isZipalign = true; //字节对齐
         public bool isDeleteTempPath = true;  //删除临时目录
 
         public string apktoolVersion = "apktool";
@@ -586,12 +588,15 @@ namespace APKRepackageSDKTool
         public bool IsForceManifest { get => isForceManifest; set => isForceManifest = value; }
         public List<KeyValue> AppNameLanguages { get => appNameLanguages; set => appNameLanguages = value; }
         public bool IsSplitDex { get => isSplitDex; set => isSplitDex = value; }
+        public bool IsResplitDex { get => isResplitDex; set => isResplitDex = value; }
         public bool IsRebuildRTable { get => isRebuildRTable; set => isRebuildRTable = value; }
         public bool IsUseAAPT2 { get => isUseAAPT2; set => isUseAAPT2 = value; }
-        public bool IsChangeManiActivity { get => isChangeMainActivity; set => isChangeMainActivity = value; }
+        public bool IsChangeMainApplication { get => isChangeMainApplication; set => isChangeMainApplication = value; }
+        public bool IsChangeMainActivity { get => isChangeMainActivity; set => isChangeMainActivity = value; }
         public bool IsExecuteInvalidFile { get => isExecuteInvalidFile; set => isExecuteInvalidFile = value; }
-        public bool IsResplitDex { get => isResplitDex; set => isResplitDex = value; }
+
         public bool IsOnlyMainClasses { get => isOnlyMainClasses; set => isOnlyMainClasses = value; }
+        public bool IsZipalign { get => isZipalign; set => isZipalign = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

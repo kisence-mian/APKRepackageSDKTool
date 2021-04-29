@@ -71,8 +71,14 @@ namespace APKRepackageSDKTool
                 OutPut("替换AppBanner");
                 ChangeAppBanner(filePath, info.AppBanner);
             }
-            
-            if(info.isChangeMainActivity)
+
+            if (info.IsChangeMainApplication)
+            {
+                OutPut("替换MainApplication");
+                ChangeApplicationName(filePath, "sdkInterface.application.MainApplication");
+            }
+
+            if (info.isChangeMainActivity)
             {
                 OutPut("替换MainActity");
                 ChangeMainActity(filePath);
@@ -732,7 +738,11 @@ namespace APKRepackageSDKTool
             //生成R文件
             if (!channel.IsUseAAPT2)
             {
-                cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest);
+                cmd.Execute(EditorData.GetAAPTPath() + " package -f"
+                    + " -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) 
+                    + " -m -J " + R_Path 
+                    + " -S " + resPath
+                    + " -M " + manifest);
             }
             else
             {
@@ -745,7 +755,7 @@ namespace APKRepackageSDKTool
                 //链接
                 cmd.Execute(EditorData.GetAAPT2Path() + " link " 
                     + tempRes
-                    + " -I " + EditorData.GetAndroidJarPath(29) 
+                    + " -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) 
                     + " --java " + R_Path 
                     + " --manifest " + manifest 
                     + " -o " + tempAPK, true, true);
@@ -997,6 +1007,11 @@ namespace APKRepackageSDKTool
                 content += "IsLog=true\n";
             }
 
+            if (info.IsSplitDex)
+            {
+                content += "IsMultiDex=true\n";
+            }
+
             FileTool.WriteStringByFile(path, content);
         }
 
@@ -1167,6 +1182,9 @@ namespace APKRepackageSDKTool
 
         void CopyFile(string filePath,SDKInfo info, ChannelInfo channelInfo)
         {
+            //TODO 这里如果可以通过aapt取代当然最好
+
+
             string SDKPath = EditorData.SdkLibPath + "\\" + info.sdkName;
 
             DirectoryInfo directoryInfo = new DirectoryInfo(SDKPath);
@@ -1178,11 +1196,13 @@ namespace APKRepackageSDKTool
                 //只拷贝这四个目录
                 if(dirName.Contains("lib"))
                 {
+                    OutPut("拷贝lib文件 " + info.sdkName + " " + dirName);
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
                 }
 
                 if(dirName.Contains("assets"))
                 {
+                    OutPut("拷贝assets文件 " + info.sdkName + " " + dirName);
                     FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
 
                     //递归替换关键字
@@ -1197,229 +1217,21 @@ namespace APKRepackageSDKTool
                 }
 
                 //合并res文件
-                if(dirName.Contains("res"))
+                if (dirName.Contains("res"))
                 {
-                    FileTool.CopyDirectoryAndExecute(dir.FullName, filePath + "\\" + dirName,"xml", RepeatHandle, PutXML);
-
-                    //合并xml时在同一文件夹下寻找相同字段去重
-
-                    //递归替换关键字
-                    FileTool.RecursionFileExecute(filePath + "\\" + dirName, "xml", (file) =>
-                    {
-                        String content = FileTool.ReadStringByFile(file);
-                        content = compileTool.ReplaceKeyWord(content, channelInfo);
-                        content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
-                    });
+                    OutPut("合并res文件夹 " + info.sdkName + " " + dirName);
+                    MergeResTool mergeRes = new MergeResTool(callBack, errorCallBack);
+                    mergeRes.Merge(dir.FullName, filePath + "\\res");
                 }
 
                 //合并smali文件
                 if (dirName.Contains("smali"))
                 {
-                    FileTool.CopyDirectory(dir.FullName, filePath + "\\" + dirName);
+                    OutPut("合并smali文件 " + info.sdkName + " " + dirName);
+                    FileTool.SafeCopyDirectory(dir.FullName, filePath + "\\" + dirName);
                 }
             }
         }
-
-        public void MergeXMLFile(string PathA, string PathB)
-        {
-            FileTool.CopyDirectory(PathA, PathB , RepeatHandle);
-        }
-
-        void RepeatHandle(string fileA,string fileB)
-        {
-            OutPut("合并文件 " + fileA + " ->" + fileB);
-
-            //只支持合并xml
-            if(fileA.Contains("xml") && fileB.Contains("xml"))
-            {
-                AppadnXML(fileA, fileB);
-            }
-            else if (fileA.Contains("png") && fileB.Contains("png"))
-            {
-                //跳过PNG
-                OutPut("跳过PNG 合并" + fileA);
-            }
-            else
-            {
-                ErrorOutPut("不支持的合并类型" + fileA + " ->" + fileB);
-            }
-        }
-
-        void PutXML(string dict,string aimDict,string filePath,string aimPath)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(filePath);
-            XmlElement root = doc.DocumentElement;
-
-            //遍历目录下的所有xml文件
-            List<string> list = FileTool.GetAllFileNamesByPath(aimDict, new string[] { "xml" }, false);
-            for (int i = 0; i < list.Count; i++)
-            {
-                XmlDocument dTmp = new XmlDocument();
-                dTmp.Load(list[i]);
-                XmlElement rTmp = dTmp.DocumentElement;
-
-                RecursionJudgeRepeatXml(root, rTmp);
-            }
-
-            if(!File.Exists(aimPath))
-            {
-                doc.Save(aimPath);
-            }
-            else
-            {
-                AppadnXML(doc, aimPath);
-            }
-        }
-
-        void RecursionJudgeRepeatXml(XmlElement root,XmlElement aimTmp)
-        {
-            List<XmlNode> list = new List<XmlNode>();
-            for (int i = 0; i < root.ChildNodes.Count; i++)
-            {
-                list.Add(root.ChildNodes[i]);
-            }
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                XmlNode node = list[i];
-                XmlElement ele = null;
-                //跳过注释
-                if (node.NodeType == XmlNodeType.Comment
-                    //|| node.NodeType == XmlNodeType.Text
-                    //|| node.NodeType == XmlNodeType.Element
-                    )
-                {
-                    continue;
-                }
-
-                try
-                {
-                    ele = (XmlElement)node;
-                }
-                catch (Exception e)
-                {
-                    string s = e.ToString();
-                }
-
-                //判重
-                if (ele!= null && IsRepeatNodeNameOnly(aimTmp, ele))
-                {
-                    root.RemoveChild(node);
-                }
-
-                if (node.HasChildNodes && ele != null)
-                {
-                    RecursionJudgeRepeatXml(ele, aimTmp);
-                }
-            }
-        }
-
-        void AppadnXML(string fileA, string fileB)
-        {
-            XmlDocument doca = new XmlDocument();
-            doca.Load(fileA);
-
-            XmlDocument docb = new XmlDocument();
-            docb.Load(fileB);
-
-            // 分别获取两个文档的根元素，以便于合并
-            XmlElement rootA = doca.DocumentElement;
-            XmlElement rootB = docb.DocumentElement;
-
-            foreach (XmlNode node in rootA.ChildNodes)
-            {
-                //判重
-                if(!IsRepeatNode(rootB, node))
-                {
-                    // 先导入节点
-                    XmlNode n = docb.ImportNode(node, true);
-
-                    // 然后，插入指定的位置
-                    rootB.AppendChild(n);
-                }
-            }
-
-            docb.Save(fileB);
-        }
-
-        void AppadnXML(XmlDocument doca, string fileB)
-        {
-            XmlDocument docb = new XmlDocument();
-            docb.Load(fileB);
-
-            // 分别获取两个文档的根元素，以便于合并
-            XmlElement rootA = doca.DocumentElement;
-            XmlElement rootB = docb.DocumentElement;
-
-            foreach (XmlNode node in rootA.ChildNodes)
-            {
-                //判重
-                if (!IsRepeatNode(rootB, node))
-                {
-                    // 先导入节点
-                    XmlNode n = docb.ImportNode(node, true);
-
-                    // 然后，插入指定的位置
-                    rootB.AppendChild(n);
-                }
-            }
-
-            docb.Save(fileB);
-        }
-
-        bool IsRepeatNode(XmlElement root, XmlNode node)
-        {
-            for (int i = 0; i < root.ChildNodes.Count; i++)
-            {
-                XmlNode tmp = root.ChildNodes[i];
-
-                //跳过注释
-                if(tmp.NodeType == XmlNodeType.Comment)
-                {
-                    continue;
-                }
-
-                XmlElement ele = (XmlElement)tmp;
-
-                if(ele.Name == node.Name 
-                    && ele.OuterXml == node .OuterXml)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        bool IsRepeatNodeNameOnly(XmlElement root, XmlElement node)
-        {
-            for (int i = 0; i < root.ChildNodes.Count; i++)
-            {
-                XmlNode tmp = root.ChildNodes[i];
-
-                //跳过注释
-                if (tmp.NodeType == XmlNodeType.Comment 
-                    //|| tmp.NodeType == XmlNodeType.Text
-                    //|| tmp.NodeType == XmlNodeType.Element
-                    )
-                {
-                    continue;
-                }
-                XmlElement ele = (XmlElement)tmp;
-
-               if ((ele.Name == node.Name  || (ele.Name == "item" && ele.GetAttribute("type") == node.Name))
-                    && ele.GetAttribute("name") == node.GetAttribute("name")
-                    && ele.GetAttribute("name") != string.Empty
-                    && ele.GetAttribute("name") != null)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         #endregion
 
         #region 整合SDK

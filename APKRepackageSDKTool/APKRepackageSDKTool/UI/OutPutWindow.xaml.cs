@@ -21,6 +21,8 @@ namespace APKRepackageSDKTool.UI
     {
         bool isError = false;
         string content = "";
+
+        StringBuilder sb = new StringBuilder();
         public OutPutWindow()
         {
             InitializeComponent();
@@ -29,6 +31,7 @@ namespace APKRepackageSDKTool.UI
         public void ReceviceOutPut(string output)
         {
             content += output + "\n";
+
 
             Action ac = new Action(UpdateContent);
             Dispatcher.BeginInvoke(ac);
@@ -50,7 +53,7 @@ namespace APKRepackageSDKTool.UI
             {
                 Title = "错误输出！";
             }
-
+            
             TextBox_output.Text = content;
         }
     }
