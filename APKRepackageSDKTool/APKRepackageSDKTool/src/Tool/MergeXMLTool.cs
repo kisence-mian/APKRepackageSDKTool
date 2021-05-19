@@ -27,7 +27,7 @@ public class MergeXMLTool
 
     public void Merge(string SDKPath, string aimPath)
     {
-        OutPut("开始合并 XML \n" + SDKPath + "\n " + aimPath);
+        //OutPut("开始合并 XML \n" + SDKPath + "\n " + aimPath);
 
         //加载目标路径的所有xml并存储
         LoadAimXML(aimPath);
@@ -53,7 +53,7 @@ public class MergeXMLTool
         {
             item.Value.Save(aimPath + "\\" + item.Key + ".xml");
 
-            OutPut("aim 存储 " + aimPath + "\\" + item.Key + ".xml");
+            //OutPut("aim 存储 " + aimPath + "\\" + item.Key + ".xml");
         }
 
         foreach (var item in sdkDict)
@@ -62,25 +62,42 @@ public class MergeXMLTool
             {
                 item.Value.Save(aimPath + "\\" + item.Key + ".xml");
 
-                OutPut("sdk 存储 " + aimPath + "\\" + item.Key + ".xml");
+                //OutPut("sdk 存储 " + aimPath + "\\" + item.Key + ".xml");
             }
         }
     }
 
     string GenerateXMLKey(XmlElement ele)
     {
-        string key = ele.Name + "#" + ele.GetAttribute("name");
+        string key = "";
 
         if(ele.Name == "item")
         {
             key = ele.GetAttribute("type") + "#" + ele.GetAttribute("name");
         }
+        if(ele.Name == "attr")
+        {
+            if(ele.HasAttribute("format"))
+            {
+                key = ele.GetAttribute("format") + "#" + ele.GetAttribute("name");
+            }
+            else
+            {
+                key = ele.Name + "#" + ele.GetAttribute("name");
+            }
+        }
+        else if (ele.HasAttribute("name"))
+        {
+            key = ele.Name + "#" + ele.GetAttribute("name");
+        }
         else
         {
-            if (ele.HasAttribute("type"))
-            {
-                key = ele.Name + "#" + ele.GetAttribute("type") + "#" + ele.GetAttribute("name");
-            }
+            key = ele.Name + "#" + ele.InnerXml;
+        }
+
+        if(string.IsNullOrEmpty(key) || key == "#" )
+        {
+            OutPut("I: xml Key 获取失败" + ele.OuterXml);
         }
 
         return key;
@@ -110,7 +127,7 @@ public class MergeXMLTool
             }
 
             string fileName = FileTool.RemoveExpandName(FileTool.GetFileNameByPath(item));
-            OutPut("LoadAimXML fileName " + fileName);
+            //OutPut("LoadAimXML fileName " + fileName);
 
             XmlDocument doc = new XmlDocument();
             doc.Load(item);
@@ -130,7 +147,7 @@ public class MergeXMLTool
                     XmlElement ele = (XmlElement)tmp;
 
                     string key = GenerateXMLKey(ele);
-                    if (!map.ContainsKey(key))
+                    if (!map.ContainsKey(key)  && !string.IsNullOrEmpty(key))
                     {
                         map.Add(key, ele.Value);
                     }
@@ -139,40 +156,50 @@ public class MergeXMLTool
                         OutPut("重复的key  " + key);
                     }
                 }
-                //else
-                //{
-                //    OutPut("跳过节点  " + tmp.Name);
-                //}
 
                 //用于处理自定义组件 declare-styleable
-                if (tmp.HasChildNodes)
+                if (tmp.HasChildNodes && tmp.Name == "declare-styleable")
                 {
-                    JuggeAimChileNode(tmp,map);
+                    JudgeAimChildNode(tmp,map);
                 }
             }
         }
     }
 
-    void JuggeAimChileNode(XmlNode node,Dictionary<string,string> map)
+    void JudgeAimChildNode(XmlNode node,Dictionary<string,string> map)
     {
         for (int i = 0; i < node.ChildNodes.Count; i++)
         {
             XmlNode tmp = node.ChildNodes[i];
 
-            if (tmp.NodeType == XmlNodeType.Element && tmp.HasChildNodes)
+            if (tmp.NodeType == XmlNodeType.Element)
             {
                 XmlElement ele = (XmlElement)tmp;
-
                 string key = GenerateXMLKey(ele);
-                if (!map.ContainsKey(key))
+
+                if (tmp.HasChildNodes)
                 {
-                    map.Add(key, ele.Value);
+                    if (!map.ContainsKey(key) && !string.IsNullOrEmpty(key))
+                    {
+                        map.Add(key, ele.Value);
+                    }
+                    else
+                    {
+                        OutPut("I: 重复的节点  " + key);
+                    }
                 }
-                else
+
+                //对一种情况进行特殊处理
+                // <attr format="dimension" name="android:translationX" />
+                if (ele.HasAttribute("format") && ele.GetAttribute("name").Contains("android:"))
                 {
-                    OutPut("重复的key  " + key);
+                    node.RemoveChild(tmp);
+                    i--;
+
+                    OutPut("I: 特殊处理掉的节点 " + key);
                 }
             }
+
             //else
             //{
             //    OutPut("跳过节点  " + tmp.Name);
@@ -223,11 +250,11 @@ public class MergeXMLTool
                     string key = GenerateXMLKey(ele);
 
                     //去重
-                    if (IsRepeat(key))
+                    if (IsRepeat(key) && !string.IsNullOrEmpty(key))
                     {
                         root.RemoveChild(tmp);
                         i--;
-                        OutPut("重复的节点 " + key);
+                        OutPut("I: 重复的节点 " + key);
                     }
                     else
                     {
@@ -240,15 +267,15 @@ public class MergeXMLTool
                 //}
 
                 //用于处理自定义组件 declare-styleable
-                if (tmp.HasChildNodes)
+                if (tmp.HasChildNodes && tmp.Name == "declare-styleable")
                 {
-                    JuggeSdkChileNode(tmp, map);
+                    JudgeSdkChileNode(tmp, map);
                 }
             }
         }
     }
 
-    void JuggeSdkChileNode(XmlNode node, Dictionary<string, string> map)
+    void JudgeSdkChileNode(XmlNode node, Dictionary<string, string> map)
     {
         for (int i = 0; i < node.ChildNodes.Count; i++)
         {
@@ -259,17 +286,29 @@ public class MergeXMLTool
                 XmlElement ele = (XmlElement)tmp;
 
                 string key = GenerateXMLKey(ele);
+
                 //去重
-                if (IsRepeat(key))
+                if (IsRepeat(key) && !string.IsNullOrEmpty(key))
                 {
                     node.RemoveChild(tmp);
                     i--;
-                    OutPut("重复的节点 " + key);
+                    OutPut("I: 重复的节点 " + key);
                 }
                 else
                 {
                     map.Add(key, ele.Value);
                 }
+
+                //对一种情况进行特殊处理
+                // <attr format="dimension" name="android:translationX" />
+                if(ele.HasAttribute("format") && ele.GetAttribute("name").Contains("android:"))
+                {
+                    node.RemoveChild(tmp);
+                    i--;
+
+                    OutPut("I: 特殊处理掉的节点 " + key);
+                }
+
             }
             //else
             //{

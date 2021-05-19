@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,6 +39,9 @@ namespace APKRepackageSDKTool.UI
         KeyValueList usesList;
         KeyValueList applicationHeadList;
         StringList firstDexList;
+
+        StringList mavenPathList;
+        StringList mavenLibList;
 
         ActivityInfo currentActivityInfo;
         KeyValue currentMainActivityProperty;
@@ -461,6 +465,65 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private StringList MavenPathList
+        {
+            get
+            {
+                if (mavenPathList == null)
+                {
+                    mavenPathList = new StringList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.mavenPathList.Count; i++)
+                    {
+                        mavenPathList.Add(EditorData.CurrentSDKConfig.mavenPathList[i]);
+                    }
+                }
+
+                return mavenPathList;
+            }
+
+            set
+            {
+                mavenPathList = value;
+                mavenPathList.Change();
+
+                EditorData.CurrentSDKConfig.mavenPathList.Clear();
+                for (int i = 0; i < mavenPathList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.mavenPathList.Add(mavenPathList[i]);
+                }
+            }
+        }
+
+        private StringList MavenLibList
+        {
+            get
+            {
+                if (mavenLibList == null)
+                {
+                    mavenLibList = new StringList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.mavenLibList.Count; i++)
+                    {
+                        mavenLibList.Add(EditorData.CurrentSDKConfig.mavenLibList[i]);
+                    }
+                }
+
+                return mavenLibList;
+            }
+
+            set
+            {
+                mavenLibList = value;
+                mavenLibList.Change();
+
+                EditorData.CurrentSDKConfig.mavenLibList.Clear();
+                for (int i = 0; i < mavenLibList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.mavenLibList.Add(mavenLibList[i]);
+                }
+            }
+        }
+
+
         #endregion
 
         public SdkEditorWindow()
@@ -482,6 +545,9 @@ namespace APKRepackageSDKTool.UI
             ListBox_UsesList.ItemsSource = UsesList;
             ListBox_ApplicationHeadList.ItemsSource = ApplicationHeadList;
             ListBox_FirstDexList.ItemsSource = FirstDexList;
+
+            ListBox_MavenPath.ItemsSource = MavenPathList;
+            ListBox_MavenLib.ItemsSource = MavenLibList;
 
             BindingEnum();
 
@@ -1107,6 +1173,129 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region Maven
+
+
+        private void Button_ClickAddMavenPath(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_AddMavenPath.Text))
+            {
+                string value = TextBox_AddMavenPath.Text.TrimEnd('\\').TrimEnd('/');
+
+                if (!MavenPathList.Contains(value))
+                {
+                    MavenPathList.Add(value);
+                    MavenPathList = MavenPathList;
+                }
+
+                TextBox_AddMavenPath.Text = "";
+            }
+        }
+
+        private void Button_mavenPath_Delete(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string name = (string)btn.Tag;
+
+            for (int i = 0; i < MavenPathList.Count; i++)
+            {
+                if (MavenPathList[i] == name)
+                {
+                    MavenPathList.RemoveAt(i);
+                }
+            }
+
+            MavenPathList = MavenPathList;
+        }
+
+        private void Button_ClickAddMavenLib(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_AddMavenLib.Text))
+            {
+                string value = TextBox_AddMavenLib.Text.TrimEnd('\\').TrimEnd('/');
+                if (!MavenLibList.Contains(value))
+                {
+                    MavenLibList.Add(value);
+                    MavenLibList = MavenLibList;
+                }
+
+                TextBox_AddMavenLib.Text = "";
+            }
+        }
+
+        private void Button_mavenLib_Delete(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string name = (string)btn.Tag;
+
+            for (int i = 0; i < MavenLibList.Count; i++)
+            {
+                if (MavenLibList[i] == name)
+                {
+                    MavenLibList.RemoveAt(i);
+                }
+            }
+
+            MavenLibList = MavenLibList;
+        }
+
+        private void Button_AddCommonMaven(object sender, RoutedEventArgs e)
+        {
+            MavenPathList.Add("https://maven.aliyun.com/repository/google");
+            MavenPathList.Add("https://maven.aliyun.com/repository/public");
+            MavenPathList.Add("https://maven.aliyun.com/repository/jcenter");
+            MavenPathList.Add("https://maven.aliyun.com/repository/gradle-plugin");
+
+            MavenPathList.Add("https://repo1.maven.org/maven2");
+            MavenPathList.Add("http://developer.huawei.com/repo");
+            MavenPathList.Add("https://maven.google.com");
+
+            MavenPathList.Add("https://maven.aliyun.com/repository/central");
+            MavenPathList.Add("https://maven.aliyun.com/repository/gradle-plugin");
+            MavenPathList.Add("https://maven.aliyun.com/repository/gradle-plugin");
+            MavenPathList.Add("https://maven.aliyun.com/repository/spring");
+            MavenPathList.Add("https://maven.aliyun.com/repository/spring-plugin");
+
+            MavenPathList.Add("https://maven.aliyun.com/repository/grails-core");
+            MavenPathList.Add("https://maven.aliyun.com/repository/apache-snapshots");
+
+            MavenPathList = MavenPathList;
+        }
+
+        private void Button_TestConnectMaven(object sender, RoutedEventArgs e)
+        {
+            OutPutWindow opw = new OutPutWindow();
+            opw.Show();
+
+            var thread = new Thread(() =>
+            {
+                MavenTool mt = new MavenTool(EditorData.MavenCachePath,opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                mt.TestConnectMaven(MavenPathList);
+            });
+
+            thread.Start();
+        }
+
+        private void Button_PreDownLoadMavenLib(object sender, RoutedEventArgs e)
+        {
+            OutPutWindow opw = new OutPutWindow();
+            opw.Show();
+
+            MavenTool mt = new MavenTool(EditorData.MavenCachePath, opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+
+            var thread = new Thread(() =>
+            {
+                mt.DowmLoadMaven(MavenPathList, MavenLibList);
+            });
+
+            thread.Start();
+        }
+
+
+        #endregion
+
         #region META
 
         private void Button_ClickAddMeta(object sender, RoutedEventArgs e)
@@ -1308,13 +1497,11 @@ namespace APKRepackageSDKTool.UI
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
 
-            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+            AndroidTool ct = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
             opw.Show();
 
             //生成R表
-            string rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
-
-            opw.ReceviceOutPut(rebuildRTable);
+            ct.BuildRTable(path, aarName, aimPath);
         }
 
         private void Button_GenerateRTableGroup_Click(object sender, RoutedEventArgs e)
@@ -1335,26 +1522,24 @@ namespace APKRepackageSDKTool.UI
 
             OutPutWindow opw = new OutPutWindow();
 
-            string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
-            string aarName = FileTool.GetFileNameByPath(path);
-
-            ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+            string sdkPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+            AndroidTool ct = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
             opw.Show();
 
             string[] dires = Directory.GetDirectories(path);
             for (int i = 0; i < dires.Length; i++)
             {
-                //生成R表
-                string rebuildRTable = ct.BuildRTable(dires[i], aarName, aimPath);
+                string aarName = FileTool.GetFileNameByPath(dires[i]);
 
-                opw.ReceviceOutPut(rebuildRTable);
+                //生成R表
+                ct.BuildRTable(dires[i], aarName, sdkPath);
             }
         }
 
 
         void ExtractAAR(string path)
         {
-            string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+            string sdkPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
             bool isConvert2AndroidX = CheckBox_ConvertAndroidX.IsChecked ?? false;
 
@@ -1368,7 +1553,7 @@ namespace APKRepackageSDKTool.UI
                 //路径有效性判断
 
                 //提取jar
-                string jarResult = ExtractJar(path, aimPath, aarName, isConvert2AndroidX, cot);
+                string jarResult = ExtractJar(path, sdkPath, aarName, isConvert2AndroidX, cot);
 
                 opw.ReceviceOutPut(jarResult);
 
@@ -1387,28 +1572,34 @@ namespace APKRepackageSDKTool.UI
                 //复制assets
                 if (Directory.Exists(path + "/assets"))
                 {
-                    FileTool.CopyDirectory(path + "/assets", aimPath + "/assets", (pathA, pathB) => {
+                    FileTool.CopyDirectory(path + "/assets", sdkPath + "/assets", (pathA, pathB) => {
                         repeatAssets += FileTool.GetFileNameByPath(pathA) + "\n";
 
                         opw.ReceviceOutPut(repeatAssets);
                     });
                 }
 
-                string rebuildRTable = "";
+                //复制assets
+                if (Directory.Exists(path + "/jni"))
+                {
+                    FileTool.CopyDirectory(path + "/jni", sdkPath + "/lib", (pathA, pathB) => {
+                        repeatAssets += FileTool.GetFileNameByPath(pathA) + "\n";
+
+                        opw.ReceviceOutPut(repeatAssets);
+                    });
+                }
+
                 //合并res
                 if (Directory.Exists(path + "/res"))
                 {
                     MergeResTool mergeRes = new MergeResTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-                    ChannelTool ct = new ChannelTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                    AndroidTool at = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
 
-                    mergeRes.Merge(path + "/res", aimPath + "/res");
-
-                    //MergeXMLTool mergeXMLTool = new MergeXMLTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-                    //mergeXMLTool.Merge(path + "/res", aimPath + "/res");
+                    //合并Res
+                    mergeRes.Merge(path + "/res", sdkPath + "/res");
 
                     //生成R表
-                    rebuildRTable = ct.BuildRTable(path, aarName, aimPath);
-                    opw.ReceviceOutPut(rebuildRTable);
+                    at.BuildRTable(path, aarName, sdkPath);
                 }
             }
             catch( Exception e)
@@ -1813,7 +2004,7 @@ namespace APKRepackageSDKTool.UI
 
         private void Button_ClickInfo(object sender, RoutedEventArgs e)
         {
-            string content = "{PackageName}会自动替换成包名\n";
+            string content = "{PackageName} ${applicationId}会自动替换成包名\n";
             content += "{字段名}会自动替换成对应字段";
 
             MessageBox.Show(content);
@@ -1821,7 +2012,7 @@ namespace APKRepackageSDKTool.UI
 
         private void Button_MianActivityInfo_Click(object sender, RoutedEventArgs e)
         {
-            string content =  "{PackageName}会自动替换成包名\n";
+            string content = "{PackageName} ${applicationId}会自动替换成包名\n";
             content += "{字段名}会自动替换成对应字段\n\n";
 
             content += "Manifest中同名的字段将被替换\n";
@@ -1830,6 +2021,11 @@ namespace APKRepackageSDKTool.UI
             MessageBox.Show(content);
         }
 
+
+
+
         #endregion
+
+
     }
 }

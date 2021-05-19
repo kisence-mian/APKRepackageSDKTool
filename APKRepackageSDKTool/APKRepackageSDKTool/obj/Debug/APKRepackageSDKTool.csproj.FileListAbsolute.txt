@@ -90,3 +90,7 @@ E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\apktool_2.4.1.jar
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\UI\LanguageWindow.g.cs
 E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\obj\Debug\UI\LanguageWindow.baml
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\apktool_2.5.0.jar
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\baksmali-2.5.2.jar
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\baksmali-2.4.0.jar
+E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\apktool_2.3.3.jar

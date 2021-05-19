@@ -242,9 +242,6 @@ namespace APKRepackageSDKTool
             AddConfig(SDKInterfaceDefine.PropertiesKey_LoginPlatform, "Tourist|AccountLogin|" + EditorData.CurrentChannel.Name);
 
             AddConfig(SDKInterfaceDefine.PropertiesKey_SelectServerURL, "http://");
-            //AddConfig(SDKInterfaceDefine.PropertiesKey_NetworkID, "0");
-            //AddConfig(SDKInterfaceDefine.PropertiesKey_SelectNetworkPath, "https://xxx");
-            //AddConfig(SDKInterfaceDefine.PropertiesKey_UpdateDownLoadPath, "https://xxx");
         }
 
         void AddConfig(string key, string value)

@@ -159,6 +159,20 @@ namespace APKRepackageSDKTool
             EditorData.JetifierPath = m_Dir;
         }
 
+        private void Button_Click_SelectMavenPath(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
+            DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+            this.Text_mavenCatahPath.Text = m_Dir;
+            EditorData.MavenCachePath = m_Dir;
+        }
+
         /// <summary>
         /// 点击重打包
         /// </summary>
@@ -334,6 +348,21 @@ namespace APKRepackageSDKTool
             EditorData.APILevel = int.Parse(Text_APILevel.Text);
         }
 
+        private void Text_ApkTool_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorData.ApktoolVersion = Text_ApkTool.Text;
+        }
+
+        private void Text_mavenCatahPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorData.MavenCachePath = Text_mavenCatahPath.Text;
+        }
+
+        private void Text_RarCmd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorData._RARcmd = Text_RarCmd.Text;
+        }
+
         #endregion
 
         #region 事件接收
@@ -411,6 +440,9 @@ namespace APKRepackageSDKTool
             Text_jetifierPath.Text = EditorData.JetifierPath;
             Text_BuildToolVersion.Text = EditorData.BuildToolVersion;
             Text_APILevel.Text = EditorData.APILevel.ToString();
+            Text_ApkTool.Text = EditorData.ApktoolVersion;
+            Text_mavenCatahPath.Text = EditorData.MavenCachePath;
+            Text_RarCmd.Text = EditorData._RARcmd;
 
             CheckBox_IsTimeStamp.IsChecked = EditorData.IsTimeStamp;
             CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
@@ -482,29 +514,33 @@ namespace APKRepackageSDKTool
             e.Handled = re.IsMatch(e.Text);
         }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //合并测试功能
 
-        //    OutPutWindow opw = new OutPutWindow();
 
-        //    string sdkPath = @"E:\文件\发布物料\喵星人简史\渠道\OKGAME\okjoy_sdk_ independent_v1.0.3_20210410\OkJoySdkDemo\app\release\apk\res\values";
-        //    string aimPath = @"E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\20210423\res\values";
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
 
-        //    MergeXMLTool mt = new MergeXMLTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-        //    opw.Show();
+            OutPutWindow opw = new OutPutWindow();
+            opw.Show();
+            AndroidTool at = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
 
-        //    var thread =  new Thread(()=> {
+            string txtPath = @"E:\Temp\okjoy_sdk_independent_1.0.3_AndroidX\R.txt";
+            string javaPath = @"E:\Temp\okjoy_sdk_independent_1.0.3_AndroidX\R.java";
 
-        //        //生成R表
-        //        mt.Merge(sdkPath, aimPath);
-        //    });
-        //    thread.Start();
-        //}
+            var thread = new Thread(() =>
+            {
+                //生成R表
+                at.RTxt2RJava("com.mxrjs.ssdk", txtPath, javaPath);
 
-        //private void ComboBox_gameList_Selected(object sender, SelectionChangedEventArgs e)
-        //{
-        //    UpdateChannel();
-        //}
+            });
+
+            thread.Start();
+        }
+
+        private void Button_Click_SaveToClipboard(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Clipboard.SetDataObject(this.output);
+        }
+
+
     }
 }

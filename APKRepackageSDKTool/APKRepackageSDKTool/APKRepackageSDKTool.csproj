@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>APKRepackageSDKTool</RootNamespace>
     <AssemblyName>APKRepackageSDKTool</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -74,6 +75,7 @@
     <Compile Include="ChannelEditorWindow.xaml.cs">
       <DependentUpon>ChannelEditorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\Tool\AndroidTool.cs" />
     <Compile Include="src\Tool\ChannelTool.cs" />
     <Compile Include="GameSetting.xaml.cs">
       <DependentUpon>GameSetting.xaml</DependentUpon>
@@ -84,6 +86,8 @@
     <Compile Include="src\Define\SDKInterfaceDefine.cs" />
     <Compile Include="src\Tool\DeJson.cs" />
     <Compile Include="src\Tool\FileTool.cs" />
+    <Compile Include="src\Tool\HttpTool.cs" />
+    <Compile Include="src\Tool\MavenTool.cs" />
     <Compile Include="src\Tool\MergeResTool.cs" />
     <Compile Include="src\Tool\MergeXMLTool.cs" />
     <Compile Include="src\Tool\MiniJSON.cs" />
@@ -91,6 +95,7 @@
     <Compile Include="src\Tool\PathTool.cs" />
     <Compile Include="src\RecordManager.cs" />
     <Compile Include="src\RepackageManager.cs" />
+    <Compile Include="src\Tool\RarTool.cs" />
     <Compile Include="src\Tool\RTableUtil.cs" />
     <Compile Include="src\Tool\YML\YML.cs" />
     <Compile Include="src\Tool\YML\YmlTool.cs" />
@@ -195,13 +200,25 @@
     <Content Include="apktool_2.3.1.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="apktool_2.3.3.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="apktool_2.4.1.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="apktool_2.5.0.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="baksmali-2.1.3.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="baksmali-2.3.4.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="baksmali-2.4.0.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="baksmali-2.5.2.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DotNETReactor\dlls\B1Plus.UI.BaseApplications.dll">

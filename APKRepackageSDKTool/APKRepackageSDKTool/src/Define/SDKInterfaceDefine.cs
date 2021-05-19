@@ -23,6 +23,7 @@ public class SDKInterfaceDefine
     public const string ModuleName_Login = "Login";
     public const string ModuleName_Pay = "Pay";
     public const string ModuleName_AD = "AD";
+    public const string ModuleName_Share = "Share";
     public const string ModuleName_Log = "Log";
     public const string ModuleName_Other = "Other";
     public const string ModuleName_LifeCycle = "LifeCycle";
@@ -61,10 +62,10 @@ public class SDKInterfaceDefine
     public const string Pay_ParameterName_GoodsName = "GoodsName";
     public const string Pay_ParameterName_GoodsDescription = "GoodsDescription";
     public const string Pay_ParameterName_CallBackUrl = "CallBackUrl";
-    public const string Pay_ParameterName_CpOrderID = "CpOrderID";//第三方支付ID
-    public const string Pay_ParameterName_OrderID = "OrderID";  //我们自己的支付ID
-    public const string Pay_ParameterName_PrepayID = "PrepayID "; //预支付订单id
-    public const string Pay_ParameterName_Price = "Price";  //价格
+    public const string Pay_ParameterName_CpOrderID = "CpOrderID"; //第三方支付ID
+    public const string Pay_ParameterName_OrderID = "OrderID";   //我们自己的支付ID
+    public const string Pay_ParameterName_PrepayID = "PrepayID"; //预支付订单id
+    public const string Pay_ParameterName_Price = "Price";     //价格
     public const string Pay_ParameterName_Currency = "Currency";  //货币
     public const string Pay_ParameterName_Payment = "Payment";   //支付途径
     public const string Pay_ParameterName_Receipt = "Receipt";   //支付回执
@@ -77,7 +78,7 @@ public class SDKInterfaceDefine
     //AD相关参数
     public const string AD_ParameterName_ADType = "ADType";
     public const string AD_ParameterName_ADResult = "ADResult";   //广告播放结果
-    public const string AD_ParameterName_VideoADKey = "VideoADKey";//视频广告Key
+    public const string AD_ParameterName_VideoADKey = "VideoADKey"; //视频广告Key
 
     public const string AD_FunctionName_LoadAD = "LoadAD";
     public const string AD_FunctionName_PlayAD = "PlayAD";
@@ -85,6 +86,13 @@ public class SDKInterfaceDefine
     public const string AD_FunctionName_ADIsLoaded = "ADIsLoaded";
     public const string AD_FunctionName_OnAD = "OnAD";
 
+    //Share相关参数
+    public const string Share_FunctionName_Share = "Share";
+
+    public const string Share_ParameterName_Title = "Title";
+    public const string Share_ParameterName_Description = "Description";
+    public const string Share_ParameterName_ThumbImage = "ThumbImage"; //缩略图
+    public const string Share_ParameterName_Image = "Image";
 
     //Log相关参数
     public const string Log_FunctionName_Login = "LogLogin";
@@ -95,6 +103,16 @@ public class SDKInterfaceDefine
     public const string Log_FunctionName_RewardVirtualCurrency = "LogRewardVirtualCurrency"; //奖励虚拟币
     public const string Log_FunctionName_PurchaseVirtualCurrency = "LogPurchaseVirtualCurrency";//消费虚拟币
     public const string Log_FunctionName_UseItem = "LogUseItem";//使用虚拟物品（通过虚拟币购买的）
+    public const string Log_FunctionName_LogError = "LogError";  //上报错误
+
+    public const string Log_ParameterName_Error = "Error";              //错误
+    public const string Log_ParameterName_ErrorStack = "ErrorStack";  //错误堆栈
+                                                                      //Log AD
+    public const string Log_FunctionName_AD = "LogAD";
+    public const string Log_ParameterName_AD_ID = "ad_id";
+    public const string Log_ParameterName_AD_Name = "name";
+    public const string Log_ParameterName_AD_Result = "result";
+    public const string Log_ParameterName_AD_Cause = "cause";
 
     //Log Login相关
     public const string Log_ParameterName_AccountId = "AccountId";
@@ -140,20 +158,31 @@ public class SDKInterfaceDefine
     public const string Other_ParameterName_TotalProgress = "TotalProgress";
     public const string Other_ParameterName_Size = "Size";
 
+    //Other -> 获取手机通讯录
+    public const string Other_FunctionName_GetPhoneNumberList = "GetPhoneNumberList";
+
+    //Other -> 打开游戏中心
+    public const string Other_FunctionName_OpenGameCenter = "OpenGameCenter";
+
+    //Other -> 存档
+    public const string Other_FunctionName_UploadGameRecord = "UploadGameRecord";
+    public const string Other_ParameterName_RecordPath = "RecordPath";//存档路径
+    public const string Other_ParameterName_RecordName = "RecordName";//文件名
+
     //Properties
     public const string FileName_ChannelProperties = "Channel";                  //文件名
     public const string PropertiesKey_IsLog = "IsLog";                           //是否输出日志
     public const string PropertiesKey_SelectNetworkPath = "SelectNetworkPath";   //选服配置下载地址
     public const string PropertiesKey_UpdateDownLoadPath = "UpdateDownLoadPath"; //热更新下载地址(最后没有斜线)
     public const string PropertiesKey_TestUpdateDownLoadPath = "TestUpdateDownLoadPath"; //热更新下载测试地址(最后没有斜线)
-    public const string PropertiesKey_ChannelName = "ChannelName";                //渠道名称
-    public const string PropertiesKey_StoreName = "StoreName";                    //商店名称，如果有支付方式用@进行分割
-    public const string PropertiesKey_LoginPlatform = "LoginPlatform";            //登录平台
-    public const string PropertiesKey_ADPlatform = "ADPlatform";                  //广告平台
-    public const string PropertiesKey_NetworkID = "NetworkID";                    //服务器选择
-    public const string PropertiesKey_QQGroup = "QQGroup";                        //玩家QQ群
-    public const string PropertiesKey_AllContact = "AllContact";                  //所有联系方式，竖线分割
-    public const string PropertiesKey_DirectlyLogin = "DirectlyLogin";            //是否直接登录，不选择登录模式
+    public const string PropertiesKey_ChannelName = "ChannelName";               //渠道名称
+    public const string PropertiesKey_StoreName = "StoreName";                 //商店名称，如果有支付方式用@进行分割
+    public const string PropertiesKey_LoginPlatform = "LoginPlatform";           //登录平台
+    public const string PropertiesKey_ADPlatform = "ADPlatform";                 //广告平台
+    public const string PropertiesKey_NetworkID = "NetworkID";                   //服务器选择
+    public const string PropertiesKey_QQGroup = "QQGroup";                     //玩家QQ群
+    public const string PropertiesKey_AllContact = "AllContact";                 //所有联系方式，竖线分割
+    public const string PropertiesKey_DirectlyLogin = "DirectlyLogin";           //是否直接登录，不选择登录模式
     public const string PropertiesKey_CloseHealthGamePact = "CloseHealthGamePact";//关闭健康游戏公约
     public const string PropertiesKey_OpenRealName = "OpenRealName";              // 开启实名认证
     public const string PropertiesKey_IsExamine = "IsExamine";                    //审核版本
@@ -164,5 +193,19 @@ public class SDKInterfaceDefine
     public const string PropertiesKey_LogoShowTime = "LogoShowTime";              //显示下一组logo n 秒 ， 0 表示覆盖原本logo
     public const string PropertiesKey_CanPay = "CanPay";                          //允许支付
 
-    public const string PropertiesKey_SelectServerURL = "SelectServerURL";        //选服服务器地址(废弃)
+    public const string PropertiesKey_SelectServerURL = "SelectServerURL";       //选服服务器地址
+
+    public const string PropertiesKey_SelectServerOSSURL = "SelectServerOSSURL";       //选服服务器 OSS地址
+
+    public const string PropertiesKey_AccountFrozenNotification = "AccountFrozenNotification";       //账户冻结提示内容注入
+    public const string PropertiesKey_AccountFrozenNotification_ContactInfo = "AccountFrozenNotification";       //账户冻结提示客服管理员联系方式注入
+
+    #region 本地数据上报URL
+
+    public const string PropertiesKey_LocalReport_ActiveUrl = "LocalReport_ActiveUrl";       // 本地数据上报URL 活跃
+    public const string PropertiesKey_LocalReport_PayUrl = "LocalReport_PayUrl";       // 本地数据上报URL 支付
+    public const string PropertiesKey_LocalReport_ADUrl = "LocalReport_ADUrl";       // 本地数据上报URL 广告
+    public const string PropertiesKey_LocalReport_EventUrl = "LocalReport_EventUrl";       // 本地数据上报URL 通用事件
+    public const string PropertiesKey_LocalReport_SecretKey = "LocalReport_SecretKey";       // 本地数据上报 秘钥
+    #endregion
 }

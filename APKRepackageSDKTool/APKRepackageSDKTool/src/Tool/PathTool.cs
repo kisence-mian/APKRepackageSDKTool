@@ -12,5 +12,23 @@ namespace APKRepackageSDKTool
         {
             return System.IO.Directory.GetCurrentDirectory();
         }
+
+        /// <summary>
+        /// 判断一个路径是否是合法路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool JudgeIsLegalPath(string path)
+        {
+            try
+            {
+                FileTool.CreatePath(path);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

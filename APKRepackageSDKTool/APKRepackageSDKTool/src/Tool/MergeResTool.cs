@@ -20,7 +20,7 @@ public class MergeResTool
 
     public void Merge(string sdkPath,string aimPath)
     {
-        OutPut("MergeResTool 合并res文件夹 \n" + sdkPath + " \n" + aimPath);
+        OutPut("I: MergeResTool 合并res文件夹 \n" + sdkPath + " \n" + aimPath);
 
         DirectoryInfo dir = new DirectoryInfo(sdkPath);
         DirectoryInfo[] res_directoryInfoArray = dir.GetDirectories();
@@ -52,7 +52,7 @@ public class MergeResTool
 
     void RepeatHandle(string fileA, string fileB)
     {
-        //OutPut("合并文件 " + fileA + " ->" + fileB);
+        OutPut("重复的资源 " + fileB);
 
         ////只支持合并xml
         //if (fileA.Contains("xml") && fileB.Contains("xml"))

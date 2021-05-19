@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APKRepackageSDKTool.UI"
         mc:Ignorable="d"
-        Title="{Binding Path=SdkName}" Height="447" Width="713">
+        Title="{Binding Path=SdkName}" Height="600" Width="800">
     <Grid>
         <!-- Label 显示下划线 开始 -->
         <Grid.Resources>
@@ -104,7 +104,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
 
                     <Grid>
                         <ListBox x:Name="ListBox_ActivtyList" Margin="10,10,10,36" SelectedValuePath="Name" SelectionChanged="ListBox_ActivtyList_SelectionChanged">
@@ -139,7 +139,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
                     <Grid Grid.ColumnSpan="2">
                         <ListBox x:Name="ListBox_mainPropertyList" Margin="10,10,10,36" SelectedValuePath="Key" SelectionChanged="ListBox_MainActivityPropertyList_SelectionChanged">
                             <ListBox.ItemContainerStyle>
@@ -172,7 +172,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
                     <Grid Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <ListBox x:Name="ListBox_serviceList"  SelectedValuePath="Name" SelectionChanged="ListBox_ServiceList_SelectionChanged" Margin="10,10,10,32">
                             <ListBox.ItemContainerStyle>
@@ -206,7 +206,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
 
                     <Grid Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <ListBox x:Name="ListBox_ProviderList" Margin="10,10,10,36" SelectedValuePath="Name" SelectionChanged="ListBox_ProviderList_SelectionChanged">
@@ -242,7 +242,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
                     <Grid Grid.ColumnSpan="2">
                         <ListBox x:Name="ListBox_MetaList" Margin="10,10,10,36" SelectedValuePath="Key" SelectionChanged="ListBox_MetaList_SelectionChanged">
                             <ListBox.ItemContainerStyle>
@@ -276,7 +276,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
                     <Grid Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <ListBox x:Name="ListBox_ManifestHeadList" Margin="10,10,10,36" SelectedValuePath="Key" SelectionChanged="ListBox_ManifestHeadList_SelectionChanged">
                             <ListBox.ItemContainerStyle>
@@ -310,7 +310,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
                     <Grid >
                         <ListBox x:Name="ListBox_ApplicationHeadList" Margin="10,10,10,36" SelectedValuePath="Key" SelectionChanged="ListBox_ApplicationHeadList_SelectionChanged">
                             <ListBox.ItemContainerStyle>
@@ -344,7 +344,7 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,-10,0,10" />
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
                     <Grid Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <ListBox x:Name="ListBox_UsesList" Margin="10,10,10,36" SelectedValuePath="Key" SelectionChanged="ListBox_UsesList_SelectionChanged">
                             <ListBox.ItemContainerStyle>
@@ -434,6 +434,60 @@
                     <Label Content="java包名包含下列字符串的会被放在第一个Dex包中,格式为 com/xxx/xxx" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="659"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Maven设置">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="45*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="50*" />
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter  Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Margin="0,10,0,10" />
+                    <Grid>
+                        <Label Content="Maven仓库" Width="210" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" />
+                        <Button Content="测试连接" Margin="0,6,10,0" Click="Button_TestConnectMaven" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+                        <Button Content="添加常用" Margin="0,6,90,0" Click="Button_AddCommonMaven" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+                        <ListBox x:Name="ListBox_MavenPath" Margin="0,30,10,36" SelectedValuePath="Key">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Label Content="{Binding Path=.}"  HorizontalAlignment="Left" Margin="0,0,45,0" />
+                                        <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=.}" Click="Button_mavenPath_Delete"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Content="新增" Margin="0,0,10,5" Height="23" VerticalAlignment="Bottom" Click="Button_ClickAddMavenPath" HorizontalAlignment="Right" Width="75" />
+                        <TextBox x:Name="TextBox_AddMavenPath" Margin="0,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Label Content="依赖库" Margin="10,0,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78" />
+                        <Button Content="预下载" Margin="0,6,10,0" Click="Button_PreDownLoadMavenLib" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+                        <!--<Button Content="提取到SDK库" Margin="0,6,90,0" Click="Button_Extract" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" IsEnabled="False"/>-->
+                        <ListBox x:Name="ListBox_MavenLib" Margin="10,30,10,36" SelectedValuePath="Key">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Label Content="{Binding Path=.}"  HorizontalAlignment="Left" Margin="0,0,45,0" />
+                                        <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=.}" Click="Button_mavenLib_Delete"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Content="新增" Margin="0,0,10,5" Height="23" VerticalAlignment="Bottom" Click="Button_ClickAddMavenLib" HorizontalAlignment="Right" Width="75" />
+                        <TextBox x:Name="TextBox_AddMavenLib" Margin="10,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
+                    </Grid>
+                </Grid>
+            </TabItem>
             <TabItem Header="其他设置">
                 <Grid>
                     <Label Content="MinSDKVersion" Margin="10,16,0,0" HorizontalAlignment="Left" Width="116" Height="27" VerticalAlignment="Top"/>
@@ -441,10 +495,11 @@
 
                     <Label Content="TargetSDKVersion" Margin="10,45,342,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=TargetSDKVersion}" Margin="155,45,10,0" VerticalAlignment="Top"/>
-                    <Label Content="   Name" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
+                    <Label Content="Name" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding ApplicationName}" Margin="155,88,10,0" VerticalAlignment="Top"/>
 
                     <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="10,132,10,173"/>
+                    <CheckBox Content="使用Maven" IsChecked="{Binding UseMaven}" Margin="10,158,10,147"/>
                 </Grid>
             </TabItem>
 

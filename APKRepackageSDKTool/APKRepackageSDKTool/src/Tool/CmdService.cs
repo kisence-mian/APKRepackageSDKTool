@@ -24,14 +24,14 @@ namespace APKRepackageSDKTool
             this.errorCallBack = errorCallBack;
         }
 
-        public void Execute(string content, bool ignoreWarning = false, bool ignoreError = false,string path = null)
+        public void Execute(string content, bool ignoreWarning = false, bool ignoreError = false,string path = null,bool outPutCmd = true)
         {
             this.ignoreError = ignoreError;
             this.ignoreWarning = ignoreWarning;
 
             try
             {
-                if(EditorData.IsOutPutCMD)
+                if(EditorData.IsOutPutCMD && outPutCmd)
                 {
                     Out(content);
                 }
@@ -94,17 +94,49 @@ namespace APKRepackageSDKTool
 
         private void ErrorReceived(object sender, DataReceivedEventArgs e)
         {
-            if(!ignoreError)
+            if(string.IsNullOrEmpty(e.Data))
             {
-                if (Filter(e.Data))
-                {
-                    errorCallBack?.Invoke(e.Data);
-                }
+                return;
             }
-            else
+
+            if(IsWaring(e.Data))
             {
                 Out(e.Data);
             }
+            else
+            {
+                if (!ignoreError)
+                {
+                    if (Filter(e.Data))
+                    {
+                        errorCallBack?.Invoke(e.Data);
+                    }
+                }
+                else
+                {
+                    Out(e.Data);
+                }
+            }
+        }
+
+        bool IsWaring(string data)
+        {
+            if(data.StartsWith("W"))
+            {
+                return true;
+            }
+
+            if (data.StartsWith("警告"))
+            {
+                return true;
+            }
+
+            if (data.StartsWith("warning"))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         void Out(string content)

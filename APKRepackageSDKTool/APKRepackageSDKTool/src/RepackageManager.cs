@@ -128,12 +128,13 @@ namespace APKRepackageSDKTool
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
                         ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
 
-                        string apktool_version = "apktool_2.4.1";
+                        //string apktool_version = "apktool_2.3.1";
+                        //EditorData.AndroidSdkPath
 
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
 
-                        string apkToolCmd = "java -jar " + apktool_version + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath;
+                        string apkToolCmd = "java -jar " + EditorData.ApktoolVersion + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath;
 
                         if (channelInfo.isForceManifest)
                         {
@@ -155,13 +156,6 @@ namespace APKRepackageSDKTool
                         MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
                         channelTool.YMLLogic(aimPath);
 
-                        //分包
-                        MakeProgress("分包", i, channelList.Count, channelInfo.Name);
-                        if (channelInfo.IsSplitDex)
-                        {
-                            channelTool.SplitDex(aimPath, channelInfo);
-                        }
-
                         ////混淆DLL
                         //MakeProgress("混淆DLL", i, channelList.Count, channelInfo.Name);
                         //channelTool.ConfusionDLL(aimPath);
@@ -173,9 +167,28 @@ namespace APKRepackageSDKTool
                             channelTool.Rebuild_R_Table(aimPath, channelInfo);
                         }
 
+                        //分包
+                        MakeProgress("分包", i, channelList.Count, channelInfo.Name);
+                        if (channelInfo.IsSplitDex)
+                        {
+                            channelTool.SplitDex(aimPath, channelInfo);
+                        }
+
                         //重打包
                         MakeProgress("重打包", i, channelList.Count, channelInfo.Name);
-                        cmd.Execute("java -jar "+ apktool_version + ".jar b " + aimPath,true,true);
+                        string options = "";
+
+                        if (channelInfo.isUseAAPT2)
+                        {
+                            options = "-a " + EditorData.GetAAPT2Path() + " --use-aapt2 ";
+                        }
+                        //else
+                        //{
+                        //    options = "-a " + EditorData.GetAAPTPath();
+                        //}
+
+
+                        cmd.Execute("java -jar "+ EditorData.ApktoolVersion + ".jar " + options + "b " + aimPath,true,true);
 
                         //判断apk是否存在
                         if(!File.Exists(apkPath))

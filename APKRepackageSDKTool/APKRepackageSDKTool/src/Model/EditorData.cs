@@ -29,10 +29,17 @@ namespace APKRepackageSDKTool
 
         static string sdkLibPath;
         static string androidSdkPath;
+
+        static string mavenCachePath = "";
+
         static string jetifierPath;
+        static string apktoolVersion = "apktool_2.5.0";
+        static string baksmaliVersion = "baksmali-2.4.0.jar";
 
         static string buildToolVersion;
         static int apiLevel;
+
+        static string RARcmd = "360zip.exe -x {RarPath} {AimPath}";
 
         public static bool isTimeStamp = false;      //时间戳
         public static bool isOutPutCMD = false;      //输出原始命令
@@ -240,6 +247,64 @@ namespace APKRepackageSDKTool
             }
         }
 
+        public static string ApktoolVersion {
+
+            get
+            {
+                JudgeInit();
+                return apktoolVersion;
+            }
+
+            set
+            {
+                apktoolVersion = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "ApktoolVersion", apktoolVersion);
+            }
+
+        }
+
+        public static string BaksmaliVersion {
+            get
+            {
+                JudgeInit();
+                return baksmaliVersion;
+            }
+
+            set
+            {
+                baksmaliVersion = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "BaksmaliVersion", baksmaliVersion);
+            }
+        }
+        public static string MavenCachePath
+        {
+            get
+            {
+                JudgeInit();
+                return mavenCachePath;
+            }
+
+            set
+            {
+                mavenCachePath = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "MavenCachePath", mavenCachePath);
+            }
+        }
+
+        public static string _RARcmd {
+            get
+            {
+                JudgeInit();
+                return RARcmd;
+            }
+
+            set
+            {
+                RARcmd = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "RARcmd", RARcmd);
+            }
+        }
+
 
 
         #endregion
@@ -270,7 +335,12 @@ namespace APKRepackageSDKTool
                 isOutPutCMD = RecordManager.GetRecord(c_ConfigRecord, "IsOutPutCMD", false);
                 isAutoInstall = RecordManager.GetRecord(c_ConfigRecord, "IsAutoInstall", false);
                 isTimeStamp = RecordManager.GetRecord(c_ConfigRecord, "IsTimeStamp", false);
-                
+
+                baksmaliVersion = RecordManager.GetRecord(c_ConfigRecord, "BaksmaliVersion", "baksmali-2.1.3.jar");
+                apktoolVersion = RecordManager.GetRecord(c_ConfigRecord, "ApktoolVersion", "apktool_2.5.0");
+                mavenCachePath = RecordManager.GetRecord(c_ConfigRecord, "MavenCachePath", null);
+                RARcmd = RecordManager.GetRecord(c_ConfigRecord, "RARcmd", "360zip.exe -x {RarPath} {AimPath}");
+
                 UpdateTotalSDKInfo();
             }
         }
@@ -493,6 +563,13 @@ namespace APKRepackageSDKTool
             return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\zipalign.exe";
         }
 
+        public static string GetBaksmaliPath()
+        {
+            return BaksmaliVersion;
+        }
+
+
+        
 
         #endregion
     }
@@ -685,11 +762,16 @@ namespace APKRepackageSDKTool
         public SDKType sdkType;
         public List<KeyValue> configList = new List<KeyValue>();
         public List<string> permissionList = new List<string>();
+
+        public List<string> mavenPathList = new List<string>();
+        public List<string> mavenLibList = new List<string>();
+
         public int minSDKversion;
         public int targetSDKVersion;
         public string applicationName;
 
         public bool force32bit; //强制32位执行
+        public bool useMaven;   //使用Maven
 
         public List<KeyValue> xmlHeadList = new List<KeyValue>();
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
@@ -767,6 +849,7 @@ namespace APKRepackageSDKTool
         public bool Force32bit { get => force32bit; set => force32bit = value; }
         public List<KeyValue> ApplicationHeadList { get => applicationHeadList; set => applicationHeadList = value; }
         public List<string> FirstDexList { get => firstDexList; set => firstDexList = value; }
+        public bool UseMaven { get => useMaven; set => useMaven = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

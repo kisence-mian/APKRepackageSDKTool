@@ -21,6 +21,7 @@ namespace APKRepackageSDKTool
         OutPutCallBack errorCallBack;
 
         CompileTool compileTool;
+        AndroidTool androidTool;
 
         public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
         {
@@ -28,6 +29,7 @@ namespace APKRepackageSDKTool
             this.errorCallBack = errorCallBack;
 
             compileTool = new CompileTool(callBack, errorCallBack);
+            androidTool = new AndroidTool(callBack, errorCallBack);
         }
 
         public void ChannelLogic(string filePath, ChannelInfo info)
@@ -41,13 +43,13 @@ namespace APKRepackageSDKTool
             if (!string.IsNullOrEmpty(info.PackageName))
             {
                 OutPut("替换包名");
-                ChangePackageName(filePath, info.PackageName);
+                androidTool.ChangePackageName(filePath, info.PackageName);
             }
 
             if (!string.IsNullOrEmpty(info.AppName))
             {
                 OutPut("替换appName");
-                ChangeAppName(filePath, info.AppName);
+                androidTool.ChangeAppName(filePath, info.AppName);
             }
 
             if (info.appNameLanguages.Count > 0)
@@ -56,7 +58,7 @@ namespace APKRepackageSDKTool
                 {
                     KeyValue kv = info.appNameLanguages[i];
                     OutPut("替换appName " + kv.key + " " + kv.value);
-                    ChangeAppNameByLanguage(filePath, kv.key, kv.value);
+                    androidTool.ChangeAppNameByLanguage(filePath, kv.key, kv.value);
                 }
             }
 
@@ -75,13 +77,13 @@ namespace APKRepackageSDKTool
             if (info.IsChangeMainApplication)
             {
                 OutPut("替换MainApplication");
-                ChangeApplicationName(filePath, "sdkInterface.application.MainApplication");
+                androidTool.ChangeApplicationName(filePath, "sdkInterface.application.MainApplication");
             }
 
             if (info.isChangeMainActivity)
             {
                 OutPut("替换MainActity");
-                ChangeMainActity(filePath);
+                androidTool.ChangeMainActity(filePath);
             }
 
             if (info.sdkList.Count > 0)
@@ -94,6 +96,10 @@ namespace APKRepackageSDKTool
                     OutPut("放入SDK " + info.sdkList[i].sdkName);
                     PutSDK(filePath, info.sdkList[i], info);
                 }
+
+                //使用Maven
+                MavanLogic(filePath, info);
+
 
                 //强制32位模式
                 Force32Bit(filePath, info);
@@ -156,569 +162,6 @@ namespace APKRepackageSDKTool
 
         #endregion
 
-        #region AndroidManifest 修改
-
-        private void ChangeMainActity(string filePath)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            string mainName = GetMainActicityName(filePath);
-
-            if(mainName != null)
-            {
-                xml = xml.Replace(mainName, "sdkInterface.activity.MainActivity");
-
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-
-                xmlDoc.Save(xmlPath);
-            }
-            else
-            {
-                ActivityInfo activityInfo = new ActivityInfo();
-                activityInfo.mainActivity = true;
-                activityInfo.content = "<activity android:name=\"sdkInterface.activity.MainActivity\"><intent-filter><action android:name=\"android.intent.action.MAIN\" /><category android:name=\"android.intent.category.LAUNCHER\" /></intent-filter><meta-data android:name=\"unityplayer.UnityActivity\" android:value=\"true\" /></activity>";
-
-                AddActivity(filePath, activityInfo, null, null);
-            }
-        }
-
-        public void ChangePackageName(string filePath, string packageName)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            packageName = compileTool.RemoveSpecialCode(packageName);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlElement nodeEle = (XmlElement)manifest;
-
-            nodeEle.SetAttribute("package", packageName);
-            xmlDoc.Save(xmlPath);
-        }
-
-        public void ChangeAppName(string filePath, string appName)
-        {
-            string xmlPath = filePath + "\\res\\values\\strings.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode resources =  xmlDoc.SelectSingleNode("resources");
-
-            //遍历String表，替换App_name
-            for (int i = 0; i < resources.ChildNodes.Count; i++)
-            {
-                XmlNode node = resources.ChildNodes[i];
-                XmlElement nodeEle = (XmlElement)node;
-                if (node.Name == "string"
-                    && nodeEle.GetAttribute("name") == "app_name" )
-                {
-                    nodeEle.InnerText = appName;
-                    break;
-                }
-            }
-
-            xmlDoc.Save(xmlPath);
-        }
-
-        public void ChangeAppNameByLanguage(string filePath,string language, string appName)
-        {
-            //判断文件是否存在
-            string xmlPath = filePath + "\\res\\values-"+ language + "\\strings-"+ language + ".xml";
-            //存在就直接改
-            if (File.Exists(xmlPath))
-            {
-                string xml = FileTool.ReadStringByFile(xmlPath);
-
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-
-                XmlNode resources = xmlDoc.SelectSingleNode("resources");
-
-                //遍历String表，替换App_name
-                for (int i = 0; i < resources.ChildNodes.Count; i++)
-                {
-                    XmlNode node = resources.ChildNodes[i];
-                    XmlElement nodeEle = (XmlElement)node;
-                    if (node.Name == "string"
-                        && nodeEle.GetAttribute("name") == "app_name")
-                    {
-                        nodeEle.InnerText = appName;
-                        break;
-                    }
-                }
-
-                xmlDoc.Save(xmlPath);
-            }
-            //不存在就创建一份
-            else
-            {
-                //创建路径
-                FileTool.CreateFilePath(xmlPath);
-                //写入文件
-                string content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <string name=\"app_name\">appName</string>\n</resources>";
-                content = content.Replace("appName", appName);
-                FileTool.WriteStringByFile(xmlPath, content);
-            }
-        }
-
-        /// <summary>
-        /// 添加权限
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="Permission"></param>
-        void AddPermission(string filePath, string permission)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-
-            //权限判重
-            for (int i = 0; i < manifest.ChildNodes.Count; i++)
-            {
-                XmlNode node = manifest.ChildNodes[i];
-                XmlElement ele = (XmlElement)node;
-                if (ele.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.permission." + permission)
-                {
-                    return;
-                }
-            }
-
-            XmlElement nd = null;
-
-            string[] info = permission.Split('|');
-
-            if (info.Length == 1)
-            {
-                nd = xmlDoc.CreateElement("uses-permission");
-                //如果有“.”则认为是自定义权限，全文输入，否则补全权限
-                if (info[0].Contains("."))
-                {
-                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", info[0]);
-                }
-                else
-                {
-                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
-                }
-            }
-            else
-            {
-                nd = xmlDoc.CreateElement("uses-permission-sdk-" + info[1]);
-
-                //如果有“.”则认为是自定义权限，全文输入，否则补全权限
-                if (info[0].Contains("."))
-                {
-                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", info[0]);
-                }
-                else
-                {
-                    nd.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.permission." + info[0]);
-                }
-            }
-
-            manifest.AppendChild(nd);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void ChangeSDKVersion(string filePath, int minSDKVersion,int targetSDKVersion)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlNode useSdk = GetNode(manifest, "uses-sdk");
-
-            if (useSdk == null)
-            {
-                useSdk = xmlDoc.CreateElement("uses-sdk");
-                manifest.AppendChild(useSdk);
-            }
-
-            XmlElement sdkEle = (XmlElement)useSdk;
-
-            if (minSDKVersion > 0)
-            {
-                sdkEle.SetAttribute("minSdkVersion", "http://schemas.android.com/apk/res/android", minSDKVersion.ToString());
-            }
-
-            if (targetSDKVersion > 0)
-            {
-                sdkEle.SetAttribute("targetSdkVersion", "http://schemas.android.com/apk/res/android", targetSDKVersion.ToString());
-            }
-
-            xmlDoc.Save(xmlPath);
-        }
-
-        #region 添加Activity与Service
-
-        void RemoveErrordManifest(string filePath)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            xml = xml.Replace("android:compileSdkVersion=\"28\"", "");
-            xml = xml.Replace("android:compileSdkVersionCodename=\"9\"", "");
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddXMLHead(string filePath, KeyValue info, SDKInfo sdkInfo, ChannelInfo channelInfo)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-
-            //替换关键字
-            string newContent = compileTool.ReplaceKeyWord(info.value, channelInfo);
-            newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
-
-            string xml = FileTool.ReadStringByFile(xmlPath);
-            int index = xml.IndexOf("<manifest") + 10;
-            xml = xml.Insert(index, newContent + " "); //最后加一个空格
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddApplicationHead(string filePath, KeyValue info, SDKInfo sdkInfo, ChannelInfo channelInfo)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-
-            //替换关键字
-            string newContent = compileTool.ReplaceKeyWord(info.value, channelInfo);
-            newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
-
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            if (!xml.Contains(newContent.Replace(" ","")))
-            {
-                int index = xml.IndexOf("<application") + 13;
-                xml = xml.Insert(index, newContent + " "); //最后加一个空格
-            }
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddActivity(string filePath, ActivityInfo info,SDKInfo sdkInfo,ChannelInfo channelInfo)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-
-            //移除旧MainActivity
-            if (info.MainActivity)
-            {
-                RemoveOldMainActivity(filePath);
-            }
-
-            //替换关键字
-            string newContent = compileTool.ReplaceKeyWord(info.content, channelInfo);
-            newContent = compileTool.ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
-
-            string xml = FileTool.ReadStringByFile(xmlPath);
-            int index = xml.IndexOf("</application>");
-            xml = xml.Insert(index, newContent);
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-
-            //添加新MainActivity
-            if (info.MainActivity)
-            {
-                AddMainActivity(filePath, info);
-            }
-        }
-
-        void AddMainActivityProperty(string filePath, KeyValue kv, SDKInfo sdkInfo, ChannelInfo channelInfo)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-
-            string xml = FileTool.ReadStringByFile(xmlPath);
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            //替换关键字
-            string newValue = compileTool.ReplaceKeyWord(kv.value, channelInfo);
-            newValue = compileTool.ReplaceKeyWordbySDKInfo(newValue, sdkInfo);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlNode app = GetNode(manifest, "application");
-
-            //获取主Activity
-            for (int i = 0; i < app.ChildNodes.Count; i++)
-            {
-                XmlNode node = app.ChildNodes[i];
-                XmlElement ele = (XmlElement)node;
-                for (int j = 0; j < ele.ChildNodes.Count; j++)
-                {
-                    XmlNode node2 = ele.ChildNodes[j];
-
-                    if (node2.Name == "intent-filter")
-                    {
-                        XmlNode action = GetNode(node2, "category");
-                        XmlElement ele2 = (XmlElement)action;
-
-                        if (ele2!= null && ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
-                        {
-                            //增加属性
-                            ele.SetAttribute(kv.key, "http://schemas.android.com/apk/res/android", newValue);
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            //保存
-            xmlDoc.Save(xmlPath);
-        }
-
-        string GetMainActicityName(string filePath)
-        {
-            string mainActivityName = null;
-
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlNode app = GetNode(manifest, "application");
-
-            //获取主Activity
-            for (int i = 0; i < app.ChildNodes.Count; i++)
-            {
-                XmlNode node = app.ChildNodes[i];
-                XmlElement ele = (XmlElement)node;
-                for (int j = 0; j < ele.ChildNodes.Count; j++)
-                {
-                    XmlNode node2 = ele.ChildNodes[j];
-
-                    if (node2.Name == "intent-filter")
-                    {
-                        XmlNode action = GetNode(node2, "category");
-                        XmlElement ele2 = (XmlElement)action;
-
-                        if (ele2 != null
-                            && ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
-                        {
-                            mainActivityName = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return mainActivityName;
-        }
-
-        void RemoveOldMainActivity(string filePath)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlNode app = GetNode(manifest, "application");
-
-            //获取主Activity
-            for (int i = 0; i < app.ChildNodes.Count; i++)
-            {
-                XmlNode node = app.ChildNodes[i];
-                XmlElement ele = (XmlElement)node;
-                for (int j = 0; j < ele.ChildNodes.Count; j++)
-                {
-                    XmlNode node2 = ele.ChildNodes[j];
-
-                    if (node2.Name == "intent-filter")
-                    {
-                        XmlNode action = GetNode(node2, "category");
-                        XmlElement ele2 = (XmlElement)action;
-
-                        if (ele2 != null 
-                            && ele2.GetAttribute("name", "http://schemas.android.com/apk/res/android") == "android.intent.category.LAUNCHER")
-                        {
-                            ele.RemoveChild(node2);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            xmlDoc.Save(xmlPath);
-        }
-
-        XmlNode GetNode(XmlNode parent, string name)
-        {
-            for (int i = 0; i < parent.ChildNodes.Count; i++)
-            {
-                if (parent.ChildNodes[i].Name == name)
-                {
-                    return parent.ChildNodes[i];
-                }
-            }
-
-            return null;
-        }
-
-        void AddMainActivity(string filePath, ActivityInfo info)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            //直接保存
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlNode app = GetNode(manifest, "application");
-
-            //权限判重
-            for (int i = 0; i < app.ChildNodes.Count; i++)
-            {
-                XmlNode node = app.ChildNodes[i];
-                XmlElement ele = (XmlElement)node;
-
-                string Attribute = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
-
-                if (Attribute.Contains(info.name))
-                {
-                    XmlElement nd = xmlDoc.CreateElement("intent-filter");
-                    node.AppendChild(nd);
-
-                    XmlElement nd1 = xmlDoc.CreateElement("action");
-                    nd1.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.intent.action.MAIN");
-
-                    XmlElement nd2 = xmlDoc.CreateElement("category");
-                    nd2.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.intent.category.LAUNCHER");
-                    XmlElement nd3 = xmlDoc.CreateElement("category");
-                    nd3.SetAttribute("name", "http://schemas.android.com/apk/res/android", "android.intent.category.LEANBACK_LAUNCHER");
-
-                    nd.AppendChild(nd1);
-                    nd.AppendChild(nd2);
-                    nd.AppendChild(nd3);
-                    break;
-                }
-            }
-
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddService(string filePath, ServiceInfo info, ChannelInfo channelInfo, SDKInfo SDKinfo)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            string content = compileTool.ReplaceKeyWord(info.content, channelInfo);
-            content = compileTool.ReplaceKeyWordbySDKInfo(content, SDKinfo);
-
-            int index = xml.IndexOf("</application>");
-            xml = xml.Insert(index, content);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddProvider(string filePath, ProviderInfo info,ChannelInfo channelInfo, SDKInfo SDKinfo)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            int index = xml.IndexOf("</application>");
-
-            string content = compileTool.ReplaceKeyWord(info.content, channelInfo);
-            content = compileTool.ReplaceKeyWordbySDKInfo(content, SDKinfo);
-
-            xml = xml.Insert(index, content);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddMeta(string filePath, KeyValue kv, ChannelInfo channelInfo,SDKInfo info)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            int index = xml.IndexOf("</application>");
-
-            //替换关键字和配置
-            string content = compileTool.ReplaceKeyWord(kv.value, channelInfo);
-            content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
-
-            xml = xml.Insert(index, content);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void AddUses(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            int index = xml.IndexOf("</manifest>");
-
-            //替换关键字和配置
-            string content = compileTool.ReplaceKeyWord(kv.value, channelInfo);
-            content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
-
-            xml = xml.Insert(index, content);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            xmlDoc.Save(xmlPath);
-        }
-
-        void ChangeApplicationName(string filePath,string applicationName)
-        {
-            string xmlPath = filePath + "\\AndroidManifest.xml";
-            string xml = FileTool.ReadStringByFile(xmlPath);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-
-            XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
-            XmlNode app = GetNode(manifest, "application");
-            XmlElement ele = (XmlElement)app;
-
-            ele.SetAttribute("name", "http://schemas.android.com/apk/res/android", applicationName);
-
-            xmlDoc.Save(xmlPath);
-        }
-
-        #endregion
-
-        #endregion
-
         #region 重新生成R表
 
         public void Rebuild_R_Table(string aimPath,ChannelInfo channel)
@@ -765,110 +208,135 @@ namespace APKRepackageSDKTool
                 File.Delete(tempRes);
             }
 
-            //转换smli文件
-            if (FindRPath(R_Path) != null)
+            string javaPath = FindRPath(R_Path);
+
+            if(!string.IsNullOrEmpty(javaPath))
             {
-                //将smli中的R表ID赋值给生成出来的ID,避免出现资源找不到的情况
-                RTableUtil rt = new RTableUtil();
-                rt.callBack += OutPut;
-                rt.errorCallBack += ErrorOutPut;
-                rt.GenerateRKV(FindRPath(R_Path));
+                string metaPackageName = androidTool.GetPackageName(manifest);
+                RTableUtil tr = new RTableUtil(callBack,errorCallBack);
 
-                rt.ReplaceRTable(smaliPath);
+                //tr.GenerateRKV(javaPath);
+                //tr.ReplaceRTable(smaliPath);
 
-                OutPut("编译R.java文件");
-                //编译R.java文件
-                cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + FindRPath(R_Path), true, true);
+                compileTool.RJava2Smali(R_Path, aimPath);
 
-                //取第一个文件夹名作为命令开头
-                string fileName = FileTool.GetDirectoryName( Directory.GetDirectories(R_Path)[0]);
+                //将模板文件覆盖到所有Styleable文件上
+                string templatePath = smaliPath + "\\" + metaPackageName.Replace(".","\\");
+                //string temp = FileTool.ReadStringByFile(templatePath);
 
-                OutPut("生成的R文件的jar");
-                //生成的R文件的jar
-                cmd.Execute("jar cvf ./R.jar ./" + fileName, path: R_Path);
+                OutPut("metaPackageName " + metaPackageName);
+                //OutPut("templatePath " + templatePath);
+               
+                tr.ReplaceStyleable(smaliPath, metaPackageName, GenerateTemplate(templatePath));
 
-                OutPut("Jar to dex");
-                //Jar to dex
-                cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ");
-
-                OutPut("dex to smali");
-                //dex to smali
-                cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + aimPath + "/smali ./R_path/classes.dex");
+                FileTool.DeleteDirectoryComplete(R_Path);
             }
             else
             {
-                throw new Exception("R文件生成失败！ 请检查清单文件是否正确！");
+                ErrorOutPut("找不到R文件，请检查清单文件");
             }
 
-            FileTool.SafeDeleteDirectory(R_Path);
+            //compileTool.RJava2Smali(R_Path, aimPath);
 
-            //cmd.Execute("java -jar baksmali-2.1.3.jar classes.dex");
+            //string metaPackageName = androidTool.GetPackageName(manifest);
+            //string metaRfile = FindRPath(R_Path);
+            //string content = FileTool.ReadStringByFile(metaRfile);
 
-            OutPut("创建临时目录");
+            ////清空R_Path路径
+            //FileTool.DeleteDirectory(R_Path);
+
+            //List<string> Rlist = FindRList(aimPath);
+
+            //for (int i = 0; i < Rlist.Count; i++)
+            //{
+            //    string sub_packageName = GetPackageNameByPath(Rlist[i]);
+            //    string sub_javaPath = R_Path + GetJavaPath(Rlist[i]) + "\\R.java";
+                
+            //    OutPut("sub_packageName " + sub_packageName);
+            //    OutPut("sub_javaPath " + sub_javaPath);
+
+            //    FileTool.CreateFilePath(sub_javaPath);
+            //    FileTool.WriteStringByFile(sub_javaPath, content.Replace(metaPackageName, sub_packageName));
+
+            //    compileTool.RJava2Smali(R_Path, aimPath);
+
+            //    //File.Delete(sub_javaPath);
+            //    FileTool.DeleteDirectory(R_Path);
+            //}
         }
 
-        public string BuildRTable(string aimPath,string name,string sdkPath)
+        //构造模板
+        Dictionary<string,string> GenerateTemplate(string smaliPath)
         {
-            string result = "";
+            Dictionary<string, string> template = new Dictionary<string, string>();
 
-            String R_Path = aimPath + "/R_path/";
+            List<string> list = FileTool.GetAllFileNamesByPath(smaliPath, new string[] { "smali" });
 
-            FileTool.CreatePath(R_Path);
-
-            //String androidPath = @"D:\AndroidSDK\platforms\android-28\android.jar";
-            string manifest = aimPath + "/AndroidManifest.xml";
-            string resPath = aimPath + "/res";
-
-            CmdService cmd = new CmdService(OutPut, errorCallBack);
-
-            //生成R文件
-            cmd.Execute(EditorData.GetAAPTPath() + " package -f -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) + " -m -J " + R_Path + " -S " + resPath + " -M " + manifest + "");
-
-            //aapt2
-            //cmd.Execute(EditorData.GetAAPT2Path() + " link -I " + EditorData.GetAndroidJarPath(29) + " --java " + R_Path + " -A " + resPath + " --manifest " + manifest + " -v");
-
-            if (FindRPath(R_Path) != null)
+            for (int i = 0; i < list.Count; i++)
             {
-                string javaPath = FindRPath(R_Path);
-                string jarPath = R_Path + "/"+ name + "_R.jar";
-                string rPath = aimPath + "/R.txt";
-
-                ////替换ID
-                ////有时不同aar包的R.id 会冲突，这里使用aar自带的R.id 进行替换，如果还不行再改
-                //result += RTableUtil.AnalysisRJava(javaPath);
-
-                //编译R.java文件
-                cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 " + javaPath, true, true);
-
-                //删除掉java文件
-                FileTool.DeleteFile(javaPath);
-
-                cmd.Execute("cd " + R_Path);
-
-                //取第一个文件夹名作为命令开头
-                string fileName = FileTool.GetDirectoryName(Directory.GetDirectories(R_Path)[0]);
-
-                //生成的R文件的jar
-                cmd.Execute("jar cvf ./"+ name + "_R.jar ./"+ fileName, path: R_Path);
-
-                if(File.Exists(jarPath))
+                string fileName = FileTool.GetFileNameByPath(list[i]);
+                if (fileName.StartsWith("R$"))
                 {
-                    //复制R文件到库
-                    File.Copy(jarPath, sdkPath + "/" + name + "_R.jar",true);
+                    template.Add(fileName, FileTool.ReadStringByFile(list[i]));
 
-                    result += "R文件生成完成！ ";
+                    OutPut("构造模板 " + fileName + " " + list[i]);
                 }
             }
-            else
-            {
-                result += "R文件生成失败！ 请检查清单文件是否正确！";
-            }
 
-            //FileTool.SafeDeleteDirectory(R_Path);
-            //Directory.Delete(R_Path);
-
-            return result;
+            return template;
         }
+
+        //string GetPackageNameByPath(string path)
+        //{
+        //    string packageName = "";
+
+        //    packageName = path.Replace("/", "\\").Replace("\\R.smali","");
+        //    int index = packageName.LastIndexOf("smali\\");
+
+        //    packageName = packageName.Substring(index).Replace("\\",".").Replace("smali.","");
+
+        //    return packageName;
+        //}
+
+        //string GetJavaPath(string path)
+        //{
+        //    string javaPath = "";
+
+        //    javaPath = path.Replace("/", "\\").Replace("\\R.smali", "");
+        //    int index = javaPath.LastIndexOf("smali\\");
+
+        //    javaPath = javaPath.Substring(index).Replace("smali\\", "");
+
+        //    return javaPath;
+        //}
+
+        //List<string> FindRList(string path)
+        //{
+        //    List<string> list = new List<string>();
+
+        //    RecursionFind(list,path);
+
+        //    return list;
+        //}
+
+        //void RecursionFind(List<string> list, string path)
+        //{
+        //    string[] allfileName = Directory.GetFiles(path);
+        //    foreach (var item in allfileName)
+        //    {
+        //        if (item.Contains("\\R.smali"))
+        //        {
+        //            list.Add(item);
+        //            OutPut("找到R路径 " + item);
+        //        }
+        //    }
+
+        //    string[] dires = Directory.GetDirectories(path);
+        //    for (int i = 0; i < dires.Length; i++)
+        //    {
+        //        RecursionFind(list, dires[i]);
+        //    }
+        //}
 
         String FindRPath(string path)
         {
@@ -1037,13 +505,13 @@ namespace APKRepackageSDKTool
             PutJar(filePath, info);
 
             //手动移除无法编译通过的字段
-            RemoveErrordManifest(filePath);
+            androidTool.RemoveErrordManifest(filePath);
 
             //自动编译类
             if (config.useCustomJavaClass)
             {
                 OutPut("自动编译 " );
-                compileTool.Compile(config, channelInfo, filePath);
+                compileTool.CompileCustomJavaClass(config, channelInfo, filePath);
             }
 
             //拷贝资源文件
@@ -1054,63 +522,63 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < config.XmlHeadList.Count; i++)
             {
                 OutPut("添加XMLHead " + info.sdkName + " " + config.XmlHeadList[i].key);
-                AddXMLHead(filePath, config.XmlHeadList[i], info, channelInfo);
+                androidTool.AddXMLHead(filePath, config.XmlHeadList[i], info, channelInfo);
             }
 
             //添加Application头
             for (int i = 0; i < config.ApplicationHeadList.Count; i++)
             {
                 OutPut("添加ApplicationHead " + info.sdkName + " " + config.ApplicationHeadList[i].Key);
-                AddApplicationHead(filePath, config.ApplicationHeadList[i], info, channelInfo);
+                androidTool.AddApplicationHead(filePath, config.ApplicationHeadList[i], info, channelInfo);
             }
 
             //添加Activity
             for (int i = 0; i < config.ActivityInfoList.Count; i++)
             {
                 OutPut("添加Activity " + info.sdkName + " " + config.ActivityInfoList[i].name);
-                AddActivity(filePath, config.ActivityInfoList[i], info, channelInfo);
+                androidTool.AddActivity(filePath, config.ActivityInfoList[i], info, channelInfo);
             }
 
             //添加MainActivityProperty
             for (int i = 0; i < config.mainActivityPropertyList.Count; i++)
             {
                 OutPut("添加mainActivityProperty " + info.sdkName + " " + config.mainActivityPropertyList[i].key);
-                AddMainActivityProperty(filePath, config.mainActivityPropertyList[i], info, channelInfo);
+                androidTool.AddMainActivityProperty(filePath, config.mainActivityPropertyList[i], info, channelInfo);
             }
 
             //添加Service
             for (int i = 0; i < config.serviceInfoList.Count; i++)
             {
                 OutPut("添加Service " + info.sdkName + " " + config.serviceInfoList[i].name);
-                AddService(filePath, config.serviceInfoList[i], channelInfo , info);
+                androidTool.AddService(filePath, config.serviceInfoList[i], channelInfo , info);
             }
 
             //添加Provider
             for (int i = 0; i < config.providerInfoList.Count; i++)
             {
                 OutPut("添加Provider " + info.sdkName + " " + config.providerInfoList[i].name);
-                AddProvider(filePath, config.providerInfoList[i], channelInfo, info);
+                androidTool.AddProvider(filePath, config.providerInfoList[i], channelInfo, info);
             }
 
             //添加Meta字段
             for (int i = 0; i < config.metaInfoList.Count; i++)
             {
                 OutPut("添加Meta " + info.sdkName + " " + config.metaInfoList[i].key);
-                AddMeta(filePath, config.metaInfoList[i], channelInfo, info);
+                androidTool.AddMeta(filePath, config.metaInfoList[i], channelInfo, info);
             }
 
             //添加Uses字段
             for (int i = 0; i < config.usesList.Count; i++)
             {
                 OutPut("添加Uses " + info.sdkName + " " + config.usesList[i].key);
-                AddUses(filePath, config.usesList[i], channelInfo, info);
+                androidTool.AddUses(filePath, config.usesList[i], channelInfo, info);
             }
 
             //修改ApplicationName
             if (!string.IsNullOrEmpty(config.ApplicationName))
             {
                 OutPut("修改ApplicationName " + config.ApplicationName);
-                ChangeApplicationName(filePath, config.ApplicationName);
+                androidTool.ChangeApplicationName(filePath, config.ApplicationName);
             }
 
             //添加配置文件
@@ -1162,8 +630,8 @@ namespace APKRepackageSDKTool
                     string permission = config.permissionList[j];
 
                     //替换关键字
-                    permission = compileTool.ReplaceKeyWord(permission, info);
-                    permission = compileTool.ReplaceKeyWordbySDKInfo(permission, info.sdkList[i]);
+                    permission = AndroidTool.ReplaceKeyWord(permission, info);
+                    permission = AndroidTool.ReplaceKeyWordbySDKInfo(permission, info.sdkList[i]);
 
                     if (!permissionList.Contains(permission))
                     {
@@ -1176,7 +644,7 @@ namespace APKRepackageSDKTool
             {
                 OutPut("权限 " + permissionList[i]);
 
-                AddPermission(filePath, permissionList[i]);
+                androidTool.AddPermission(filePath, permissionList[i]);
             }
         }
 
@@ -1209,8 +677,8 @@ namespace APKRepackageSDKTool
                     FileTool.RecursionFileExecute(filePath + "\\" + dirName, "ini", (file) =>
                     {
                         String content = FileTool.ReadStringByFile(file);
-                        content = compileTool.ReplaceKeyWord(content, channelInfo);
-                        content = compileTool.ReplaceKeyWordbySDKInfo(content, info);
+                        content = AndroidTool.ReplaceKeyWord(content, channelInfo);
+                        content = AndroidTool.ReplaceKeyWordbySDKInfo(content, info);
 
                         FileTool.WriteStringByFile(file, content);
                     });
@@ -1276,10 +744,32 @@ namespace APKRepackageSDKTool
                     }
                 }
             }
-            ChangeSDKVersion(filePath, minSDKVersion, targetSDKVersion);
+            androidTool.ChangeSDKVersion(filePath, minSDKVersion, targetSDKVersion);
         }
 
         #endregion
+
+        #region Maven
+        void MavanLogic(string filePath, ChannelInfo info)
+        {
+            List<string> mavenPath = new List<string>();
+            List<string> mavenLibPath = new List<string>();
+            for (int i = 0; i < info.sdkList.Count; i++)
+            {
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkList[i].sdkName);
+                if (config.useMaven)
+                {
+                    mavenPath.AddRange(config.mavenPathList);
+                    mavenLibPath.AddRange(config.mavenLibList);
+                }
+            }
+
+            MavenTool mt = new MavenTool(EditorData.MavenCachePath,callBack, errorCallBack);
+
+            mt.ExtractMavenFile(mavenPath, mavenLibPath, filePath, info);
+        }
+
+        #endregion 
 
         #region 强制32位模式
 
@@ -1308,8 +798,9 @@ namespace APKRepackageSDKTool
             }
 
             OutPut("删除不必要的的库");
-            //Delete(filePath + "/lib/x86");
-            //Delete(filePath + "/lib/x86_64");
+            Delete(filePath + "/lib/x86");
+            Delete(filePath + "/lib/x86_64");
+
             Delete(filePath + "/lib/mips");
             Delete(filePath + "/lib/mips64");
         }
@@ -1392,8 +883,7 @@ namespace APKRepackageSDKTool
 
             Dictionary<string, string> allMethod = new Dictionary<string, string>();
 
-            int maxFuncNum = 65535;
-            //int maxFuncNum = 30000;
+            int maxFuncNum = 65535 ;
             int currentFuncNum = 0;
             int currentIndex = 1;
 
@@ -1403,9 +893,14 @@ namespace APKRepackageSDKTool
                 if(JudgeMainDex(list[i], info))
                 {
                     currentFuncNum += CalcSmaliMethodCountBySmali(list[i], allMethod);
-
-                    //OutPut("主Dex：" + list[i] + " funcnum:" + currentFuncNum);
                 }
+            }
+
+            OutPut("主Dex 的大小： funcnum:" + currentFuncNum);
+
+            if(currentFuncNum > maxFuncNum)
+            {
+                errorCallBack("主包的大小超过了限制！");
             }
 
             for (int i = 0; i < list.Count; i++)
@@ -1430,7 +925,7 @@ namespace APKRepackageSDKTool
                     string newPath = smaliPath + "_classes" + currentIndex;
                     FileTool.CreatePath(newPath);
 
-                    //OutPut("超过上限：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
+                    OutPut("超过上限： currentIndex " + currentIndex + " name " + list[i]);
                 }
 
                 if (currentIndex > 1)
@@ -1438,8 +933,8 @@ namespace APKRepackageSDKTool
                     string newPath = smaliPath + "_classes" + currentIndex;
                     string targetPath = newPath + "" + list[i].Replace(smaliPath, "");
                     FileTool.CreateFilePath(targetPath);
-                    File.Move(list[i], targetPath);
 
+                    File.Move(list[i], targetPath);
                     //OutPut("分包：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
                 }
             }
@@ -1459,12 +954,16 @@ namespace APKRepackageSDKTool
             //默认设置
             mainDexList.Add(@"/android/support/multidex");
             mainDexList.Add("sdkInterface");
+            mainDexList.Add("Provider");
             mainDexList.Add("Service");
             mainDexList.Add("Receiver");
-            mainDexList.Add("Provider");
             mainDexList.Add("Activity");
-            mainDexList.Add("Fragment");
-            mainDexList.Add("Exception");
+
+            //mainDexList.Add("Fragment");
+            //mainDexList.Add("Exception");
+
+            //mainDexList.Add("R$");
+            //mainDexList.Add(@"/R.smali");
 
             for (int i = 0; i < info.SdkList.Count; i++)
             {
@@ -1496,7 +995,7 @@ namespace APKRepackageSDKTool
         /// <param name="smaliPath"></param>
         /// <param name="allMethod"></param>
         /// <returns></returns>
-        public int CalcSmaliMethodCountBySmali(string smaliPath,Dictionary<string,string> allMethod)
+        public int CalcSmaliMethodCountBySmali(string smaliPath, Dictionary<string, string> allMethod)
         {
             int count = 0;
             string content = FileTool.ReadStringByFile(smaliPath);
@@ -1513,30 +1012,32 @@ namespace APKRepackageSDKTool
                 string line = lines[i].Trim();
                 string method = c_NoneMethod;
 
-                if(line.StartsWith(".method"))
+                if (line.StartsWith(".method"))
                 {
-                    method = ParseMethodDefault(className, line);
-
-                    //OutPut("StartsWith method " + line);
+                    method = "m" + ParseMethodDefault(className, line);
                 }
-                else if(line.StartsWith("invoke-"))
+                else if (line.StartsWith("invoke-"))
                 {
-                    method = ParseMethodInvoke(className, line);
+                    method = "i" + ParseMethodInvoke(className, line);
+                }
+                else if (line.StartsWith(".field"))
+                {
+                    method = "f" + ParseFieldName(className, line);
                 }
 
-                if(method == c_NoneMethod)
+                if (method == c_NoneMethod)
                 {
                     continue;
                 }
 
-                if(!allMethod.ContainsKey(method))
+                if (!allMethod.ContainsKey(method))
                 {
-                    allMethod.Add(method,method);
-                    count++;
+                    allMethod.Add(method, method);
+                    count+=2;
                 }
             }
 
-            //OutPut("method " + count);
+            //OutPut(smaliPath + " method " + count);
 
             return count;
         }
@@ -1572,6 +1073,25 @@ namespace APKRepackageSDKTool
 
             string[] blocks = line.Split(' ');
             return className + "->" + blocks[blocks.Length - 1];
+        }
+
+        string ParseFieldName(string className, string line)
+        {
+            string[] blocks = line.Split(' ');
+            if (blocks.Length >= 7)
+            {
+                string[] kv = blocks[blocks.Length - 3].Split(':');
+                return className + "->" + kv[0];
+            }
+            else if (blocks.Length >= 4)
+            {
+                string[] kv = blocks[blocks.Length - 1].Split(':');
+                return className + "->" + kv[0];
+            }
+            else
+            {
+                return c_NoneMethod;
+            }
         }
         #endregion
 
