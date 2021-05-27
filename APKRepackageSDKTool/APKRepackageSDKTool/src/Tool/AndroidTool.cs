@@ -196,7 +196,7 @@ public class AndroidTool
 
     #region 提取资源到SDK目录
 
-    //在 SdkEditorWindow  -> void ExtractAAR(string path) 1540 行
+    //在 SdkEditorWindow  -> void ExtractAAR(string path) 1667 行
 
     #endregion
 
@@ -210,6 +210,9 @@ public class AndroidTool
     /// <param name="info"></param>
     public void ExtractAAR2APK(string rarPath,string aimPath,ChannelInfo info)
     {
+        cot.assignMinAPILevel = info.GetAssignMinAPILevel();
+        cot.minAPILevel = info.GetMinAPILevel();
+
         string aarName = FileTool.GetFileNameByPath(rarPath);
 
         //提取jar
@@ -248,7 +251,7 @@ public class AndroidTool
             mergeRes.Merge(rarPath + "/res", aimPath + "/res");
 
             //生成R表
-            BuildRTable2APK(rarPath, aarName, aimPath);
+            BuildRTable2APKByCache(rarPath, aarName, aimPath);
         }
     }
 
@@ -259,7 +262,7 @@ public class AndroidTool
         {
             if (item.EndsWith(".jar"))
             {
-                cot.Jar2Smali(item, aimPath);
+                cot.Jar2SmaliByCache(item, aimPath);
             }
         }
 
@@ -267,6 +270,24 @@ public class AndroidTool
         for (int i = 0; i < dires.Length; i++)
         {
             ExtractJar2APK(dires[i], aimPath);
+        }
+    }
+
+    public void BuildRTable2APKByCache(string rarPath, string name, string aimPath)
+    {
+        string R_Path = rarPath + "/R_path/";
+
+        string cachePath = rarPath + "\\.smaliCache\\" + name + "_R.jar";
+        string smaliPath = aimPath + "\\smali";
+
+        if(Directory.Exists(cachePath))
+        {
+            OutPut("读取R文件缓存 " + cachePath);
+            FileTool.CopyDirectory(cachePath, smaliPath, (fileA, fileB) => { });
+        }
+        else
+        {
+            BuildRTable2APK(rarPath, name, aimPath);
         }
     }
 
@@ -297,11 +318,10 @@ public class AndroidTool
         string txtPath = rarPath + "\\R.txt";
         string javaPath = R_Path + "" + packageName.Replace(".", "\\") + "\\R.java";
 
-
         RTxt2RJava(packageName, txtPath, javaPath);
         cot.GenerateRJar2APK(R_Path, rarPath, name, aimPath);
 
-        //FileTool.DeleteDirectoryComplete(R_Path);
+        FileTool.DeleteDirectoryComplete(R_Path);
     }
 
 
@@ -347,6 +367,19 @@ public class AndroidTool
                 metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
 
                 AddMeta(aimPath, metaKV, info,null);
+
+                OutPut("I: 添加 meta " + metaKV.value);
+            }
+
+            //uses-feature
+            else if (ele.Name == "uses-feature")
+            {
+                //Meta
+                KeyValue metaKV = new KeyValue();
+                metaKV.key = ele.OuterXml;
+                metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
+
+                AddUses(aimPath, metaKV, info, null);
 
                 OutPut("I: 添加 meta " + metaKV.value);
             }
@@ -430,7 +463,7 @@ public class AndroidTool
                 }
 
                 //recevicer和provider的处理是一样的
-                if (ele.Name == "recevicer")
+                if (ele.Name == "receiver")
                 {
                     string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
 

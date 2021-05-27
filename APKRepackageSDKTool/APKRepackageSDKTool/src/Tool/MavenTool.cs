@@ -105,12 +105,123 @@ public class MavenTool
     /// <param name="aimPath"></param>
     public void ExtractMavenFile(List<string> mavenPathList, List<string> mavenLibList,string aimPath, ChannelInfo info)
     {
+        //指定编译版本
+        ct.assignMinAPILevel = info.GetAssignMinAPILevel();
+        ct.minAPILevel = info.GetMinAPILevel();
+
+        //先根据依赖收集一份maven清单
+        //主要是为了版本号唯一
+        List<string> mavenFinalList = CollectMavenList(mavenLibList);
+
         Dictionary<string, bool> repeatHash = new Dictionary<string, bool>();
         //进行提取
+        //这里考虑进行多线程优化，提高速度
+        for (int i = 0; i < mavenFinalList.Count; i++)
+        {
+            ExtractSinglePackage(mavenFinalList[i], aimPath, repeatHash,info);
+        }
+    }
+
+    List<string> CollectMavenList(List<string> mavenLibList)
+    {
+        List<string> fList = new List<string>();
+        List<MavenData> mavenDataList = new List<MavenData>();
+
+        List<MavenData> repeatList = new List<MavenData>();
+        List<MavenData> finalList = new List<MavenData>();
+
+        //构造MavenData
         for (int i = 0; i < mavenLibList.Count; i++)
         {
-            ExtractSinglePackage(mavenLibList[i], aimPath, repeatHash,info);
+            mavenDataList.Add(MavenData.GetMavenData(mavenLibList[i]));
         }
+
+        //进行依赖收集
+        for (int i = 0; i < mavenDataList.Count; i++)
+        {
+            CollectSingleMaven(mavenDataList[i], finalList, repeatList);
+        }
+
+        OutPut("最终放入的maven清单：");
+        for (int i = 0; i < finalList.Count; i++)
+        {
+            OutPut(finalList[i].GetFullName());
+            //输出结果
+            fList.Add(finalList[i].GetFullName());
+        }
+        OutPut("抛弃的maven清单：");
+        for (int i = 0; i < repeatList.Count; i++)
+        {
+            OutPut(repeatList[i].GetFullName());
+        }
+
+        return fList;
+    }
+
+    void CollectSingleMaven(MavenData maven, List<MavenData> finalList, List<MavenData> repeatList)
+    {
+        //对自身进行排重
+        MavenRemoveRepeat(maven , finalList, repeatList);
+
+        //处理依赖
+        string libPomPath = pomPath + "\\" + maven.GetFileName() + ".pom";
+        var list = AnalysisPomDependencies(libPomPath);
+        for (int i = 0; i < list.Count; i++)
+        {
+            CollectSingleMaven(MavenData.GetMavenData(list[i]), finalList,repeatList);
+        }
+    }
+
+    bool MavenRemoveRepeat(MavenData data, List<MavenData> finalList, List<MavenData> repeatList)
+    {
+        bool isRepeat = false;
+        for (int i = 0; i < finalList.Count; i++)
+        {
+            //只取版本最大的
+            if(finalList[i].GetGroupAddArtifact() == data.GetGroupAddArtifact())
+            {
+                isRepeat = true;
+
+                if(finalList[i].VersionCompare(data) < 0)
+                {
+                    finalList[i] = data;
+
+                    //收集重复结果
+                    if(!GetHasMaven(repeatList,finalList[i]))
+                    {
+                        repeatList.Add(finalList[i]);
+                    }
+                }
+                else if(finalList[i].VersionCompare(data) > 0)
+                {
+                    //收集重复结果
+                    if (!GetHasMaven(repeatList,data))
+                    {
+                        repeatList.Add(data);
+                    }
+                }
+            }
+        }
+
+        if(!isRepeat)
+        {
+            finalList.Add(data);
+        }
+
+        return isRepeat;
+    }
+
+    bool GetHasMaven(List<MavenData> repeatList,MavenData maven)
+    {
+        for (int i = 0; i < repeatList.Count; i++)
+        {
+            if(repeatList[i].GetFullName() == maven.GetFullName())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -487,13 +598,13 @@ public class MavenTool
 
         OutPut("I: 提取Maven  " + gradleName);
 
-        //读取依赖
-        var list = AnalysisPomDependencies(aimPomPath);
+        ////读取依赖
+        //var list = AnalysisPomDependencies(aimPomPath);
 
-        for (int i = 0; i < list.Count; i++)
-        {
-            ExtractSinglePackage(list[i], aimPath, repeatHash, info);
-        }
+        //for (int i = 0; i < list.Count; i++)
+        //{
+        //    ExtractSinglePackage(list[i], aimPath, repeatHash, info);
+        //}
 
         if (fileType == "aar")
         {
@@ -526,7 +637,7 @@ public class MavenTool
                 return;
             }
 
-            ct.Jar2Smali(aimJarPath, aimPath);
+            ct.Jar2SmaliByCache(aimJarPath, aimPath);
         }
         else
         {
@@ -542,5 +653,79 @@ public class MavenTool
     public void ErrorOutPut(string content)
     {
         errorCallBack?.Invoke(content);
+    }
+
+    struct MavenData
+    {
+        public string group;
+        public string artifact;
+        public string version;
+
+        List<int> versions;
+
+        public static MavenData GetMavenData(string gradleName)
+        {
+            //androidx.appcompat:appcompat:1.1.0 
+            MavenData mavenData = new MavenData();
+
+            string[] spilt = gradleName.Split(':');
+            mavenData.group = spilt[0];
+            mavenData.artifact = spilt[1];
+            mavenData.version = spilt[2];
+
+            mavenData.versions = new List<int>();
+            string[] vs = mavenData.version.Split('.');
+
+            for (int i = 0; i < vs.Length; i++)
+            {
+                mavenData.versions.Add(int.Parse(vs[i]));
+            }
+
+            return mavenData;
+        }
+
+        public string GetGroupAddArtifact()
+        {
+            return group + ":" + artifact;
+        }
+
+        public string GetFullName()
+        {
+            return group + ":" + artifact+":"+version;
+        }
+
+        public string GetFileName()
+        {
+            return group + "." + artifact + "-" + version;
+        }
+
+        public int VersionCompare(MavenData otherMaven)
+        {
+            for (int i = 0; i < versions.Count; i++)
+            {
+                if(otherMaven.versions.Count < i)
+                {
+                    return 1;
+                }
+
+                if(versions[i] > otherMaven.versions[i])
+                {
+                    return 1;
+                }
+                else if(versions[i] < otherMaven.versions[i])
+                {
+                    return -1;
+                }
+
+                //如果相等则判断下一位
+            }
+
+            if(otherMaven.versions.Count > versions.Count)
+            {
+                return -1;
+            }
+
+            return 0;
+        }
     }
 }

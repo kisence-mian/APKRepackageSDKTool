@@ -465,6 +465,7 @@
                         <TextBox x:Name="TextBox_AddMavenPath" Margin="0,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
                     </Grid>
                     <Grid Grid.Column="2">
+                        <CheckBox Content="使用Maven" IsChecked="{Binding UseMaven}" Height="17" VerticalAlignment="Top" Margin="0,8,74,0" HorizontalAlignment="Right" Width="113"/>
                         <Label Content="依赖库" Margin="10,0,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78" />
                         <Button Content="预下载" Margin="0,6,10,0" Click="Button_PreDownLoadMavenLib" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
                         <!--<Button Content="提取到SDK库" Margin="0,6,90,0" Click="Button_Extract" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" IsEnabled="False"/>-->
@@ -490,16 +491,17 @@
             </TabItem>
             <TabItem Header="其他设置">
                 <Grid>
-                    <Label Content="MinSDKVersion" Margin="10,16,0,0" HorizontalAlignment="Left" Width="116" Height="27" VerticalAlignment="Top"/>
+                    <Label Content="Min API Version" Margin="10,16,0,0" HorizontalAlignment="Left" Width="116" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=MinSDKversion}" Margin="155,16,10,0" VerticalAlignment="Top"/>
 
-                    <Label Content="TargetSDKVersion" Margin="10,45,342,0" Height="27" VerticalAlignment="Top"/>
+                    <Label Content="Target API Version" Margin="10,45,342,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=TargetSDKVersion}" Margin="155,45,10,0" VerticalAlignment="Top"/>
-                    <Label Content="Name" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
+                    <Label Content="ApplicationName" Margin="9,88,529,0" Height="27" VerticalAlignment="Top"/>
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding ApplicationName}" Margin="155,88,10,0" VerticalAlignment="Top"/>
 
-                    <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="10,132,10,173"/>
-                    <CheckBox Content="使用Maven" IsChecked="{Binding UseMaven}" Margin="10,158,10,147"/>
+                    <CheckBox Content="编译时指定 min API Level" IsChecked="{Binding AssignMinAPILevel}" Margin="9,135,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="209"/>
+                    <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="9,179,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="746"/>
+
                 </Grid>
             </TabItem>
 

@@ -536,7 +536,7 @@ namespace APKRepackageSDKTool
         /// <returns></returns>
         public static string GetD8Path()
         {
-            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\lib\\d8.jar";
+            return androidSdkPath + "\\build-tools\\" + buildToolVersion + "\\d8.bat";
         }
 
         /// <summary>
@@ -702,6 +702,39 @@ namespace APKRepackageSDKTool
 
             return null;
         }
+
+        public bool GetAssignMinAPILevel()
+        {
+            for (int i = 0; i < sdkList.Count; i++)
+            {
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(sdkList[i].sdkName);
+                if (config.assignMinAPILevel)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 最小APILevel 取所有sdk设置中最大的
+        /// </summary>
+        /// <returns></returns>
+        public int GetMinAPILevel()
+        {
+            int minApiLevel = -1;
+            for (int i = 0; i < sdkList.Count; i++)
+            {
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(sdkList[i].sdkName);
+                if (config.MinSDKversion > minApiLevel)
+                {
+                    minApiLevel = config.MinSDKversion;
+                }
+            }
+
+            return minApiLevel;
+        }
     }
 
     public class TotalSDKConfig : List<SDKConfig>, INotifyCollectionChanged
@@ -766,9 +799,11 @@ namespace APKRepackageSDKTool
         public List<string> mavenPathList = new List<string>();
         public List<string> mavenLibList = new List<string>();
 
-        public int minSDKversion;
+        public int minSDKversion = 16;
         public int targetSDKVersion;
         public string applicationName;
+
+        public bool assignMinAPILevel = false;
 
         public bool force32bit; //强制32位执行
         public bool useMaven;   //使用Maven
@@ -850,6 +885,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> ApplicationHeadList { get => applicationHeadList; set => applicationHeadList = value; }
         public List<string> FirstDexList { get => firstDexList; set => firstDexList = value; }
         public bool UseMaven { get => useMaven; set => useMaven = value; }
+        public bool AssignMinAPILevel { get => assignMinAPILevel; set => assignMinAPILevel = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

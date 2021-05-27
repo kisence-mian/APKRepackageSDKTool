@@ -97,6 +97,7 @@
     <Compile Include="src\RepackageManager.cs" />
     <Compile Include="src\Tool\RarTool.cs" />
     <Compile Include="src\Tool\RTableUtil.cs" />
+    <Compile Include="src\Tool\SplitDexTool.cs" />
     <Compile Include="src\Tool\YML\YML.cs" />
     <Compile Include="src\Tool\YML\YmlTool.cs" />
     <Compile Include="UI\LanguageWindow.xaml.cs">

@@ -34,7 +34,11 @@ namespace APKRepackageSDKTool
 
         public void ChannelLogic(string filePath, ChannelInfo info)
         {
-            if(info.IsExecuteInvalidFile)
+            //指定编译版本
+            compileTool.assignMinAPILevel = info.GetAssignMinAPILevel();
+            compileTool.minAPILevel = info.GetMinAPILevel();
+
+            if (info.IsExecuteInvalidFile)
             {
                 OutPut("处理无效文件");
                 ExecuteInvalidFile(filePath);
@@ -104,6 +108,9 @@ namespace APKRepackageSDKTool
                 //强制32位模式
                 Force32Bit(filePath, info);
             }
+
+            OutPut("移除编不过的资源");
+            RemoveUnCompileResource(filePath);
 
             OutPut("写配置清单");
             SaveSDKManifest(filePath, info);
@@ -224,12 +231,18 @@ namespace APKRepackageSDKTool
                 string templatePath = smaliPath + "\\" + metaPackageName.Replace(".","\\");
                 //string temp = FileTool.ReadStringByFile(templatePath);
 
-                OutPut("metaPackageName " + metaPackageName);
+                //OutPut("metaPackageName " + metaPackageName);
                 //OutPut("templatePath " + templatePath);
-               
-                tr.ReplaceStyleable(smaliPath, metaPackageName, GenerateTemplate(templatePath));
 
-                FileTool.DeleteDirectoryComplete(R_Path);
+                if(Directory.Exists(smaliPath))
+                {
+                    tr.ReplaceRsmali(smaliPath, metaPackageName, GenerateTemplate(templatePath));
+                    FileTool.DeleteDirectoryComplete(R_Path);
+                }
+                else
+                {
+                    ErrorOutPut("找不到模板文件 " + smaliPath);
+                }
             }
             else
             {
@@ -279,7 +292,7 @@ namespace APKRepackageSDKTool
                 {
                     template.Add(fileName, FileTool.ReadStringByFile(list[i]));
 
-                    OutPut("构造模板 " + fileName + " " + list[i]);
+                    //OutPut("构造模板 " + fileName + " " + list[i]);
                 }
             }
 
@@ -594,7 +607,7 @@ namespace APKRepackageSDKTool
 
             for (int i = 0; i < jarList.Count; i++)
             {
-                compileTool.Jar2Smali(jarList[i], filePath);
+                compileTool.Jar2SmaliByCache(jarList[i], filePath);
             }
         }
 
@@ -693,7 +706,7 @@ namespace APKRepackageSDKTool
                 }
 
                 //合并smali文件
-                if (dirName.Contains("smali"))
+                if (dirName.Contains("\\smali"))
                 {
                     OutPut("合并smali文件 " + info.sdkName + " " + dirName);
                     FileTool.SafeCopyDirectory(dir.FullName, filePath + "\\" + dirName);
@@ -816,6 +829,30 @@ namespace APKRepackageSDKTool
 
         #endregion
 
+        #region 移除编不过的资源
+
+        void RemoveUnCompileResource(string filePath)
+        {
+            string resPath = filePath + "\\res";
+
+            string[] directorys = Directory.GetDirectories(resPath);
+
+            //删掉所有子目录
+            for (int i = 0; i < directorys.Length; i++)
+            {
+                string pathTmp = directorys[i];
+                string dictName = FileTool.GetFileNameBySring(pathTmp);
+
+                if (dictName.Contains("-watch-"))
+                {
+                    FileTool.DeleteDirectoryComplete(pathTmp);
+                    OutPut("移除编不过的路径 " + pathTmp);
+                }
+            }
+        }
+
+        #endregion
+
         #region YML
 
 
@@ -859,6 +896,10 @@ namespace APKRepackageSDKTool
 
         public void SplitDex(string aimPath, ChannelInfo info)
         {
+            //分别计算  field  method string type proto methodHandle callSite 的数量，并分开分包
+            //为提高效率，只遍历一次
+
+
             string smaliPath = aimPath.Replace("\\", "/") + "/smali";
 
             if(info.IsResplitDex)
@@ -884,7 +925,7 @@ namespace APKRepackageSDKTool
             Dictionary<string, string> allMethod = new Dictionary<string, string>();
 
             int maxFuncNum = 65535 ;
-            int currentFuncNum = 0;
+            int currentFuncNum = 15000;
             int currentIndex = 1;
 
             for (int i = 0; i < list.Count; i++)
@@ -925,7 +966,7 @@ namespace APKRepackageSDKTool
                     string newPath = smaliPath + "_classes" + currentIndex;
                     FileTool.CreatePath(newPath);
 
-                    OutPut("超过上限： currentIndex " + currentIndex + " name " + list[i]);
+                    OutPut("I: 超过上限： currentIndex " + currentIndex + " name " + list[i]);
                 }
 
                 if (currentIndex > 1)
@@ -934,7 +975,93 @@ namespace APKRepackageSDKTool
                     string targetPath = newPath + "" + list[i].Replace(smaliPath, "");
                     FileTool.CreateFilePath(targetPath);
 
-                    File.Move(list[i], targetPath);
+                    if (File.Exists(list[i]))
+                    {
+                        File.Move(list[i], targetPath);
+                    }
+                    else
+                    {
+                        OutPut("W: 分包时找不到路径 " + list[i]);
+                    }
+                    //OutPut("分包：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
+                }
+            }
+
+            //再根据字段分一次
+            SplitDexByField(aimPath,info);
+        }
+
+        void SplitDexByField(string aimPath, ChannelInfo info)
+        {
+            OutPut("I: 根据字段分包" );
+
+            string smaliPath = aimPath.Replace("\\", "/") + "/smali";
+
+            List<string> list = FileTool.GetAllFileNamesByPath(smaliPath, new string[] { "smali" });
+
+            Dictionary<string, string> allMethod = new Dictionary<string, string>();
+
+            int maxFieldNum = 65535;
+            int currentFieldNum = 0;
+            int currentIndex = 1;
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace("\\", "/");
+                if (JudgeMainDex(list[i], info))
+                {
+                    currentFieldNum += CalcSmaliFieldCountBySmali(list[i], allMethod);
+                }
+            }
+
+            OutPut("主Dex field 的大小： funcnum:" + currentFieldNum);
+
+            if (currentFieldNum > maxFieldNum)
+            {
+                errorCallBack("主包的大小超过了限制！");
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace("\\", "/");
+                //剔除所有不需要分包的类
+                if (JudgeMainDex(list[i], info))
+                {
+                    continue;
+                }
+
+                //计算当前有多少字段
+                currentFieldNum += CalcSmaliFieldCountBySmali(list[i], allMethod);
+
+                //OutPut("普通Dex：" + list[i] + " funcnum:" + currentFuncNum);
+
+                if (currentFieldNum > maxFieldNum)
+                {
+                    currentFieldNum = 0;
+                    currentIndex++;
+
+                    string newPath = smaliPath + "_classes" + currentIndex;
+                    FileTool.CreatePath(newPath);
+
+                    OutPut("I:超过上限： currentIndex " + currentIndex + " name " + list[i]);
+                }
+
+                if (currentIndex > 1)
+                {
+                    string newPath = smaliPath + "_classes" + currentIndex;
+                    string targetPath = newPath + "" + list[i].Replace(smaliPath, "");
+                    FileTool.CreateFilePath(targetPath);
+
+                    if(File.Exists(list[i]))
+                    {
+                        File.Move(list[i], targetPath);
+                    }
+                    else
+                    {
+                        OutPut("W: 分包时找不到路径 " + list[i]);
+                    }
+
+                   
                     //OutPut("分包：" + list[i] + " funcnum:" + currentFuncNum + " currentIndex " + currentIndex);
                 }
             }
@@ -956,7 +1083,7 @@ namespace APKRepackageSDKTool
             mainDexList.Add("sdkInterface");
             mainDexList.Add("Provider");
             mainDexList.Add("Service");
-            mainDexList.Add("Receiver");
+            //mainDexList.Add("Receiver");
             mainDexList.Add("Activity");
 
             //mainDexList.Add("Fragment");
@@ -1014,13 +1141,52 @@ namespace APKRepackageSDKTool
 
                 if (line.StartsWith(".method"))
                 {
-                    method = "m" + ParseMethodDefault(className, line);
+                    method = ParseMethodDefault(className, line);
                 }
                 else if (line.StartsWith("invoke-"))
                 {
-                    method = "i" + ParseMethodInvoke(className, line);
+                    method = ParseMethodInvoke(className, line);
                 }
-                else if (line.StartsWith(".field"))
+                //else if (line.StartsWith(".field"))
+                //{
+                //    method = "f" + ParseFieldName(className, line);
+                //}
+
+                if (method == c_NoneMethod)
+                {
+                    continue;
+                }
+
+                if (!allMethod.ContainsKey(method))
+                {
+                    allMethod.Add(method, method);
+                    count+=1;
+                }
+            }
+
+            //OutPut(smaliPath + " method " + count);
+
+            return count;
+        }
+
+        public int CalcSmaliFieldCountBySmali(string smaliPath, Dictionary<string, string> allMethod)
+        {
+            int count = 0;
+            string content = FileTool.ReadStringByFile(smaliPath);
+
+            //Dictionary<string, string> allMethod = new Dictionary<string, string>();
+
+            string[] lines = content.Split('\n');
+            string className = ParseClassName(lines[0].Trim());
+
+            //OutPut("smaliPath " + smaliPath + " " + lines.Length);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i].Trim();
+                string method = c_NoneMethod;
+
+                if (line.StartsWith(".field"))
                 {
                     method = "f" + ParseFieldName(className, line);
                 }
@@ -1033,7 +1199,7 @@ namespace APKRepackageSDKTool
                 if (!allMethod.ContainsKey(method))
                 {
                     allMethod.Add(method, method);
-                    count+=2;
+                    count += 1;
                 }
             }
 

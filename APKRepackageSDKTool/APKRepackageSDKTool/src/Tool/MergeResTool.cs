@@ -52,7 +52,7 @@ public class MergeResTool
 
     void RepeatHandle(string fileA, string fileB)
     {
-        OutPut("重复的资源 " + fileB);
+        //OutPut("重复的资源 " + fileB);
 
         ////只支持合并xml
         //if (fileA.Contains("xml") && fileB.Contains("xml"))

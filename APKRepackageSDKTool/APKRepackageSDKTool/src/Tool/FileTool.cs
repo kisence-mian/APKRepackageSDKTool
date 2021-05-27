@@ -118,7 +118,7 @@ public class FileTool
                 }
                 else
                 {
-                    File.Copy(fsi.FullName, destName);
+                    CopyFile(fsi.FullName, destName);
                 }
             }
             //如果是文件夹，新建文件夹，递归
@@ -127,6 +127,32 @@ public class FileTool
                 Directory.CreateDirectory(destName);
                 CopyDirectory(fsi.FullName, destName, repeatCallBack);
             }
+        }
+    }
+
+    /// <summary>
+    /// 处理文件过长无法复制的问题
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    public static void CopyFile(string from,string to)
+    {
+        try
+        {
+            File.Copy(from, to);
+        }
+        catch(Exception)
+        {
+            StringBuilder line = new StringBuilder();
+
+            StreamReader sr = File.OpenText(from);
+            line.Append(sr.ReadToEnd());
+
+            sr.Close();
+            sr.Dispose();
+
+            string content = ReadStringByFile(from);
+            WriteStringByFile(to, line.ToString());
         }
     }
 
@@ -288,6 +314,7 @@ public class FileTool
     //取出一个相对路径下的文件名
     public static string GetFileNameBySring(string path)
     {
+        path = path.Replace('\\', '/');
         string[] paths = path.Split('/');
         return paths[paths.Length - 1];
     }

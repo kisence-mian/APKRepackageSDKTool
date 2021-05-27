@@ -153,7 +153,7 @@ public class MergeXMLTool
                     }
                     else
                     {
-                        OutPut("重复的key  " + key);
+                        //OutPut("重复的key  " + key);
                     }
                 }
 
@@ -185,7 +185,7 @@ public class MergeXMLTool
                     }
                     else
                     {
-                        OutPut("I: 重复的节点  " + key);
+                        //OutPut("I: 重复的节点  " + key);
                     }
                 }
 
@@ -254,7 +254,7 @@ public class MergeXMLTool
                     {
                         root.RemoveChild(tmp);
                         i--;
-                        OutPut("I: 重复的节点 " + key);
+                        //OutPut("I: 重复的节点 " + key);
                     }
                     else
                     {
@@ -292,7 +292,7 @@ public class MergeXMLTool
                 {
                     node.RemoveChild(tmp);
                     i--;
-                    OutPut("I: 重复的节点 " + key);
+                    //OutPut("I: 重复的节点 " + key);
                 }
                 else
                 {

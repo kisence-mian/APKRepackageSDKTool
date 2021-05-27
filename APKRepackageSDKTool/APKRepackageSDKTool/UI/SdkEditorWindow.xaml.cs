@@ -1697,7 +1697,7 @@ namespace APKRepackageSDKTool.UI
                         Permission.Add(permissionString);
                         Permission = Permission;
 
-                        result += "permission " +  permissionString + "\n";
+                        result += "permission " + permissionString + "\n";
                     }
                 }
                 //meta以及其他
@@ -1716,80 +1716,114 @@ namespace APKRepackageSDKTool.UI
                         result += ele.Name + " " + ele.OuterXml + "\n";
                     }
                 }
+                else if (ele.Name == "uses-feature")
+                {
+                    if (!HasUses(ele.OuterXml))
+                    {
+                        //Meta
+                        KeyValue metaKV = new KeyValue();
+                        metaKV.key = ele.OuterXml;
+                        metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
+
+                        UsesList.Add(metaKV);
+                        UsesList = UsesList;
+
+                        result += ele.Name + " " + ele.OuterXml + "\n";
+                    }
+                }
             }
 
-            if(application != null)
-            for (int i = 0; i < application.ChildNodes.Count; i++)
-            {
-                XmlNode node = application.ChildNodes[i];
-
-                //跳过注释
-                if(node.NodeType == XmlNodeType.Comment)
+            if (application != null)
+                for (int i = 0; i < application.ChildNodes.Count; i++)
                 {
-                    continue;
-                }
+                    XmlNode node = application.ChildNodes[i];
 
-                XmlElement ele = (XmlElement)node;
-
-                //Activity
-                if (ele.Name == "activity")
-                {
-                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
-
-                    if(!HasActivity(name))
+                    //跳过注释
+                    if (node.NodeType == XmlNodeType.Comment)
                     {
-                        ActivityInfo activityInfo = new ActivityInfo();
-
-                        activityInfo.mainActivity = false;
-                        activityInfo.name = name;
-                        activityInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"","");
-
-                        _ActivityList.Add(activityInfo);
-                        _ActivityList = _ActivityList;
-
-                        result += "Activity " + name + "\n";
+                        continue;
                     }
-                }
 
-                //Service
-                if (ele.Name == "service")
-                {
-                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+                    XmlElement ele = (XmlElement)node;
 
-                    if(!HasService(name))
+                    //Activity
+                    if (ele.Name == "activity")
                     {
-                        //Service
-                        ServiceInfo serviceInfo = new ServiceInfo();
+                        string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
 
-                        serviceInfo.name = name;
-                        serviceInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
+                        if (!HasActivity(name))
+                        {
+                            ActivityInfo activityInfo = new ActivityInfo();
 
-                        _ServiceInfo.Add(serviceInfo);
-                        _ServiceInfo = _ServiceInfo;
+                            activityInfo.mainActivity = false;
+                            activityInfo.name = name;
+                            activityInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
 
-                        result += "Service " + name + "\n";
+                            _ActivityList.Add(activityInfo);
+                            _ActivityList = _ActivityList;
+
+                            result += "Activity " + name + "\n";
+                        }
                     }
-                }
 
-                if (ele.Name == "provider")
-                {
-                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
-
-                    if (!HasProvider(name))
+                    //Service
+                    if (ele.Name == "service")
                     {
-                        //Provider
-                        ProviderInfo providerInfo = new ProviderInfo();
+                        string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
 
-                        providerInfo.name = name;
-                        providerInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "").Replace("${ApplicationID}","{PackageName}");
+                        if (!HasService(name))
+                        {
+                            //Service
+                            ServiceInfo serviceInfo = new ServiceInfo();
+
+                            serviceInfo.name = name;
+                            serviceInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
+
+                            _ServiceInfo.Add(serviceInfo);
+                            _ServiceInfo = _ServiceInfo;
+
+                            result += "Service " + name + "\n";
+                        }
+                    }
+
+                    if (ele.Name == "provider")
+                    {
+                        string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+
+                        if (!HasProvider(name))
+                        {
+                            //Provider
+                            ProviderInfo providerInfo = new ProviderInfo();
+
+                            providerInfo.name = name;
+                            providerInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "").Replace("${ApplicationID}", "{PackageName}");
 
                             _ProviderInfo.Add(providerInfo);
 
-                        _ProviderInfo = _ProviderInfo;
-                        result += "Provider " + name + "\n";
+                            _ProviderInfo = _ProviderInfo;
+                            result += "Provider " + name + "\n";
+                        }
+                    }
+
+                    if (ele.Name == "receiver")
+                    {
+                        string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+
+                        if (!HasProvider(name))
+                        {
+                            //Provider
+                            ProviderInfo providerInfo = new ProviderInfo();
+
+                            providerInfo.name = name;
+                            providerInfo.content = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "").Replace("${ApplicationID}", "{PackageName}");
+
+                            _ProviderInfo.Add(providerInfo);
+
+                            _ProviderInfo = _ProviderInfo;
+                            result += "Provider " + name + "\n";
+                        }
                     }
                 }
-            }
             return result;
         }
 
@@ -1838,6 +1872,19 @@ namespace APKRepackageSDKTool.UI
             for (int i = 0; i < MetaList.Count; i++)
             {
                 if (MetaList[i].value == value)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool HasUses(string value)
+        {
+            for (int i = 0; i < UsesList.Count; i++)
+            {
+                if (UsesList[i].value == value)
                 {
                     return true;
                 }
@@ -2024,8 +2071,8 @@ namespace APKRepackageSDKTool.UI
 
 
 
-        #endregion
 
+        #endregion
 
     }
 }

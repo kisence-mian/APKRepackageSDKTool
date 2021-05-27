@@ -15,6 +15,9 @@ public class CompileTool
     OutPutCallBack errorCallBack;
     CmdService cmd;
 
+    public bool assignMinAPILevel = false;
+    public int minAPILevel = 16;
+
     public CompileTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
     {
         this.callBack = callBack;
@@ -40,21 +43,85 @@ public class CompileTool
         string jarName = FileTool.GetFileNameByPath(jarPath);
         string tempPath = JavaTempPath + "\\" + jarName;
 
+        if(Directory.Exists(JavaTempPath))
+        {
+            FileTool.DeleteDirectory(JavaTempPath);
+        }
+
         FileTool.CreatePath(JavaTempPath);
 
         OutPut("I: 放入Jar :" + jarName);
 
-        //Jar to dex
-        cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true, outPutCmd: false);
+        string options = "";
 
-        //dex to smali
-        cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath, true, true, outPutCmd: false);
+        if(assignMinAPILevel)
+        {
+            options = "--min-api " + minAPILevel + " ";
+        }
+
+        //Jar to dex
+        //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
+        cmd.Execute(EditorData.GetD8Path() + " --no-desugaring " + options + "--output=" + tempPath + " " + jarPath, true, true);
 
         ////dex to smali
-        //cmd.Execute("java -jar "+ EditorData.GetBaksmaliPath() + " d " + tempPath  + " -o " + smaliPath);
+        cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + smaliPath, true, true);
+        //cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath, true, true);
 
         //删除临时目录
-        //FileTool.DeleteDirectoryComplete(JavaTempPath);
+        FileTool.DeleteDirectoryComplete(JavaTempPath);
+    }
+
+    public void Jar2SmaliByCache(string jarPath, string filePath)
+    {
+        string cachePath = FileTool.GetFileDirectory(jarPath) + "\\.smaliCache\\" + FileTool.GetFileNameBySring(jarPath);
+        string smaliPath = filePath + "\\smali";
+
+        if (!Directory.Exists(cachePath))
+        {
+            CreateSmaliCache(jarPath, cachePath);
+        }
+        else
+        {
+            OutPut("读取Smali 缓存 " + cachePath);
+        }
+
+        FileTool.CopyDirectory(cachePath, smaliPath,(fileA,fileB)=>{ });
+    }
+
+    //通过缓存提高解析速度
+    public void CreateSmaliCache(string jarPath,string cachePath)
+    {
+        string JavaTempPath = PathTool.GetCurrentPath() + "\\JavaTempPath";
+        string jarName = FileTool.GetFileNameByPath(jarPath);
+        string tempPath = JavaTempPath + "\\" + jarName;
+
+        if (Directory.Exists(JavaTempPath))
+        {
+            FileTool.DeleteDirectory(JavaTempPath);
+        }
+
+        FileTool.CreatePath(cachePath);
+        FileTool.CreatePath(JavaTempPath);
+
+        OutPut("I: 创建Smali 缓存 :" + jarName);
+
+        string options = "";
+
+        if (assignMinAPILevel)
+        {
+            options = "--min-api " + minAPILevel + " ";
+        }
+
+        //Jar to dex
+        //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
+        cmd.Execute(EditorData.GetD8Path() + " --no-desugaring " + options + "--output=" + tempPath + " " + jarPath, true, true);
+
+        ////dex to smali
+        cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + cachePath, true, true);
+        //cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath, true, true);
+
+        //删除临时目录
+        FileTool.DeleteDirectoryComplete(JavaTempPath);
     }
 
     public void GenerateRJar(string R_Path, string aimPath, string name, string sdkPath)
@@ -70,8 +137,6 @@ public class CompileTool
 
             //删除掉java文件
             FileTool.DeleteFile(javaPath);
-
-            cmd.Execute("cd " + R_Path);
 
             //取第一个文件夹名作为命令开头
             string fileName = FileTool.GetDirectoryName(Directory.GetDirectories(R_Path)[0]);
@@ -110,9 +175,6 @@ public class CompileTool
             //编译R.java文件
             cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 \"" + javaPath + "\"", true, true);
 
-            //切换当前目录
-            cmd.Execute("cd " + R_Path);
-
             //取第一个文件夹名作为命令开头
             string fileName = FileTool.GetDirectoryName(Directory.GetDirectories(R_Path)[0]);
 
@@ -144,15 +206,19 @@ public class CompileTool
         {
             string javaPath = FindRPath(R_Path);
             string jarPath = R_Path + name + "_R.jar";
+            string jarPath_final = rarPath + "/" + name + "_R.jar";
             string rPath = rarPath + "/R.txt";
 
             //编译R.java文件（编译成了class文件）
             cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 \"" + javaPath + "\"", true, true);
 
-            //删除掉java文件
-            FileTool.DeleteFile(javaPath);
+            if(!File.Exists(javaPath))
+            {
+                ErrorOutPut("E; Java 文件未编译成功 " + javaPath);
+            }
 
-            cmd.Execute("cd " + R_Path);
+            //删除掉java文件
+            //FileTool.DeleteFile(javaPath);
 
             //取第一个文件夹名作为命令开头
             string fileName = FileTool.GetDirectoryName(Directory.GetDirectories(R_Path)[0]);
@@ -160,9 +226,12 @@ public class CompileTool
             //生成的R文件的jar
             cmd.Execute("jar cvf \"./" + name + "_R.jar\" \"./" + fileName + "\"", path: R_Path);
 
-            if (File.Exists(jarPath))
+            File.Move(jarPath, jarPath_final);
+
+            if (File.Exists(jarPath_final))
             {
-                Jar2Smali(jarPath, aimPath);
+                //Jar2Smali(jarPath, aimPath);
+                Jar2SmaliByCache(jarPath_final, aimPath);
                 OutPut("I: R文件生成完成！ ");
             }
             else
@@ -237,35 +306,6 @@ public class CompileTool
             callBack("I: "+inputJar + " 转换完毕");
         }
     }
-
-    //public string ReplaceKeyWord(string oldContent, ChannelInfo channelInfo)
-    //{
-    //    string result = oldContent;
-
-    //    if (channelInfo != null)
-    //    {
-    //        result = result.Replace("{PackageName}", channelInfo.PackageName);
-    //        result = result.Replace("${applicationId}", channelInfo.PackageName);
-    //        //result = result.Replace("{applicationId}", channelInfo.PackageName);
-    //    }
-
-    //    return result;
-    //}
-
-    //public string ReplaceKeyWordbySDKInfo(string oldContent, SDKInfo SDKinfo)
-    //{
-    //    string result = oldContent;
-
-    //    if(SDKinfo != null)
-    //    {
-    //        for (int i = 0; i < SDKinfo.sdkConfig.Count; i++)
-    //        {
-    //            result = result.Replace("{" + SDKinfo.sdkConfig[i].key + "}", SDKinfo.sdkConfig[i].value);
-    //        }
-    //    }
-
-    //    return result;
-    //}
 
     String FindRPath(string path)
     {

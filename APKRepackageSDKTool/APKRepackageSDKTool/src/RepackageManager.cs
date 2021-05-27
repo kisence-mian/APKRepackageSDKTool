@@ -171,7 +171,9 @@ namespace APKRepackageSDKTool
                         MakeProgress("分包", i, channelList.Count, channelInfo.Name);
                         if (channelInfo.IsSplitDex)
                         {
-                            channelTool.SplitDex(aimPath, channelInfo);
+                            SplitDexTool sdt = new SplitDexTool(OutPutCallBack, ErrorCallBack);
+                            sdt.SplitDex(aimPath, channelInfo);
+                            //channelTool.SplitDex(aimPath, channelInfo);
                         }
 
                         //重打包
@@ -182,11 +184,11 @@ namespace APKRepackageSDKTool
                         {
                             options = "-a " + EditorData.GetAAPT2Path() + " --use-aapt2 ";
                         }
-                        //else
-                        //{
-                        //    options = "-a " + EditorData.GetAAPTPath();
-                        //}
 
+                        if (channelInfo.GetAssignMinAPILevel())
+                        {
+                            options += "--api " + channelInfo.GetMinAPILevel() + " ";
+                        }
 
                         cmd.Execute("java -jar "+ EditorData.ApktoolVersion + ".jar " + options + "b " + aimPath,true,true);
 

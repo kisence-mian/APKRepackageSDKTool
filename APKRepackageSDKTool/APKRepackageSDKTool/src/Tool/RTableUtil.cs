@@ -22,7 +22,7 @@ namespace APKRepackageSDKTool.src
 
         int IdIndex = 0;
 
-        int excessArrayNum = 0;
+        //int excessArrayNum = 0;
         //int 
 
         public RTableUtil(OutPutCallBack callBack, OutPutCallBack errorCallBack)
@@ -130,7 +130,7 @@ namespace APKRepackageSDKTool.src
             OutPut("W: 找不到的资源数目： " + IdIndex);
         }
 
-        public void ReplaceStyleable(string smaliPath,string packageName,Dictionary<string,string> template)
+        public void ReplaceRsmali(string smaliPath,string packageName,Dictionary<string,string> template)
         {
             List<string> list = FileTool.GetAllFileNamesByPath(smaliPath, new string[] { "smali" });
 
@@ -140,12 +140,16 @@ namespace APKRepackageSDKTool.src
                 if (fileName.StartsWith("R$"))
                 {
                     list[i] = list[i].Replace("\\", "/");
-
-                    Replace_Styleable(list[i],packageName, template[fileName]);
+                    if(template.ContainsKey(fileName))
+                    {
+                        Replace_Single_Rsmali(list[i], packageName, template[fileName]);
+                    }
+                    else
+                    {
+                        OutPut("W: 找不到对应的模板： " + fileName + " " + list[i]);
+                    }
                 }
             }
-
-            OutPut("W: 找不到的资源数目： " + IdIndex);
         }
 
         void ReplaceSingleRTable(string path)
@@ -301,13 +305,13 @@ namespace APKRepackageSDKTool.src
             FileTool.WriteStringByFile(path, content);
         }
 
-        void Replace_Styleable(string path,string packageName,string template)
+        void Replace_Single_Rsmali(string path,string packageName,string template)
         {
             packageName = packageName.Replace(".","/");
             string className = GetPackageNameByPath(path);
             string content = template.Replace(packageName, className);
 
-            OutPut("替换 Styleable文件 " + path + " " + className);
+            //OutPut("替换 R " + path + " " + className);
 
             //回写
             FileTool.WriteStringByFile(path, content);
