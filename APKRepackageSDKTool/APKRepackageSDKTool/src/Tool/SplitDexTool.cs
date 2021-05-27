@@ -121,14 +121,7 @@ public class SplitDexTool
 
                 if (File.Exists(list[i]))
                 {
-                    try
-                    {
-                        File.Move(list[i], targetPath);
-                    }
-                    catch (Exception e)
-                    {
-                        OutPut("E: 移动文件出错 " + e + " " + list[i] + " " + targetPath);
-                    }
+                    FileTool.MoveFile(list[i], targetPath);
                 }
                 else
                 {

@@ -131,7 +131,7 @@ public class FileTool
     }
 
     /// <summary>
-    /// 处理文件过长无法复制的问题
+    /// 处理文件名过长无法复制的问题
     /// </summary>
     /// <param name="from"></param>
     /// <param name="to"></param>
@@ -153,6 +153,34 @@ public class FileTool
 
             string content = ReadStringByFile(from);
             WriteStringByFile(to, line.ToString());
+        }
+    }
+
+    /// <summary>
+    /// 处理文件名过长无法复制的问题
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    public static void MoveFile(string from, string to)
+    {
+        try
+        {
+            File.Move(from, to);
+        }
+        catch (Exception)
+        {
+            StringBuilder line = new StringBuilder();
+
+            StreamReader sr = File.OpenText(from);
+            line.Append(sr.ReadToEnd());
+
+            sr.Close();
+            sr.Dispose();
+
+            string content = ReadStringByFile(from);
+            WriteStringByFile(to, line.ToString());
+
+            File.Delete(from);
         }
     }
 
