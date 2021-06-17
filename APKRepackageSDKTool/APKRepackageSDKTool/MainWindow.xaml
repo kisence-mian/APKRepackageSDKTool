@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APKRepackageSDKTool"
         mc:Ignorable="d"
-        Title="APK重打包工具" Height="476.859" Width="865.35" BorderBrush="#FFD6DBE9">
+        Title="APK重打包工具" Height="700" Width="1000" BorderBrush="#FFD6DBE9">
     <Grid>
         <TabControl Margin="0,0,0,0">
             <TabItem Header="打包">
@@ -100,7 +100,7 @@
 
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
 
-                    <!--<Button Content="测试" Height="100" Width="75" Margin="10,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_Click"/>-->
+                    <Button Content="测试" Height="100" Width="75" Margin="10,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_ClickTest"/>
                 </Grid>
             </TabItem>
         </TabControl>

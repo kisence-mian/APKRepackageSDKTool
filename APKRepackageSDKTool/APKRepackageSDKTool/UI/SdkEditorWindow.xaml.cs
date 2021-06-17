@@ -1213,7 +1213,14 @@ namespace APKRepackageSDKTool.UI
         {
             if (!string.IsNullOrEmpty(TextBox_AddMavenLib.Text))
             {
-                string value = TextBox_AddMavenLib.Text.TrimEnd('\\').TrimEnd('/');
+                string value = TextBox_AddMavenLib.Text.TrimEnd('\\').TrimEnd('/').Trim();
+
+                if(value.Split(':').Length < 3)
+                {
+                    MessageBox.Show("库的格式不正确，请确保用冒号（:）分隔包名与版本号");
+                    return;
+                }
+
                 if (!MavenLibList.Contains(value))
                 {
                     MavenLibList.Add(value);

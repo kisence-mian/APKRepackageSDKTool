@@ -353,7 +353,7 @@ public class AndroidTool
                 string permissionString = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android").Replace("android.permission.", "");
                 OutPut("I: 添加 permission " + permissionString);
 
-                permissionString = ReplaceKeyWord(permissionString, info);
+                permissionString = ReplaceKeyWordByChannelInfo(permissionString, info);
                 permissionString = ReplaceKeyWordbySDKInfo(permissionString, null);
 
                 AddPermission(aimPath, permissionString);
@@ -552,7 +552,7 @@ public class AndroidTool
         }
 
         //替换关键字
-        string newContent = ReplaceKeyWord(info.content, channelInfo);
+        string newContent = ReplaceKeyWordByChannelInfo(info.content, channelInfo);
         newContent = ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
 
         string xml = FileTool.ReadStringByFile(xmlPath);
@@ -620,7 +620,7 @@ public class AndroidTool
         string xmlPath = filePath + "\\AndroidManifest.xml";
         string xml = FileTool.ReadStringByFile(xmlPath);
 
-        string content = ReplaceKeyWord(info.content, channelInfo);
+        string content = ReplaceKeyWordByChannelInfo(info.content, channelInfo);
         content = ReplaceKeyWordbySDKInfo(content, SDKinfo);
 
         int index = xml.IndexOf("</application>");
@@ -638,7 +638,7 @@ public class AndroidTool
 
         int index = xml.IndexOf("</application>");
 
-        string content = ReplaceKeyWord(info.content, channelInfo);
+        string content = ReplaceKeyWordByChannelInfo(info.content, channelInfo);
         content = ReplaceKeyWordbySDKInfo(content, SDKinfo);
 
         xml = xml.Insert(index, content);
@@ -656,7 +656,7 @@ public class AndroidTool
         int index = xml.IndexOf("</application>");
 
         //替换关键字和配置
-        string content = ReplaceKeyWord(kv.value, channelInfo);
+        string content = ReplaceKeyWordByChannelInfo(kv.value, channelInfo);
         content = ReplaceKeyWordbySDKInfo(content, info);
 
         xml = xml.Insert(index, content);
@@ -674,7 +674,7 @@ public class AndroidTool
         int index = xml.IndexOf("</manifest>");
 
         //替换关键字和配置
-        string content = ReplaceKeyWord(kv.value, channelInfo);
+        string content = ReplaceKeyWordByChannelInfo(kv.value, channelInfo);
         content = ReplaceKeyWordbySDKInfo(content, info);
 
         xml = xml.Insert(index, content);
@@ -749,7 +749,7 @@ public class AndroidTool
         xmlDoc.LoadXml(xml);
 
         //替换关键字
-        string newValue = ReplaceKeyWord(kv.value, channelInfo);
+        string newValue = ReplaceKeyWordByChannelInfo(kv.value, channelInfo);
         newValue = ReplaceKeyWordbySDKInfo(newValue, sdkInfo);
 
         XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
@@ -845,7 +845,7 @@ public class AndroidTool
         string xmlPath = filePath + "\\AndroidManifest.xml";
 
         //替换关键字
-        string newContent = ReplaceKeyWord(info.value, channelInfo);
+        string newContent = ReplaceKeyWordByChannelInfo(info.value, channelInfo);
         newContent = ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
 
         string xml = FileTool.ReadStringByFile(xmlPath);
@@ -863,7 +863,7 @@ public class AndroidTool
         string xmlPath = filePath + "\\AndroidManifest.xml";
 
         //替换关键字
-        string newContent = ReplaceKeyWord(info.value, channelInfo);
+        string newContent = ReplaceKeyWordByChannelInfo(info.value, channelInfo);
         newContent = ReplaceKeyWordbySDKInfo(newContent, sdkInfo);
 
         string xml = FileTool.ReadStringByFile(xmlPath);
@@ -1106,7 +1106,25 @@ public class AndroidTool
 
     #region 文本处理
 
-    public static string ReplaceKeyWord(string oldContent, ChannelInfo channelInfo)
+    public static void ReplaceKeyWordByDiretory(string aimPath, ChannelInfo channelInfo, SDKInfo sdkInfo)
+    {
+        string[] allFileName = Directory.GetFiles(aimPath);
+        foreach (var item in allFileName)
+        {
+            //只处理xml文件
+            if (item.EndsWith(".xml"))
+            {
+                string content = FileTool.ReadStringByFile(item);
+
+                content = ReplaceKeyWordByChannelInfo(content, channelInfo);
+                content = ReplaceKeyWordbySDKInfo(content, sdkInfo);
+
+                FileTool.WriteStringByFile(item, content);
+            }
+        }
+    }
+
+    public static string ReplaceKeyWordByChannelInfo(string oldContent, ChannelInfo channelInfo)
     {
         string result = oldContent;
 
@@ -1119,6 +1137,8 @@ public class AndroidTool
 
         return result;
     }
+
+
 
     public static string ReplaceKeyWordbySDKInfo(string oldContent, SDKInfo SDKinfo)
     {

@@ -103,7 +103,7 @@ namespace APKRepackageSDKTool
                         }
 
                         string fileName = FileTool.GetFileNameByPath(repackageInfo.apkPath);
-                        string aimPath = outPath + "\\" + FileTool.RemoveExpandName(fileName);
+                        string aimPath = outPath + "\\.APKCache\\" + FileTool.RemoveExpandName(fileName);
                         string apkPath = aimPath + "\\dist\\" + fileName;
                         string finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + ".apk";
 
@@ -198,10 +198,10 @@ namespace APKRepackageSDKTool
                             throw new Exception("重打包失败！");
                         }
 
-                        //进行签名
                         MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);
+                        //进行签名
                         cmd.Execute("jarsigner" // -verbose
-                            //+ " -tsa https://timestamp.geotrust.com/tsa"
+                                                //+ " -tsa https://timestamp.geotrust.com/tsa"
                             + " -digestalg SHA1 -sigalg MD5withRSA"
                             + " -storepass " + channelInfo.KeyStorePassWord
                             + " -keystore " + channelInfo.KeyStorePath
@@ -219,9 +219,30 @@ namespace APKRepackageSDKTool
                         else
                         {
                             MakeProgress("跳过字节对齐", i, channelList.Count, channelInfo.Name);
+                            File.Move(apkPath, finalPath);
                         }
 
-                        if(EditorData.IsAutoInstall)
+                        //字节对齐后再进行v2签名
+                        //进行V2签名
+                        if (channelInfo.UseV2Sign)
+                        {
+                            string v2SignCmd = "java -jar " + EditorData.GetApksignerPath() + " sign "
+                                + "--ks " + channelInfo.JksPath + " "
+                                + "--ks-key-alias " + channelInfo.KeyStoreAlias + " "
+                                + "--ks-pass pass:" + channelInfo.KeyStorePassWord + " "
+                                + "--key-pass pass:" + channelInfo.keyStoreAliasPassWord + " "
+                                + "--out " + finalPath
+                                + " " + finalPath;
+
+                            cmd.Execute(v2SignCmd);
+                            //删掉多余的idsig文件
+                            File.Delete(finalPath + ".idsig");
+                        }
+                        //播放完成音频
+                        AudioTool.PlayAudio(@"\res\SFX_Finish.mp3", UriKind.RelativeOrAbsolute);
+
+
+                        if (EditorData.IsAutoInstall)
                         {
                             //自动安装
                             MakeProgress("自动安装", i, channelList.Count, channelInfo.Name);
@@ -242,6 +263,8 @@ namespace APKRepackageSDKTool
 
                         System.Diagnostics.Process.Start("Explorer", "/select," + finalPath);
                         MakeProgress("完成", i, channelList.Count, channelInfo.Name);
+
+
                     }
                 }
                 catch (Exception e)

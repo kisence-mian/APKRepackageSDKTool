@@ -616,8 +616,11 @@ namespace APKRepackageSDKTool
 
         public bool isChecked; //是否被选中
 
+        public bool useV2Sign;      //使用v2版的签名
         public string keyStorePath; //KeyStore的路径
         public string keyStorePassWord; //KeyStore 密码
+
+        public string jksPath; //jks文件的路径
 
         public string keyStoreAlias;         //别名
         public string keyStoreAliasPassWord; //别名密码
@@ -674,6 +677,8 @@ namespace APKRepackageSDKTool
 
         public bool IsOnlyMainClasses { get => isOnlyMainClasses; set => isOnlyMainClasses = value; }
         public bool IsZipalign { get => isZipalign; set => isZipalign = value; }
+        public bool UseV2Sign { get => useV2Sign; set => useV2Sign = value; }
+        public string JksPath { get => jksPath; set => jksPath = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

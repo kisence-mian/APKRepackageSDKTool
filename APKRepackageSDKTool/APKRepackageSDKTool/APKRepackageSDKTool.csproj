@@ -76,6 +76,7 @@
       <DependentUpon>ChannelEditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\Tool\AndroidTool.cs" />
+    <Compile Include="src\Tool\AudioTool.cs" />
     <Compile Include="src\Tool\ChannelTool.cs" />
     <Compile Include="GameSetting.xaml.cs">
       <DependentUpon>GameSetting.xaml</DependentUpon>
@@ -250,6 +251,9 @@
     </Content>
     <Resource Include="Img\favicon.ico" />
     <Resource Include="favicon.ico" />
+    <Content Include="res\SFX_Finish.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="zipalign.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

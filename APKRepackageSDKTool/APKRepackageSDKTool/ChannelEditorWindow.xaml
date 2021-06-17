@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APKRepackageSDKTool"
         mc:Ignorable="d"
-        Title="渠道设置" Height="451.449" Width="808.25">
+        Title="渠道设置" Height="700" Width="1000">
     <Grid x:Name="Grid_root">
         <Grid.Resources>
             <Style TargetType="Label">
@@ -37,6 +37,13 @@
 
                         <Label Content="AliasPassWord" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top"/>
                         <PasswordBox x:Name="PasswordBox_alias" Margin="133,88,80,0" VerticalAlignment="Top" PasswordChar="{Binding KeyStorePassWord, Mode=TwoWay}"/>
+
+                        <CheckBox Content="使用V2签名" HorizontalAlignment="Left" Margin="14,126,0,0" VerticalAlignment="Top" IsChecked="{Binding UseV2Sign,Mode=TwoWay}" />
+                        <Label Content="JKS" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="TextBox_jks" Height="18" Margin="133,146,80,0" TextWrapping="Wrap" Text="{Binding JksPath, Mode=TwoWay}" VerticalAlignment="Top"/>
+                        <Button Content="浏览" Margin="0,145,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="66" Click="Button_Click_v2"/>
+
+
                     </Grid>
                 </Grid>
             </TabItem>

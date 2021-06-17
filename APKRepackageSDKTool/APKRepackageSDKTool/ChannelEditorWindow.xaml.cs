@@ -105,6 +105,20 @@ namespace APKRepackageSDKTool
             }
         }
 
+        private void Button_Click_v2(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "v2 Sign Files (*.jks)|*.jks"
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                this.TextBox_jks.Text = openFileDialog.FileName;
+                EditorData.CurrentChannel.JksPath = openFileDialog.FileName;
+            }
+        }
+
         private void Button_Click_SelectIcon(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
@@ -355,6 +369,7 @@ namespace APKRepackageSDKTool
             EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
             MessageBox.Show("保存成功");
         }
+
 
     }
 }

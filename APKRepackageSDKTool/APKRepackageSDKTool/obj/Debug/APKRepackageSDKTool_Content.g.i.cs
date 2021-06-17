@@ -32,6 +32,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/tools/phone%20activation%20system/client.exe")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/tools/phone%20activation%20system/server.exe")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dx.jar")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("res/sfx_finish.mp3")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("zipalign.exe")]
 
 

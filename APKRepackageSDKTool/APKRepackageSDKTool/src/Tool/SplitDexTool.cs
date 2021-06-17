@@ -26,7 +26,6 @@ public class SplitDexTool
         this.errorCallBack = errorCallBack;
     }
 
-
     public void SplitDex(string aimPath, ChannelInfo info)
     {
         //分别计算  field  method string type proto methodHandle callSite 的数量，并分开分包
@@ -148,16 +147,15 @@ public class SplitDexTool
     {
         switch(type)
         {
+
             case SmaliType.String: return CalcStringNumber(type, content);
             case SmaliType.Field:return CalcFieldNumber(type,content);
             case SmaliType.Method:return CalcMethodNumber(type, content);
             case SmaliType.Type: return CalcTypeNumber(type, content);
-            case SmaliType.CallSite:return CalcCallSiteHandleNumber(type, content);
-            case SmaliType.MethodHandle: return CalcMethodHandleNumber(type, content);
 
-                //case SmaliType.Format21c: return CalcFormat21cNumber(type, content);
-                //case SmaliType.Format11x: return CalcFormat11Number(type, content);
-                //case SmaliType.Proto: return CalcProtoNumber(type, content);
+            //为提高效率，不分析对分包影响不大的文件
+            //case SmaliType.CallSite:return CalcCallSiteHandleNumber(type, content);
+            //case SmaliType.MethodHandle: return CalcMethodHandleNumber(type, content);
         }
 
         return 0;
@@ -282,6 +280,9 @@ public class SplitDexTool
 
     private int CalcStringNumber(SmaliType type, string content)
     {
+        Dictionary<string, int> types = new Dictionary<string, int>();
+
+
         int count = 0;
         string[] lines = content.Split('\n');
         string className = ParseClassName(lines[0].Trim());
@@ -301,20 +302,17 @@ public class SplitDexTool
                 continue;
             }
 
-            if (!allName[type].ContainsKey(name))
-            {
-                allName[type].Add(name, name);
-                count += 1;
-            }
+            //不排重
+            count += 1;
         }
 
         return count;
     }
 
-
-
     int CalcMethodNumber(SmaliType type, string content)
     {
+        Dictionary<string, int> types = new Dictionary<string, int>();
+
         int count = 0;
         string[] lines = content.Split('\n');
         string className = ParseClassName(lines[0].Trim());
@@ -364,8 +362,11 @@ public class SplitDexTool
                 continue;
             }
 
-            if (!allName[type].ContainsKey(name))
+            //尝试单文件排重
+            if (!types.ContainsKey(name))
             {
+                //types.Add(name, 1);
+
                 //allName[type].Add(name, name);
                 count += 1;
             }
@@ -405,6 +406,11 @@ public class SplitDexTool
                 name = ParseFieldName(className, line);
             }
 
+            if (line.StartsWith("invoke-"))
+            {
+                name = ParseFieldName(className, line);
+            }
+
             if (name == c_NoneName)
             {
                 continue;
@@ -412,7 +418,6 @@ public class SplitDexTool
 
             if (!allName[type].ContainsKey(name))
             {
-                allName[type].Add(name, name);
                 count += 1;
             }
         }

@@ -36,6 +36,7 @@ public class CompileTool
         errorCallBack?.Invoke(content);
     }
 
+    //目前全部迁移到缓存方法中，提高效率
     public void Jar2Smali(string jarPath, string filePath)
     {
         string smaliPath = filePath + "\\smali";
@@ -78,6 +79,7 @@ public class CompileTool
 
         if (!Directory.Exists(cachePath))
         {
+            OutPut("I: 创建Smali 缓存 :" + cachePath);
             CreateSmaliCache(jarPath, cachePath);
         }
         else
@@ -102,8 +104,6 @@ public class CompileTool
 
         FileTool.CreatePath(cachePath);
         FileTool.CreatePath(JavaTempPath);
-
-        OutPut("I: 创建Smali 缓存 :" + jarName);
 
         string options = "";
 
@@ -262,7 +262,7 @@ public class CompileTool
         for (int i = 0; i < sdkConfig.customJavaClass.Count; i++)
         {
             string javaName = JavaCompileSrcPath + "\\" + sdkConfig.customJavaClass[i].key + ".java";
-            string s = AndroidTool.ReplaceKeyWord(sdkConfig.customJavaClass[i].value, channelInfo);
+            string s = AndroidTool.ReplaceKeyWordByChannelInfo(sdkConfig.customJavaClass[i].value, channelInfo);
             FileTool.WriteStringByFile(javaName, s);
         }
 
@@ -319,6 +319,4 @@ public class CompileTool
             return null;
         }
     }
-
-
 }
