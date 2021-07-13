@@ -52,7 +52,7 @@ public class MavenTool
         FileTool.CreatePath(jarPath);
         FileTool.CreatePath(pomPath);
 
-        rt = new RarTool(EditorData._RARcmd,callBack, errorCallBack);
+        rt = new RarTool(callBack, errorCallBack);
         ht = new HttpTool(callBack, errorCallBack);
         ct = new CompileTool(callBack, errorCallBack);
         at = new AndroidTool(callBack, errorCallBack);

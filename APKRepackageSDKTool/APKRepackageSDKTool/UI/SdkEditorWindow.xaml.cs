@@ -1300,6 +1300,13 @@ namespace APKRepackageSDKTool.UI
             thread.Start();
         }
 
+        private void Button_Sort(object sender, RoutedEventArgs e)
+        {
+            MavenLibList.Sort();
+
+            MavenLibList = MavenLibList;
+        }
+
 
         #endregion
 
@@ -1985,6 +1992,27 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
+        #region 文件夹
+
+        private void Button_OpenSDKPath_Click(object sender, RoutedEventArgs e)
+        {
+            string sdkPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
+            System.Diagnostics.Process.Start(sdkPath);
+        }
+
+        private void Button_CreateExtraPath_Click(object sender, RoutedEventArgs e)
+        {
+            string extraPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName + "/" + ExtraFileTool.c_FileName;
+            FileTool.CreatePath(extraPath);
+        }
+
+        private void Button_ExtraPathDescription_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("在 SDK 目录下创建 "+ ExtraFileTool.c_FileName + " 文件夹，用于放置一些额外文件，以应对一些SDK的特殊需求\n需要 RAR 工具正确配置才能使用");
+        }
+
+        #endregion
+
         #endregion
 
         #region 类声明
@@ -2074,6 +2102,9 @@ namespace APKRepackageSDKTool.UI
 
             MessageBox.Show(content);
         }
+
+
+
 
 
 

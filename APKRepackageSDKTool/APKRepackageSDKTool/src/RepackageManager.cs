@@ -148,13 +148,13 @@ namespace APKRepackageSDKTool
 
                         cmd.Execute(apkToolCmd);
 
-                        //执行对应的文件操作
-                        MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
-                        channelTool.ChannelLogic(aimPath, channelInfo);
-
                         //移除过长的YML
                         MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
                         channelTool.YMLLogic(aimPath);
+
+                        //执行对应的文件操作
+                        MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
+                        channelTool.ChannelLogic(aimPath, channelInfo);
 
                         ////混淆DLL
                         //MakeProgress("混淆DLL", i, channelList.Count, channelInfo.Name);
@@ -190,6 +190,11 @@ namespace APKRepackageSDKTool
                             options += "--api " + channelInfo.GetMinAPILevel() + " ";
                         }
 
+                        if (channelInfo.IsNoCompressResource)
+                        {
+                            options += "--no-crunch ";
+                        }
+
                         cmd.Execute("java -jar "+ EditorData.ApktoolVersion + ".jar " + options + "b " + aimPath,true,true);
 
                         //判断apk是否存在
@@ -198,10 +203,20 @@ namespace APKRepackageSDKTool
                             throw new Exception("重打包失败！");
                         }
 
+                        //放入额外文件
+                        //在通常apk结构之外的情况,需要先把包打出来,然后再放入文件
+                        if(channelInfo.GetUseExtraFile())
+                        {
+                            ExtraFileTool eft = new ExtraFileTool(OutPutCallBack, ErrorCallBack);
+                            eft.PurExtraFile(aimPath,apkPath, channelInfo);
+                        }
+
                         MakeProgress("进行签名", i, channelList.Count, channelInfo.Name);
-                        //进行签名
-                        cmd.Execute("jarsigner" // -verbose
-                                                //+ " -tsa https://timestamp.geotrust.com/tsa"
+                        if (!channelInfo.UseV2Sign)
+                        {
+                            //进行签名
+                            cmd.Execute("jarsigner" // -verbose
+                                                    //+ " -tsa https://timestamp.geotrust.com/tsa"
                             + " -digestalg SHA1 -sigalg MD5withRSA"
                             + " -storepass " + channelInfo.KeyStorePassWord
                             + " -keystore " + channelInfo.KeyStorePath
@@ -209,8 +224,9 @@ namespace APKRepackageSDKTool
                             + " " + apkPath
                             + " " + channelInfo.KeyStoreAlias
                             );
+                        }
 
-                        if(channelInfo.IsZipalign)
+                        if (channelInfo.IsZipalign)
                         {
                             //进行字节对齐并导出到最终目录
                             MakeProgress("进行字节对齐并导出到最终目录", i, channelList.Count, channelInfo.Name);

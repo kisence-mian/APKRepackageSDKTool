@@ -304,6 +304,13 @@ namespace APKRepackageSDKTool
             System.Windows.Forms.MessageBox.Show("保存成功");
         }
 
+        private void Button_OpenAPKCachePath_Click(object sender, RoutedEventArgs e)
+        {
+            string cachePath = PathTool.GetCurrentPath() + "\\.APKCache";
+
+            System.Diagnostics.Process.Start(cachePath);
+        }
+
 
 
         #endregion
@@ -358,10 +365,16 @@ namespace APKRepackageSDKTool
             EditorData.MavenCachePath = Text_mavenCatahPath.Text;
         }
 
-        private void Text_RarCmd_TextChanged(object sender, TextChangedEventArgs e)
+        private void Text_RarCompressCmd_TextChanged(object sender, TextChangedEventArgs e)
         {
-            EditorData._RARcmd = Text_RarCmd.Text;
+            EditorData._RARcompressCmd = Text_RarCompressCmd.Text;
         }
+
+        private void Text_RarDocompressCmd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorData._RARdocompressCmd = Text_RarDocompressCmd.Text;
+        }
+
 
         #endregion
 
@@ -442,7 +455,8 @@ namespace APKRepackageSDKTool
             Text_APILevel.Text = EditorData.APILevel.ToString();
             Text_ApkTool.Text = EditorData.ApktoolVersion;
             Text_mavenCatahPath.Text = EditorData.MavenCachePath;
-            Text_RarCmd.Text = EditorData._RARcmd;
+            Text_RarCompressCmd.Text = EditorData._RARcompressCmd;
+            Text_RarDocompressCmd.Text = EditorData._RARdocompressCmd;
 
             CheckBox_IsTimeStamp.IsChecked = EditorData.IsTimeStamp;
             CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
@@ -498,8 +512,21 @@ namespace APKRepackageSDKTool
 
         private void Button_ClickTest(object sender, RoutedEventArgs e)
         {
-            //播放完成音频
-            AudioTool.PlayAudio(@"/res/SFX_Finish.mp3", UriKind.Relative);
+            List<ChannelInfo> list = new List<ChannelInfo>();
+            for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
+            {
+                if (EditorData.CurrentGameChannelList[i].isChecked)
+                {
+                    list.Add(EditorData.CurrentGameChannelList[i]);
+                }
+            }
+
+
+            ExtraFileTool eft = new ExtraFileTool(OutPut, OutPut);
+
+            eft.PurExtraFile(@"E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\.APKCache\CardGame-2021-06-22-1",
+                @"E:\Project\Tool\APKRepackageSDKTool\APKRepackageSDKTool\APKRepackageSDKTool\bin\Debug\.APKCache\CardGame-2021-06-22-1\dist\CardGame-2021-06-22-1.apk"
+                , list[0]);
         }
 
         private void Text_APILevel_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -508,27 +535,6 @@ namespace APKRepackageSDKTool
             e.Handled = re.IsMatch(e.Text);
         }
 
-
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            OutPutWindow opw = new OutPutWindow();
-            opw.Show();
-            AndroidTool at = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-
-            string txtPath = @"E:\Temp\okjoy_sdk_independent_1.0.3_AndroidX\R.txt";
-            string javaPath = @"E:\Temp\okjoy_sdk_independent_1.0.3_AndroidX\R.java";
-
-            var thread = new Thread(() =>
-            {
-                //生成R表
-                at.RTxt2RJava("com.mxrjs.ssdk", txtPath, javaPath);
-
-            });
-
-            thread.Start();
-        }
 
         private void Button_Click_SaveToClipboard(object sender, RoutedEventArgs e)
         {

@@ -39,7 +39,8 @@ namespace APKRepackageSDKTool
         static string buildToolVersion;
         static int apiLevel;
 
-        static string RARcmd = "360zip.exe -x {RarPath} {AimPath}";
+        static string RARdocompressCmd = "360zip.exe -x {RarPath} {AimPath}";
+        static string RARcompressCmd = "360zip.exe -ar {FilePath} {ZipPath}";
 
         public static bool isTimeStamp = false;      //时间戳
         public static bool isOutPutCMD = false;      //输出原始命令
@@ -291,17 +292,33 @@ namespace APKRepackageSDKTool
             }
         }
 
-        public static string _RARcmd {
+        public static string _RARdocompressCmd
+        {
             get
             {
                 JudgeInit();
-                return RARcmd;
+                return RARdocompressCmd;
             }
 
             set
             {
-                RARcmd = value;
-                RecordManager.SaveRecord(c_ConfigRecord, "RARcmd", RARcmd);
+                RARdocompressCmd = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "RARdocompressCmd", RARdocompressCmd);
+            }
+        }
+
+        public static string _RARcompressCmd
+        {
+            get
+            {
+                JudgeInit();
+                return RARcompressCmd;
+            }
+
+            set
+            {
+                RARcompressCmd = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "RARcompressCmd", RARcompressCmd);
             }
         }
 
@@ -339,7 +356,8 @@ namespace APKRepackageSDKTool
                 baksmaliVersion = RecordManager.GetRecord(c_ConfigRecord, "BaksmaliVersion", "baksmali-2.1.3.jar");
                 apktoolVersion = RecordManager.GetRecord(c_ConfigRecord, "ApktoolVersion", "apktool_2.5.0");
                 mavenCachePath = RecordManager.GetRecord(c_ConfigRecord, "MavenCachePath", null);
-                RARcmd = RecordManager.GetRecord(c_ConfigRecord, "RARcmd", "360zip.exe -x {RarPath} {AimPath}");
+                RARdocompressCmd = RecordManager.GetRecord(c_ConfigRecord, "RARdocompressCmd", "360zip.exe -x {RarPath} {AimPath}");
+                RARcompressCmd = RecordManager.GetRecord(c_ConfigRecord, "RARcompressCmd", "360zip.exe -ar {FilePath} {ZipPath}");
 
                 UpdateTotalSDKInfo();
             }
@@ -636,6 +654,7 @@ namespace APKRepackageSDKTool
         public bool isRebuildRTable = true; //重新生成R表
         public bool isForceManifest = false; //强制反编译清单文件(反编译Resource文件)
         public bool isOnlyMainClasses = false; //只反编译主Classes文件(解决混淆问题)
+        public bool isNoCompressResource = false; //不压缩Resource文件
         public bool isUseAAPT2 = false; //使用AAPT2
         public bool isChangeMainApplication = false; //修改ManinApplication
         public bool isChangeMainActivity = true; //修改ManinActivity
@@ -679,6 +698,7 @@ namespace APKRepackageSDKTool
         public bool IsZipalign { get => isZipalign; set => isZipalign = value; }
         public bool UseV2Sign { get => useV2Sign; set => useV2Sign = value; }
         public string JksPath { get => jksPath; set => jksPath = value; }
+        public bool IsNoCompressResource { get => isNoCompressResource; set => isNoCompressResource = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -714,6 +734,20 @@ namespace APKRepackageSDKTool
             {
                 SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(sdkList[i].sdkName);
                 if (config.assignMinAPILevel)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool GetUseExtraFile()
+        {
+            for (int i = 0; i < sdkList.Count; i++)
+            {
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(sdkList[i].sdkName);
+                if (config.UseExtraFile)
                 {
                     return true;
                 }
@@ -812,6 +846,7 @@ namespace APKRepackageSDKTool
 
         public bool force32bit; //强制32位执行
         public bool useMaven;   //使用Maven
+        public bool useExtraFile; //放入额外文件
 
         public List<KeyValue> xmlHeadList = new List<KeyValue>();
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
@@ -891,6 +926,7 @@ namespace APKRepackageSDKTool
         public List<string> FirstDexList { get => firstDexList; set => firstDexList = value; }
         public bool UseMaven { get => useMaven; set => useMaven = value; }
         public bool AssignMinAPILevel { get => assignMinAPILevel; set => assignMinAPILevel = value; }
+        public bool UseExtraFile { get => useExtraFile; set => useExtraFile = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

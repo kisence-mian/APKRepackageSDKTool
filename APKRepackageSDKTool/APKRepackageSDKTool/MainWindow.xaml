@@ -90,18 +90,20 @@
                     <Label Content="ApkTool Version" Margin="10,154,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
                     <TextBox x:Name="Text_ApkTool" TextChanged="Text_ApkTool_TextChanged" Margin="130,154,400,0"  PreviewTextInput="Text_APILevel_PreviewTextInput" InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
 
-                    <Label Content="RAR 解压命令" Margin="10,178,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
-                    <TextBox x:Name="Text_RarCmd" TextChanged="Text_RarCmd_TextChanged" Margin="130,178,400,0"  PreviewTextInput="Text_APILevel_PreviewTextInput" InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
+                    <Label Content="RAR 压缩命令" Margin="10,178,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_RarCompressCmd" TextChanged="Text_RarCompressCmd_TextChanged" Margin="130,178,400,0"   InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
 
+                    <Label Content="RAR 解压命令" Margin="10,202,0,0" HorizontalAlignment="Left" Width="115"  VerticalAlignment="Top"/>
+                    <TextBox x:Name="Text_RarDocompressCmd" TextChanged="Text_RarDocompressCmd_TextChanged" Margin="130,202,400,0"   InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
 
-                    <CheckBox x:Name="CheckBox_IsTimeStamp" Content="APK名称添加时间戳" HorizontalAlignment="Left" Margin="10,213,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsTimeStamp_Checked" Checked="ChexkBox_IsTimeStamp_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsTimeStamp" Content="APK名称添加时间戳" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsTimeStamp_Checked" Checked="ChexkBox_IsTimeStamp_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,252,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,272,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
 
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
-
-                    <Button Content="测试" Height="100" Width="75" Margin="10,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_ClickTest"/>
-                </Grid>
+                    <Button Content="打开APK打包缓存目录" Margin="10,0,809,34" Click="Button_OpenAPKCachePath_Click" Height="19" VerticalAlignment="Bottom"/>
+                    <Button Content="测试" Height="100" Width="75" Margin="10,0,0,58" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_ClickTest"/>
+               </Grid>
             </TabItem>
         </TabControl>
     </Grid>

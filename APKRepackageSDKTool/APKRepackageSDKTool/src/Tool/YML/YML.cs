@@ -87,6 +87,24 @@ namespace APKRepackageSDKTool.src.YML
             }
         }
 
+        public void AddNodeByKey(String key, String value)
+        {
+            Node node = findNodeByKey(key);
+
+            if (node != null)
+            {
+                Node newNode = new Node();
+                newNode.parent = newNode;
+                newNode.value = value;
+                newNode.name = "-";
+                newNode.space = node.space + 1;
+
+                int index = nodeList.IndexOf(node);
+
+                nodeList.Insert(index + 1, newNode);
+            }
+        }
+
         public void DeleteAllChildNode(string key)
         {
             Node node = findNodeByKey(key);

@@ -188,14 +188,14 @@ namespace APKRepackageSDKTool
             sew.ShowDialog();
         }
 
-
+        string currentSDKname;
         private void Button_ClickSDKView(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
 
-            string sdkName = (string)btn.Tag;
+            currentSDKname = (string)btn.Tag;
 
-            SDKInfo info = EditorData.CurrentChannel.GetSDKInfo(sdkName);
+            SDKInfo info = EditorData.CurrentChannel.GetSDKInfo(currentSDKname);
             if (info != null)
             {
                 CurrentSelectInfo.Clear();
@@ -211,6 +211,49 @@ namespace APKRepackageSDKTool
             }
 
             CurrentSelectInfo = CurrentSelectInfo;
+        }
+
+        private void Button_Click_Refresh(object sender, RoutedEventArgs e)
+        {
+            if(!string.IsNullOrEmpty(currentSDKname))
+            {
+                SDKInfo info = EditorData.CurrentChannel.GetSDKInfo(currentSDKname);
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(currentSDKname);
+
+                for (int i = 0; i < config.configList.Count; i++)
+                {
+                    if(!ExistKey(info.sdkConfig, config.configList[i].key))
+                    {
+                        info.sdkConfig.Add(config.configList[i].DeepCopy());
+                    }
+                }
+
+                CurrentSelectInfo.Clear();
+
+                for (int i = 0; i < info.sdkConfig.Count; i++)
+                {
+                    CurrentSelectInfo.Add(info.sdkConfig[i]);
+                }
+
+                CurrentSelectInfo = CurrentSelectInfo;
+            }
+            else
+            {
+                MessageBox.Show("没有选中任何SDK");
+            }
+        }
+
+        bool ExistKey(List<KeyValue> list ,string key)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if(list[i].key == key)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #region 属性编辑

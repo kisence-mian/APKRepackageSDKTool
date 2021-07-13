@@ -28,7 +28,7 @@
                     <Label Content="Java类名" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                     <TextBox Height="23" Margin="94,12,10,0" TextWrapping="Wrap" Text="{Binding Path=ClassName,Mode=TwoWay}" VerticalAlignment="Top"/>
                     <Label Content="SDK类型" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top"/>
-                    <ListBox x:Name="ListBox_SDKType" Margin="94,73,10,106">
+                    <ListBox x:Name="ListBox_SDKType" Margin="94,73,0,106" HorizontalAlignment="Left" Width="287">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -50,6 +50,7 @@
                     <CheckBox x:Name="CheckBox_ConvertAndroidX" Content="转换为AndroidX" HorizontalAlignment="Left" Margin="94,0,0,59" VerticalAlignment="Bottom"/>
                     <Button x:Name="Button_BatchConvertAndroid" Content="批量转换Androidx" Margin="386,0,0,59" Click="Button_BatchConvertAndroid_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="138"/>
                     <Button x:Name="Button_ConvertAndroid" Content="转换Androidx" Margin="243,0,0,58" Click="Button_ConvertAndroid_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="138"/>
+                    <Button  Content="打开SDK路径" Margin="94,0,0,10" Height="19" VerticalAlignment="Bottom" Click="Button_OpenSDKPath_Click" HorizontalAlignment="Left" Width="138"/>
 
                 </Grid>
             </TabItem>
@@ -465,9 +466,10 @@
                         <TextBox x:Name="TextBox_AddMavenPath" Margin="0,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
                     </Grid>
                     <Grid Grid.Column="2">
-                        <CheckBox Content="使用Maven" IsChecked="{Binding UseMaven}" Height="17" VerticalAlignment="Top" Margin="0,8,74,0" HorizontalAlignment="Right" Width="113"/>
+                        <CheckBox Content="使用Maven" IsChecked="{Binding UseMaven}" Height="17" VerticalAlignment="Top" Margin="0,8,143,0" HorizontalAlignment="Right" Width="113"/>
                         <Label Content="依赖库" Margin="10,0,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78" />
                         <Button Content="预下载" Margin="0,6,10,0" Click="Button_PreDownLoadMavenLib" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+                        <Button Content="排序" Margin="0,6,90,0" Click="Button_Sort" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
                         <!--<Button Content="提取到SDK库" Margin="0,6,90,0" Click="Button_Extract" Height="19" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" IsEnabled="False"/>-->
                         <ListBox x:Name="ListBox_MavenLib" Margin="10,30,10,36" SelectedValuePath="Key">
                             <ListBox.ItemContainerStyle>
@@ -501,6 +503,10 @@
 
                     <CheckBox Content="编译时指定 min API Level" IsChecked="{Binding AssignMinAPILevel}" Margin="9,135,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="209"/>
                     <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="9,179,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="746"/>
+                    <CheckBox Content="使用额外文件夹" IsChecked="{Binding Path=UseExtraFile}" Margin="9,221,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="117"/>
+
+                    <Button  Content="创建额外文件夹" Margin="221,218,0,0" Click="Button_CreateExtraPath_Click" HorizontalAlignment="Left" Width="138" Height="19" VerticalAlignment="Top"/>
+                    <Button  Content="说明" Margin="145,218,0,0" Click="Button_ExtraPathDescription_Click" HorizontalAlignment="Left" Width="61" Height="19" VerticalAlignment="Top"/>
 
                 </Grid>
             </TabItem>

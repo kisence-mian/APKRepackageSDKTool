@@ -86,6 +86,7 @@
     <Compile Include="src\Define\KeyValueList.cs" />
     <Compile Include="src\Define\SDKInterfaceDefine.cs" />
     <Compile Include="src\Tool\DeJson.cs" />
+    <Compile Include="src\Tool\ExtraFileTool.cs" />
     <Compile Include="src\Tool\FileTool.cs" />
     <Compile Include="src\Tool\HttpTool.cs" />
     <Compile Include="src\Tool\MavenTool.cs" />

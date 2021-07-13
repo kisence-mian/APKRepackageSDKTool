@@ -865,8 +865,10 @@ namespace APKRepackageSDKTool
 
             YML yml = new YML(path);
 
-            yml.modify("doNotCompress", "null");
             yml.DeleteAllChildNode("doNotCompress");
+            yml.AddNodeByKey("doNotCompress", "resources.arsc");
+            yml.AddNodeByKey("doNotCompress", "resource");
+            yml.AddNodeByKey("doNotCompress", "png");
             yml.save();
         }
 
