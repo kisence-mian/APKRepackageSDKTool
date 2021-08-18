@@ -674,11 +674,20 @@ public class MavenTool
             mavenData.version = spilt[2];
 
             mavenData.versions = new List<int>();
-            string[] vs = mavenData.version.Split('.');
+
+            string vsTemp = mavenData.version.Split('-')[0].Replace(" ","");
+            string[] vs = vsTemp.Split('.');
 
             for (int i = 0; i < vs.Length; i++)
             {
-                mavenData.versions.Add(int.Parse(vs[i]));
+                try
+                {
+                    mavenData.versions.Add(int.Parse(vs[i]));
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("GetMavenData  Parse version error ->" + mavenData.version + "<- " + e.ToString());
+                }
             }
 
             return mavenData;

@@ -577,7 +577,7 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < config.metaInfoList.Count; i++)
             {
                 OutPut("添加Meta " + info.sdkName + " " + config.metaInfoList[i].key);
-                androidTool.AddMeta(filePath, config.metaInfoList[i], channelInfo, info);
+                androidTool.AddMeta_Application(filePath, config.metaInfoList[i], channelInfo, info);
             }
 
             //添加Uses字段

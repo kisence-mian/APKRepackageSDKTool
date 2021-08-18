@@ -359,14 +359,14 @@ public class AndroidTool
                 AddPermission(aimPath, permissionString);
             }
             //meta以及其他
-            else if (ele.Name == "meta")
+            else if (ele.Name == "meta" || ele.Name == "meta-data")
             {
                 //Meta
                 KeyValue metaKV = new KeyValue();
                 metaKV.key = ele.OuterXml;
                 metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
 
-                AddMeta(aimPath, metaKV, info,null);
+                AddMeta_Manifest(aimPath, metaKV, info,null);
 
                 OutPut("I: 添加 meta " + metaKV.value);
             }
@@ -374,7 +374,6 @@ public class AndroidTool
             //uses-feature
             else if (ele.Name == "uses-feature")
             {
-                //Meta
                 KeyValue metaKV = new KeyValue();
                 metaKV.key = ele.OuterXml;
                 metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
@@ -382,6 +381,18 @@ public class AndroidTool
                 AddUses(aimPath, metaKV, info, null);
 
                 OutPut("I: 添加 meta " + metaKV.value);
+            }
+
+            //queries
+            if (ele.Name == "queries")
+            {
+                KeyValue queriesKV = new KeyValue();
+                queriesKV.key = ele.OuterXml;
+                queriesKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
+
+                AddQueries(aimPath, queriesKV, info, null);
+
+                OutPut("I: 添加 queries " + queriesKV.value);
             }
         }
 
@@ -482,6 +493,29 @@ public class AndroidTool
                         OutPut("I: 重复的 recevicer " + name);
                     }
                 }
+
+                if (ele.Name == "meta-data" || ele.Name == "meta")
+                {
+                    string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+
+                    if (!HasApplicationNode(aimPath, "meta-data", name))
+                    {
+                        OutPut("I: 添加 meta-data " + name);
+
+                        //Meta
+                        KeyValue metaKV = new KeyValue();
+                        metaKV.key = ele.OuterXml;
+                        metaKV.value = ele.OuterXml.Replace("xmlns:android=\"http://schemas.android.com/apk/res/android\"", "");
+
+                        AddMeta_Application(aimPath, metaKV, info, null);
+                    }
+                    else
+                    {
+                        OutPut("I: 重复的 recevicer " + name);
+                    }
+                }
+
+
             }
     }
 
@@ -648,7 +682,7 @@ public class AndroidTool
         xmlDoc.Save(xmlPath);
     }
 
-    public void AddMeta(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
+    public void AddMeta_Application(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
     {
         string xmlPath = filePath + "\\AndroidManifest.xml";
         string xml = FileTool.ReadStringByFile(xmlPath);
@@ -666,7 +700,43 @@ public class AndroidTool
         xmlDoc.Save(xmlPath);
     }
 
+    public void AddMeta_Manifest(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
+    {
+        string xmlPath = filePath + "\\AndroidManifest.xml";
+        string xml = FileTool.ReadStringByFile(xmlPath);
+
+        int index = xml.IndexOf("</manifest>");
+
+        //替换关键字和配置
+        string content = ReplaceKeyWordByChannelInfo(kv.value, channelInfo);
+        content = ReplaceKeyWordbySDKInfo(content, info);
+
+        xml = xml.Insert(index, content);
+
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xml);
+        xmlDoc.Save(xmlPath);
+    }
+
     public void AddUses(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
+    {
+        string xmlPath = filePath + "\\AndroidManifest.xml";
+        string xml = FileTool.ReadStringByFile(xmlPath);
+
+        int index = xml.IndexOf("</manifest>");
+
+        //替换关键字和配置
+        string content = ReplaceKeyWordByChannelInfo(kv.value, channelInfo);
+        content = ReplaceKeyWordbySDKInfo(content, info);
+
+        xml = xml.Insert(index, content);
+
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xml);
+        xmlDoc.Save(xmlPath);
+    }
+
+    public void AddQueries(string filePath, KeyValue kv, ChannelInfo channelInfo, SDKInfo info)
     {
         string xmlPath = filePath + "\\AndroidManifest.xml";
         string xml = FileTool.ReadStringByFile(xmlPath);
