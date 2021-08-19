@@ -249,10 +249,10 @@ public class AndroidTool
 
             //合并Res
             mergeRes.Merge(rarPath + "/res", aimPath + "/res");
-
-            //生成R表
-            BuildRTable2APKByCache(rarPath, aarName, aimPath);
         }
+
+        //生成R表
+        BuildRTable2APKByCache(rarPath, aarName, aimPath);
     }
 
     void ExtractJar2APK(string sourcePath, string aimPath)
@@ -298,8 +298,9 @@ public class AndroidTool
         string R_Path = rarPath + "/R_path/";
         string manifest = rarPath + "/AndroidManifest.xml";
         string resPath = rarPath + "/res";
+        string txtPath = rarPath + "\\R.txt";
 
-        if (!Directory.Exists(resPath))
+        if (string.IsNullOrEmpty(FileTool.ReadStringByFile(txtPath)))
         {
             //不存在res文件夹则不传入
             OutPut("I: 无需生成R文件 " + name);
@@ -315,7 +316,7 @@ public class AndroidTool
 
         //用直接生成的办法创建R文件
         string packageName = GetPackageName(manifest);
-        string txtPath = rarPath + "\\R.txt";
+        
         string javaPath = R_Path + "" + packageName.Replace(".", "\\") + "\\R.java";
 
         RTxt2RJava(packageName, txtPath, javaPath);

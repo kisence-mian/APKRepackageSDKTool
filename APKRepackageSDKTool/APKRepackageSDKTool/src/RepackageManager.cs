@@ -113,11 +113,14 @@ namespace APKRepackageSDKTool
                         {
                             if(EditorData.IsTimeStamp)
                             {
+                                //移除旧的时间戳和渠道
+                                fileName = Regex.Replace(fileName, @"_[a-zA-Z]+_\d+_\d+", "");
+
                                 //移除旧的时间戳
-                                fileName = Regex.Replace(fileName, @"\d+_\d+", "");
+                                fileName = Regex.Replace(fileName, @"_\d+_\d+", "");
 
                                 //加时间戳
-                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + now.ToString("yyyyMMdd_HHmm")+ "_" + channelInfo.suffix + ".apk";
+                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix+"_" + now.ToString("yyyyMMdd_HHmm") + ".apk";
                             }
                             else
                             {
