@@ -22,6 +22,7 @@ namespace APKRepackageSDKTool
 
         CompileTool compileTool;
         AndroidTool androidTool;
+        RarTool rarTool;
 
         public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
         {
@@ -30,6 +31,7 @@ namespace APKRepackageSDKTool
 
             compileTool = new CompileTool(callBack, errorCallBack);
             androidTool = new AndroidTool(callBack, errorCallBack);
+            rarTool = new RarTool(callBack, errorCallBack);
         }
 
         public void ChannelLogic(string filePath, ChannelInfo info)
@@ -517,6 +519,9 @@ namespace APKRepackageSDKTool
             OutPut("添加Jar " + info.sdkName);
             PutJar(filePath, info);
 
+            //处理aar
+            PutAAR( filePath,  info,  channelInfo);
+
             //手动移除无法编译通过的字段
             androidTool.RemoveErrordManifest(filePath);
 
@@ -608,6 +613,57 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < jarList.Count; i++)
             {
                 compileTool.Jar2SmaliByCache(jarList[i], filePath);
+            }
+        }
+
+        void PutAAR(string filePath, SDKInfo info, ChannelInfo channelInfo)
+        {
+            string aarPath = EditorData.SdkLibPath + "\\" + info.sdkName + "\\aar";
+            string rarPath = EditorData.SdkLibPath + "\\" + info.sdkName + "\\rar";
+
+            //先判断有没有aar文件夹
+            if (!Directory.Exists(aarPath))
+            {
+                return;
+            }
+
+            List<string> aarList = FileTool.GetAllFileNamesByPath(aarPath, new string[] { "aar" }, false);
+
+            for (int i = 0; i < aarList.Count; i++)
+            {
+                string aarFilePath = aarList[i];
+                string rarFilePath = rarPath + "\\" + FileTool.RemoveExpandName(FileTool.GetFileNameByPath(aarFilePath)) + ".rar" ;
+                string rarDecompressionPath = rarPath + "\\" + FileTool.RemoveExpandName(FileTool.GetFileNameByPath(aarFilePath));
+
+                if (!Directory.Exists(rarPath))
+                {
+                    Directory.CreateDirectory(rarPath);
+                }
+
+                //转储为rar并解压
+
+                if (!File.Exists(rarFilePath))
+                {
+                    //转储RAR
+                    File.Copy(aarFilePath, rarFilePath);
+                }
+
+                //如果没有解压就现场解压
+                if (!Directory.Exists(rarDecompressionPath))
+                {
+                    if (File.Exists(rarFilePath))
+                    {
+                        rarTool.Decompression(rarFilePath);
+                    }
+                    else
+                    {
+                        ErrorOutPut("E: 找不到资源 " + rarFilePath);
+                        return;
+                    }
+                }
+
+                //提取本体
+                androidTool.ExtractAAR2APK(rarDecompressionPath, filePath, channelInfo);
             }
         }
 

@@ -15,6 +15,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.3.3.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.4.1.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.5.0.jar")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("apktool_2.6.0.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.1.3.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.3.4.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.4.0.jar")]

@@ -346,6 +346,12 @@ public class AndroidTool
                 continue;
             }
 
+            if(node.NodeType != XmlNodeType.Element)
+            {
+                OutPut("I: node.NodeType" + node.NodeType);
+                return;
+            }
+
             XmlElement ele = (XmlElement)node;
 
             //权限

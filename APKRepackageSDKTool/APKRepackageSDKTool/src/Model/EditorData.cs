@@ -33,7 +33,7 @@ namespace APKRepackageSDKTool
         static string mavenCachePath = "";
 
         static string jetifierPath;
-        static string apktoolVersion = "apktool_2.5.0";
+        static string apktoolVersion = "apktool_2.6.0";
         static string baksmaliVersion = "baksmali-2.4.0.jar";
 
         static string buildToolVersion;
@@ -655,7 +655,7 @@ namespace APKRepackageSDKTool
         public bool isForceManifest = false; //强制反编译清单文件(反编译Resource文件)
         public bool isOnlyMainClasses = false; //只反编译主Classes文件(解决混淆问题)
         public bool isNoCompressResource = false; //不压缩Resource文件
-        public bool isUseAAPT2 = false; //使用AAPT2
+        public bool isUseAAPT2 = true; //使用AAPT2
         public bool isChangeMainApplication = false; //修改ManinApplication
         public bool isChangeMainActivity = true; //修改ManinActivity
         public bool isExecuteInvalidFile = true; //处理无效文件
