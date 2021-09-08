@@ -43,7 +43,7 @@ public class SplitDexTool
         //初始化
         foreach (SmaliType item in Enum.GetValues(typeof(SmaliType)))
         {
-            currentNum.Add(item,0);
+            currentNum.Add(item, info.SplitDexOffset);
             currentIndex.Add(item, 1);
             allName.Add(item, new Dictionary<string, string>());
         }
@@ -98,7 +98,7 @@ public class SplitDexTool
                     foreach (SmaliType item2 in Enum.GetValues(typeof(SmaliType)))
                     {
                         //全部重新计算
-                        currentNum[item2] = 0;
+                        currentNum[item2] = info.SplitDexOffset;
                         currentIndex[item2]++;
                     }
 

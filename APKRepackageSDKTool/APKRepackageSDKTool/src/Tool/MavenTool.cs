@@ -19,11 +19,12 @@ public class MavenTool
     string rarPath;
     string jarPath;
     string pomPath;
+    string bundlePath;
 
     List<string> failDownloadList = new List<string>();
     List<string> successDownloadList = new List<string>();
 
-    RarTool rt ;
+    RarTool rt;
     HttpTool ht;
     CompileTool ct;
     AndroidTool at;
@@ -46,6 +47,7 @@ public class MavenTool
         rarPath = mavenCachePath + @"\rar";
         jarPath = mavenCachePath + @"\jar";
         pomPath = mavenCachePath + @"\pom";
+        bundlePath = mavenCachePath + @"\bundle";
 
         FileTool.CreatePath(aarPath);
         FileTool.CreatePath(rarPath);
@@ -103,7 +105,7 @@ public class MavenTool
     /// </summary>
     /// <param name="mavenLibList"></param>
     /// <param name="aimPath"></param>
-    public void ExtractMavenFile(List<string> mavenPathList, List<string> mavenLibList,string aimPath, ChannelInfo info)
+    public void ExtractMavenFile(List<string> mavenPathList, List<string> mavenLibList, string aimPath, ChannelInfo info)
     {
         //指定编译版本
         ct.assignMinAPILevel = info.GetAssignMinAPILevel();
@@ -118,7 +120,7 @@ public class MavenTool
         //这里考虑进行多线程优化，提高速度
         for (int i = 0; i < mavenFinalList.Count; i++)
         {
-            ExtractSinglePackage(mavenFinalList[i], aimPath, repeatHash,info);
+            ExtractSinglePackage(mavenFinalList[i], aimPath, repeatHash, info);
         }
     }
 
@@ -161,14 +163,14 @@ public class MavenTool
     void CollectSingleMaven(MavenData maven, List<MavenData> finalList, List<MavenData> repeatList)
     {
         //对自身进行排重
-        MavenRemoveRepeat(maven , finalList, repeatList);
+        MavenRemoveRepeat(maven, finalList, repeatList);
 
         //处理依赖
         string libPomPath = pomPath + "\\" + maven.GetFileName() + ".pom";
         var list = AnalysisPomDependencies(libPomPath);
         for (int i = 0; i < list.Count; i++)
         {
-            CollectSingleMaven(MavenData.GetMavenData(list[i]), finalList,repeatList);
+            CollectSingleMaven(MavenData.GetMavenData(list[i]), finalList, repeatList);
         }
     }
 
@@ -178,24 +180,24 @@ public class MavenTool
         for (int i = 0; i < finalList.Count; i++)
         {
             //只取版本最大的
-            if(finalList[i].GetGroupAddArtifact() == data.GetGroupAddArtifact())
+            if (finalList[i].GetGroupAddArtifact() == data.GetGroupAddArtifact())
             {
                 isRepeat = true;
 
-                if(finalList[i].VersionCompare(data) < 0)
+                if (finalList[i].VersionCompare(data) < 0)
                 {
                     finalList[i] = data;
 
                     //收集重复结果
-                    if(!GetHasMaven(repeatList,finalList[i]))
+                    if (!GetHasMaven(repeatList, finalList[i]))
                     {
                         repeatList.Add(finalList[i]);
                     }
                 }
-                else if(finalList[i].VersionCompare(data) > 0)
+                else if (finalList[i].VersionCompare(data) > 0)
                 {
                     //收集重复结果
-                    if (!GetHasMaven(repeatList,data))
+                    if (!GetHasMaven(repeatList, data))
                     {
                         repeatList.Add(data);
                     }
@@ -203,7 +205,7 @@ public class MavenTool
             }
         }
 
-        if(!isRepeat)
+        if (!isRepeat)
         {
             finalList.Add(data);
         }
@@ -211,11 +213,11 @@ public class MavenTool
         return isRepeat;
     }
 
-    bool GetHasMaven(List<MavenData> repeatList,MavenData maven)
+    bool GetHasMaven(List<MavenData> repeatList, MavenData maven)
     {
         for (int i = 0; i < repeatList.Count; i++)
         {
-            if(repeatList[i].GetFullName() == maven.GetFullName())
+            if (repeatList[i].GetFullName() == maven.GetFullName())
             {
                 return true;
             }
@@ -233,13 +235,13 @@ public class MavenTool
         OutPut("I: 开始尝试下载 " + mavenLibName);
 
         bool isFindMaven = false;
-        string finalMaven ="";
-       
+        string finalMaven = "";
+
         string urlpath = GradleName2url(mavenLibName);
         string fileName = GradleName2fileName(mavenLibName);
         string libPomPath = pomPath + "\\" + fileName + ".pom";
 
-        if(string.IsNullOrEmpty(urlpath))
+        if (string.IsNullOrEmpty(urlpath))
         {
             ErrorOutPut("E: 格式异常 终止下载");
             return false;
@@ -256,7 +258,7 @@ public class MavenTool
         {
             //构造url进行下载
             string url = mavenPathList[i] + "\\" + urlpath + ".pom";
-           
+
             if (ht.HttpDownload(url, libPomPath))
             {
                 isFindMaven = true;
@@ -266,11 +268,14 @@ public class MavenTool
             }
         }
 
-        if(isFindMaven)
+        if (isFindMaven)
         {
             //解析pom 下载依赖
             //OutPut("解析依赖 " + mavenLibName);
-            var list =  AnalysisPomDependencies(libPomPath);
+            //下载父Pom
+            DownLoadParentPom(finalMaven, libPomPath);
+
+            var list = AnalysisPomDependencies(libPomPath);
             string fileType = AnalysisPomByFileType(libPomPath);
 
             //将该maven置顶，提高查询效率
@@ -281,7 +286,7 @@ public class MavenTool
             //加载依赖
             for (int i = 0; i < list.Count; i++)
             {
-                isAll &=  DownLoadSingleMavenLib(mavenPathList, list[i]);
+                isAll &= DownLoadSingleMavenLib(mavenPathList, list[i]);
             }
 
             bool isDownload = false;
@@ -291,10 +296,18 @@ public class MavenTool
                 isDownload = DownLoadAar(finalMaven, urlpath, fileName);
 
             }
-            else if(fileType == "jar")
+            else if (fileType == "pom")
             {
-                isDownload = DownLoadJar(finalMaven, urlpath, fileName);
+                isDownload = DownLoadAar(finalMaven, urlpath, fileName);
             }
+            else if (fileType == "jar" || fileType == "bundle")
+            {
+                isDownload = true;
+            }
+            //else if (fileType == "bundle")
+            //{
+            //    isDownload = DownLoadBundle(finalMaven, urlpath, fileName);
+            //}
             else
             {
                 ErrorOutPut("E: 意外的文件类型 " + fileType + " " + mavenLibName);
@@ -334,9 +347,65 @@ public class MavenTool
         }
     }
 
+    private void DownLoadParentPom(string finalMaven, string libPomPath)
+    {
+        //解析父pom GradleName
+        string parentPomGradeName = AnalysisParentPomGradeName(libPomPath);
+
+        if (parentPomGradeName != null)
+        {
+            string parentUrlpath = GradleName2url(parentPomGradeName);
+            string parentFileName = GradleName2fileName(parentPomGradeName);
+            string parentLibPomPath = pomPath + "\\" + parentFileName + ".pom";
+
+            //判断本地文件是否存在
+            if (!File.Exists(parentLibPomPath))
+            {
+                //下载Pom
+                string url = finalMaven + "\\" + parentUrlpath + ".pom";
+
+                if (ht.HttpDownload(url, parentLibPomPath))
+                {
+                }
+                else
+                {
+                    ErrorOutPut("E: " + url + " 下载失败！");
+                }
+            }
+
+            //递归下载父POM
+            DownLoadParentPom(finalMaven, parentLibPomPath);
+        }
+    }
+
+    Pom AnlysisParentPom(string libPomPath)
+    {
+        //解析父pom GradleName
+        string parentPomGradeName = AnalysisParentPomGradeName(libPomPath);
+        Pom parentPom = null;
+
+        if (parentPomGradeName != null)
+        {
+            string parentFileName = GradleName2fileName(parentPomGradeName);
+            string parentLibPomPath = pomPath + "\\" + parentFileName + ".pom";
+
+            //判断本地文件是否存在
+            if (!File.Exists(parentLibPomPath))
+            {
+                return null;
+            }
+            else
+            {
+                parentPom = new Pom(parentLibPomPath);
+                parentPom.parent = AnlysisParentPom(parentLibPomPath);
+            }
+        }
+        return parentPom;
+    }
+
     void AddFailList(string mavenLibName)
     {
-        if(!failDownloadList.Contains(mavenLibName))
+        if (!failDownloadList.Contains(mavenLibName))
         {
             failDownloadList.Add(mavenLibName);
         }
@@ -350,7 +419,7 @@ public class MavenTool
         }
     }
 
-    bool DownLoadAar(string mavenPath,string urlPath,string fileName)
+    bool DownLoadAar(string mavenPath, string urlPath, string fileName)
     {
         //下载aar
         string aarUrl = mavenPath + "\\" + urlPath + ".aar";
@@ -388,13 +457,55 @@ public class MavenTool
         }
     }
 
+    bool DownLoadBundle(string mavenPath, string urlPath, string fileName)
+    {
+        //下载aar
+        string bundleUrl = mavenPath + "\\" + urlPath + ".bundle";
+        string bundleFileName = jarPath + "\\" + fileName + ".jar";
+
+        if (ht.HttpDownload(bundleUrl, bundleFileName))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    string AnalysisParentPomGradeName(string pomPath)
+    {
+        Pom pom = new Pom(pomPath);
+
+        XmlDocument doc = new XmlDocument();
+        doc.Load(pomPath);
+
+        //解析Parent地址
+        XmlElement root = doc.DocumentElement;
+
+        for (int i = 0; i < root.ChildNodes.Count; i++)
+        {
+            XmlNode tmp = root.ChildNodes[i];
+
+            if (tmp.Name == "parent")
+            {
+                return AnalysisSingleDependenciesXML(tmp, pom);
+            }
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// 解析依赖节点
     /// </summary>
     /// <param name="pomPath"></param>
     /// <returns></returns>
-    List<string> AnalysisPomDependencies (string pomPath)
+    List<string> AnalysisPomDependencies(string pomPath)
     {
+        Pom pom = new Pom(pomPath);
+        pom.parent = AnlysisParentPom(pomPath);
+
         List<string> result = new List<string>();
 
         XmlDocument doc = new XmlDocument();
@@ -402,34 +513,20 @@ public class MavenTool
 
         XmlElement root = doc.DocumentElement;
 
-        string version = "noFind";
-
         for (int i = 0; i < root.ChildNodes.Count; i++)
         {
             XmlNode tmp = root.ChildNodes[i];
-            //OutPut("tmp.Name " + tmp.Name);
-
-            if (tmp.Name == "parent")
-            {
-                for (int j = 0; j < tmp.ChildNodes.Count; j++)
-                {
-                    if (tmp.ChildNodes[j].Name == "version")
-                    {
-                        version = tmp.ChildNodes[j].InnerXml;
-                    }
-                }
-            }
 
             if (tmp.Name == "dependencies")
             {
-                if(tmp.HasChildNodes)
+                if (tmp.HasChildNodes)
                 {
                     //解析单个 依赖节点
                     for (int j = 0; j < tmp.ChildNodes.Count; j++)
                     {
-                        if(IsDependenciesNode(tmp.ChildNodes[j]))
+                        if (IsDependenciesNode(tmp.ChildNodes[j]))
                         {
-                            result.Add(AnalysisSingleDependenciesXML(tmp.ChildNodes[j], version));
+                            result.Add(AnalysisSingleDependenciesXML(tmp.ChildNodes[j], pom));
                         }
                     }
                 }
@@ -460,7 +557,12 @@ public class MavenTool
 
     bool IsDependenciesNode(XmlNode node)
     {
-        bool isHasScope = false;
+        bool isHasScope = true;
+
+        if(node.NodeType == XmlNodeType.Comment)
+        {
+            return false;
+        }
 
         for (int i = 0; i < node.ChildNodes.Count; i++)
         {
@@ -477,7 +579,7 @@ public class MavenTool
                 }
             }
 
-            if(xml.Name == "optional" && xml.InnerXml == "true")
+            if (xml.Name == "optional" && xml.InnerXml == "true")
             {
                 return false;
             }
@@ -486,7 +588,7 @@ public class MavenTool
         return isHasScope;
     }
 
-    string AnalysisSingleDependenciesXML(XmlNode node,string parentVersion)
+    string AnalysisSingleDependenciesXML(XmlNode node, Pom pom)
     {
         //OutPut("AnalysisSingleDependenciesXML node.Name " + node.Name);
 
@@ -500,10 +602,20 @@ public class MavenTool
             if (xml.Name == "groupId")
             {
                 groupId = xml.InnerXml;
+
+                if(groupId.Contains("$"))
+                {
+                    groupId = pom.GetProperties(groupId);
+                }
             }
             else if (xml.Name == "artifactId")
             {
                 artifactId = xml.InnerXml;
+
+                if(artifactId.Contains("$"))
+                {
+                    artifactId = pom.GetProperties(artifactId);
+                }
             }
             else if (xml.Name == "version")
             {
@@ -512,15 +624,30 @@ public class MavenTool
         }
 
         //未指定版本则使用父节点版本
-        if(string.IsNullOrEmpty(version))
+        if (string.IsNullOrEmpty(version))
         {
-            version = parentVersion;
+            if (pom == null)
+            {
+                ErrorOutPut("E:未找到 parent!");
+                version = "Error_NoFind_AnalysisSingleDependenciesXML";
+            }
+            else
+            {
+                version = pom.GetVersion(groupId, artifactId);
+            }
+        }
+        else
+        {
+            if (version.Contains("$"))
+            {
+                version = pom.GetProperties(version);
+            }
         }
 
         return groupId + ":" + artifactId + ":" + version;
     }
 
-    string VersionLogic(string version)
+    public static string VersionLogic(string version)
     {
         //直接去掉左右方括号
         //[19.7.0]  -> 19.7.0
@@ -532,8 +659,6 @@ public class MavenTool
         //[5,6)
 
         //5.+ 
-
-
 
         return version;
     }
@@ -561,9 +686,9 @@ public class MavenTool
             // androidx.appcompat:appcompat:1.1.0 -> androidx/appcompat/appcompat/1.2.0/appcompat-1.2.0
             string[] spilt = gradleName.Split(':');
 
-            return spilt[0].Replace(".", "/") + "/" + spilt[1] + "/" + spilt[2] + "/" + spilt[1] + "-" + spilt[2];
+            return spilt[0].Replace(".", "\\") + "\\" + spilt[1] + "\\" + spilt[2] + "\\" + spilt[1] + "-" + spilt[2];
         }
-        catch(Exception )
+        catch (Exception)
         {
             ErrorOutPut("E: Gradle 格式异常 " + gradleName);
             return null;
@@ -572,7 +697,7 @@ public class MavenTool
 
     void DumpRarAndDecompression(string aarFileName, string rarFileName)
     {
-        if(!File.Exists(rarFileName))
+        if (!File.Exists(rarFileName))
         {
             //转储RAR
             File.Copy(aarFileName, rarFileName);
@@ -581,31 +706,22 @@ public class MavenTool
         rt.Decompression(rarFileName);
     }
 
-    void ExtractSinglePackage(string gradleName,string aimPath, Dictionary<string, bool> repeatHash, ChannelInfo info)
+    void ExtractSinglePackage(string gradleName, string aimPath, Dictionary<string, bool> repeatHash, ChannelInfo info)
     {
         string aimPomPath = pomPath + "\\" + GradleName2fileName(gradleName) + ".pom";
         string fileType = AnalysisPomByFileType(aimPomPath);
 
         //避免重复提取
-        if(repeatHash.ContainsKey(gradleName))
+        if (repeatHash.ContainsKey(gradleName))
         {
             return;
         }
         else
         {
-            repeatHash.Add(gradleName,true);
+            repeatHash.Add(gradleName, true);
         }
 
         OutPut("I: 提取Maven  " + gradleName);
-
-        ////读取依赖
-        //var list = AnalysisPomDependencies(aimPomPath);
-
-        //for (int i = 0; i < list.Count; i++)
-        //{
-        //    ExtractSinglePackage(list[i], aimPath, repeatHash, info);
-        //}
-
         if (fileType == "aar")
         {
             string aimRarPath = rarPath + "\\" + GradleName2fileName(gradleName);
@@ -614,7 +730,7 @@ public class MavenTool
             //如果没有解压就现场解压
             if (!Directory.Exists(aimRarPath))
             {
-                if(File.Exists(aimRarFile))
+                if (File.Exists(aimRarFile))
                 {
                     rt.Decompression(aimRarFile);
                 }
@@ -626,12 +742,12 @@ public class MavenTool
             }
 
             //提取本体
-            at.ExtractAAR2APK(aimRarPath, aimPath,info);
+            at.ExtractAAR2APK(aimRarPath, aimPath, info);
         }
-        else if(fileType == "jar")
+        else if (fileType == "jar" || fileType == "bundle")
         {
-            string aimJarPath = jarPath + "\\" + GradleName2fileName(gradleName) +".jar";
-            if(!File.Exists(aimJarPath))
+            string aimJarPath = jarPath + "\\" + GradleName2fileName(gradleName) + ".jar";
+            if (!File.Exists(aimJarPath))
             {
                 ErrorOutPut("E: 找不到资源 " + gradleName + " " + aimJarPath);
                 return;
@@ -639,9 +755,13 @@ public class MavenTool
 
             ct.Jar2SmaliByCache(aimJarPath, aimPath);
         }
+        else if (fileType == "pom")
+        {
+
+        }
         else
         {
-            ErrorOutPut("E: 意外的文件类型 " + fileType +" " + gradleName);
+            ErrorOutPut("E: 意外的文件类型 " + fileType + " " + gradleName);
         }
     }
 
@@ -675,7 +795,7 @@ public class MavenTool
 
             mavenData.versions = new List<int>();
 
-            string vsTemp = mavenData.version.Split('-')[0].Replace(" ","");
+            string vsTemp = mavenData.version.Split('-')[0].Replace(" ", "");
             string[] vs = vsTemp.Split('.');
 
             for (int i = 0; i < vs.Length; i++)
@@ -686,7 +806,32 @@ public class MavenTool
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("GetMavenData  Parse version error ->" + mavenData.version + "<- " + e.ToString());
+                    throw new Exception("GetMavenData  Parse version error ->" + mavenData.version + "<- " + gradleName  +"\n"+ e.ToString());
+                }
+            }
+
+            return mavenData;
+        }
+
+        public static MavenData GetMavenData(XmlNode node)
+        {
+            //androidx.appcompat:appcompat:1.1.0 
+            MavenData mavenData = new MavenData();
+
+            for (int i = 0; i < node.ChildNodes.Count; i++)
+            {
+                XmlNode xml = node.ChildNodes[i];
+                if (xml.Name == "groupId")
+                {
+                    mavenData.group = xml.InnerXml;
+                }
+                else if (xml.Name == "artifactId")
+                {
+                    mavenData.artifact = xml.InnerXml;
+                }
+                else if (xml.Name == "version")
+                {
+                    mavenData.version = VersionLogic(xml.InnerXml);
                 }
             }
 
@@ -700,7 +845,7 @@ public class MavenTool
 
         public string GetFullName()
         {
-            return group + ":" + artifact+":"+version;
+            return group + ":" + artifact + ":" + version;
         }
 
         public string GetFileName()
@@ -712,16 +857,16 @@ public class MavenTool
         {
             for (int i = 0; i < versions.Count; i++)
             {
-                if(otherMaven.versions.Count < i)
+                if (otherMaven.versions.Count < i)
                 {
                     return 1;
                 }
 
-                if(versions[i] > otherMaven.versions[i])
+                if (versions[i] > otherMaven.versions[i])
                 {
                     return 1;
                 }
-                else if(versions[i] < otherMaven.versions[i])
+                else if (versions[i] < otherMaven.versions[i])
                 {
                     return -1;
                 }
@@ -729,12 +874,135 @@ public class MavenTool
                 //如果相等则判断下一位
             }
 
-            if(otherMaven.versions.Count > versions.Count)
+            if (otherMaven.versions.Count > versions.Count)
             {
                 return -1;
             }
 
             return 0;
+        }
+    }
+
+    class Pom
+    {
+        public string pomPath;
+        public Pom parent;
+        public Dictionary<string, string> properties = new Dictionary<string, string>();
+        public List<MavenData> dependencies = new List<MavenData>();
+
+        public Pom()
+        {
+
+        }
+
+        public Pom(string pomPath)
+        {
+            this.pomPath = pomPath;
+            XmlDocument doc = new XmlDocument();
+            doc.Load(pomPath);
+
+            XmlElement root = doc.DocumentElement;
+
+            for (int i = 0; i < root.ChildNodes.Count; i++)
+            {
+                XmlNode tmp = root.ChildNodes[i];
+                if (tmp.Name == "parent")
+                {
+                    //TODO 解析parent 的 parent
+                }
+
+                if (tmp.Name == "properties")
+                {
+                    for (int j = 0; j < tmp.ChildNodes.Count; j++)
+                    {
+                        if (tmp.ChildNodes[j].NodeType == XmlNodeType.Comment)
+                        {
+                            continue;
+                        }
+
+                        properties.Add(tmp.ChildNodes[j].Name, tmp.ChildNodes[j].InnerText);
+                    }
+                }
+
+                if (tmp.Name == "dependencyManagement")
+                {
+                    AnalysisDependenciesNode(tmp["dependencies"]);
+                }
+            }
+        }
+
+        void AnalysisDependenciesNode(XmlNode xml)
+        {
+            for (int i = 0; i < xml.ChildNodes.Count; i++)
+            {
+                MavenData maven = MavenData.GetMavenData(xml.ChildNodes[i]);
+
+                dependencies.Add(maven);
+            }
+        }
+
+        public string GetProperties(string key)
+        {
+            string value = key.Replace("$", "").Replace("}", "").Replace("{", "");
+
+            if (properties.ContainsKey(value))
+            {
+                value = properties[value];
+            }
+            else
+            {
+                if (parent != null)
+                {
+                    return parent.GetProperties(key);
+                }
+                else
+                {
+                    value = "Error_NoFindVersion_NoProperties";
+                }
+            }
+
+            return value;
+        }
+
+        public string GetVersion(string groupId, string artifactId)
+        {
+            bool isFind = false;
+            string version = "";
+            for (int i = 0; i < dependencies.Count; i++)
+            {
+                MavenData maven = dependencies[i];
+
+                if (maven.group == groupId
+                    && maven.artifact == artifactId
+                    && !string.IsNullOrEmpty(maven.version))
+                {
+                    version =  maven.version;
+                    isFind = true;
+                    break;
+                }
+            }
+
+            if (isFind)
+            {
+                //替换properties
+                if (version.Contains("$"))
+                {
+                    version = GetProperties(version);
+                }
+                return version;
+            }
+            //没有在本层查找到
+            else
+            {
+                if(parent != null)
+                {
+                    return parent.GetVersion(groupId, artifactId);
+                }
+                else
+                {
+                    return "Error_NoFind_version";
+                }
+            }
         }
     }
 }

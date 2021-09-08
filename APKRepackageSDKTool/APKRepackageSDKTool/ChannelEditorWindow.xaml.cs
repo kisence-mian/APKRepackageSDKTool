@@ -296,6 +296,7 @@ namespace APKRepackageSDKTool
         {
             AddConfig(SDKInterfaceDefine.PropertiesKey_ChannelName, EditorData.CurrentChannel.Name);
             AddConfig(SDKInterfaceDefine.PropertiesKey_StoreName, EditorData.CurrentChannel.Name);
+            AddConfig(SDKInterfaceDefine.PropertiesKey_ADPlatform, EditorData.CurrentChannel.Name);
             AddConfig(SDKInterfaceDefine.PropertiesKey_LoginPlatform, "Tourist|AccountLogin|" + EditorData.CurrentChannel.Name);
 
             AddConfig(SDKInterfaceDefine.PropertiesKey_SelectServerURL, "http://");

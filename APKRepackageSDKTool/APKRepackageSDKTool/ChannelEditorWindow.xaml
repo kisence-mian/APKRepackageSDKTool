@@ -148,21 +148,23 @@
                     <CheckBox Content="重新分包" HorizontalAlignment="Left" Margin="30,136,0,0" VerticalAlignment="Top" IsChecked="{Binding IsResplitDex,Mode=TwoWay}" />
                     <CheckBox Content="修改MainApplication" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" IsChecked="{Binding IsChangeMainApplication,Mode=TwoWay}" />
                     <CheckBox Content="修改MainActivity" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" IsChecked="{Binding IsChangeMainActivity,Mode=TwoWay}" />
-                    <CheckBox Content="处理无效文件（移除xml文件名和内容中的所有 $ 符号）" Margin="328,14,127,0" VerticalAlignment="Top" IsChecked="{Binding IsExecuteInvalidFile,Mode=TwoWay}" />
+                    <CheckBox Content="处理无效文件（移除xml文件名和内容中的所有 $ 符号）" Margin="328,14,0,0" VerticalAlignment="Top" IsChecked="{Binding IsExecuteInvalidFile,Mode=TwoWay}" HorizontalAlignment="Left" Width="511" />
 
                     <CheckBox Content="只反编译主Classes文件" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" IsChecked="{Binding IsOnlyMainClasses,Mode=TwoWay}" />
-                    <CheckBox Content="不压缩资源文件" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top" IsChecked="{Binding IsNoCompressResource,Mode=TwoWay}" />
+                    <CheckBox Content="不压缩资源文件" HorizontalAlignment="Left" Margin="10,182,0,0" VerticalAlignment="Top" IsChecked="{Binding IsNoCompressResource,Mode=TwoWay}" />
 
                     <CheckBox Content="强制反编译清单文件(反编译Resource文件)" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" IsChecked="{Binding IsForceManifest,Mode=TwoWay}"  />
 
-                    <CheckBox Content="重新生成R表" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRebuildRTable,Mode=TwoWay}" />
-                    <CheckBox Content="使用aapt2" HorizontalAlignment="Left" Margin="26,207,0,0" VerticalAlignment="Top" IsChecked="{Binding IsUseAAPT2,Mode=TwoWay}" />
+                    <CheckBox Content="重新生成R表" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRebuildRTable,Mode=TwoWay}" />
+                    <CheckBox Content="使用aapt2" HorizontalAlignment="Left" Margin="26,222,0,0" VerticalAlignment="Top" IsChecked="{Binding IsUseAAPT2,Mode=TwoWay}" />
 
-                    <CheckBox Content="输出日志" HorizontalAlignment="Left" Margin="10,245,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLog,Mode=TwoWay}" />
-                    <CheckBox Content="字节对齐" Margin="10,265,445,0" VerticalAlignment="Top" IsChecked="{Binding IsZipalign,Mode=TwoWay}" />
-                    <CheckBox Content="删除临时目录" HorizontalAlignment="Left" Margin="10,285,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDeleteTempPath, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox Content="输出日志" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLog,Mode=TwoWay}" />
+                    <CheckBox Content="字节对齐" Margin="10,280,445,0" VerticalAlignment="Top" IsChecked="{Binding IsZipalign,Mode=TwoWay}" />
+                    <CheckBox Content="删除临时目录" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDeleteTempPath, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" />
                     <Button Content="复制渠道配置" Margin="10,0,0,10" VerticalAlignment="Bottom" Click="Button_Click_Copy" HorizontalAlignment="Left" Width="126"/>
                     <Button Content="粘贴渠道配置" Margin="155,0,0,10" Click="Button_Click_paste" HorizontalAlignment="Left" Width="126" Height="19" VerticalAlignment="Bottom"/>
+                    <CheckBox Content="精简Yml文件" Margin="328,34,0,0" VerticalAlignment="Top" IsChecked="{Binding IsSimplifyYml, Mode=TwoWay}" HorizontalAlignment="Left" Width="511" />
+                    <TextBox HorizontalAlignment="Left" Text="{Binding SplitDexOffset,Mode=TwoWay}" Height="17" Margin="78,116,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.175,3.059"/>
                 </Grid>
             </TabItem>
         </TabControl>

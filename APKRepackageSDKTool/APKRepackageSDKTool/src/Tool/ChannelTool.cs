@@ -921,10 +921,31 @@ namespace APKRepackageSDKTool
 
             YML yml = new YML(path);
 
+            //不压缩逻辑
+            List<string> noCompressList = new List<string>();
+
+            var list = yml.FindChilenList("doNotCompress");
+            for (int i = 0; i < list.Count; i++)
+            {
+                string value = list[i].value;
+                if (value.Contains("video")
+                     //|| value.Contains(".resource")
+                     //|| value.Contains(".png")
+                     )
+                {
+                    noCompressList.Add(value);
+                }
+            }
+
             yml.DeleteAllChildNode("doNotCompress");
             yml.AddNodeByKey("doNotCompress", "resources.arsc");
             yml.AddNodeByKey("doNotCompress", "resource");
             yml.AddNodeByKey("doNotCompress", "png");
+
+            for (int i = 0; i < noCompressList.Count; i++)
+            {
+                yml.AddNodeByKey("doNotCompress", noCompressList[i]);
+            }
             yml.save();
         }
 

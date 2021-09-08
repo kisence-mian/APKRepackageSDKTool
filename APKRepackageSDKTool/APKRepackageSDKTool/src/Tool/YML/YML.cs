@@ -80,7 +80,7 @@ namespace APKRepackageSDKTool.src.YML
         // 修改值 允许key为多级 例如：spring.datasource.url
         public void modify(String key, String value)
         {
-            Node node = findNodeByKey(key);
+            Node node = FindNodeByKey(key);
             if (node != null)
             {
                 node.value = value;
@@ -89,7 +89,7 @@ namespace APKRepackageSDKTool.src.YML
 
         public void AddNodeByKey(String key, String value)
         {
-            Node node = findNodeByKey(key);
+            Node node = FindNodeByKey(key);
 
             if (node != null)
             {
@@ -105,9 +105,14 @@ namespace APKRepackageSDKTool.src.YML
             }
         }
 
+        //public Node GetNode(string name)
+        //{
+
+        //}
+
         public void DeleteAllChildNode(string key)
         {
-            Node node = findNodeByKey(key);
+            Node node = FindNodeByKey(key);
 
             if(node != null)
             {
@@ -125,7 +130,7 @@ namespace APKRepackageSDKTool.src.YML
         // 读取值
         public String read(String key, String value)
         {
-            Node node = findNodeByKey(key);
+            Node node = FindNodeByKey(key);
             if (node != null)
             {
                 return node.value;
@@ -134,7 +139,7 @@ namespace APKRepackageSDKTool.src.YML
         }
 
         // 根据key找节点
-        private Node findNodeByKey(String key)
+        public Node FindNodeByKey(String key)
         {
             String[] ks = key.Split('.');
             for (int i = 0; i < nodeList.Count; i++)
@@ -163,6 +168,16 @@ namespace APKRepackageSDKTool.src.YML
                 }
             }
             return null;
+        }
+
+        public List<Node> FindChilenList(string key)
+        {
+            List<Node> result = new List<Node>();
+
+            Node n = FindNodeByKey(key);
+
+            findChildren(n, result);
+            return result;
         }
 
         // 保存到文件中
@@ -307,7 +322,7 @@ namespace APKRepackageSDKTool.src.YML
         }
 
         // 私有节点类
-        private class Node
+        public class Node
         {
             // 名称
             public String name { get; set; }

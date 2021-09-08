@@ -651,6 +651,8 @@ namespace APKRepackageSDKTool
 
         public bool isSplitDex = true; //分包
         public bool isResplitDex = true; //重新分包
+        public int splitDexOffset = 0;   //分包补偿
+
         public bool isRebuildRTable = true; //重新生成R表
         public bool isForceManifest = false; //强制反编译清单文件(反编译Resource文件)
         public bool isOnlyMainClasses = false; //只反编译主Classes文件(解决混淆问题)
@@ -662,6 +664,7 @@ namespace APKRepackageSDKTool
         public bool isLog;  //输出日志
         public bool isZipalign = true; //字节对齐
         public bool isDeleteTempPath = true;  //删除临时目录
+        public bool isSimplifyYml = true;     //精简YML
 
         public string apktoolVersion = "apktool";
 
@@ -699,6 +702,8 @@ namespace APKRepackageSDKTool
         public bool UseV2Sign { get => useV2Sign; set => useV2Sign = value; }
         public string JksPath { get => jksPath; set => jksPath = value; }
         public bool IsNoCompressResource { get => isNoCompressResource; set => isNoCompressResource = value; }
+        public bool IsSimplifyYml { get => isSimplifyYml; set => isSimplifyYml = value; }
+        public int SplitDexOffset { get => splitDexOffset; set => splitDexOffset = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

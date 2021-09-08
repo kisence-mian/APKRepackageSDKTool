@@ -66,6 +66,8 @@ public class HttpTool
     /// <returns></returns>
     public bool HttpDownload(string url, string path)
     {
+        url = url.Replace("\\", "/");
+
         OutPut("开始下载 " + url);
 
         if(File.Exists(path))
@@ -115,10 +117,10 @@ public class HttpTool
 
             return true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             fs.Close();
-            ErrorOutPut("下载失败 " + url);
+            ErrorOutPut("下载失败 " + url + " \n" + e);
 
             FileTool.DeleteDirectoryComplete(tempPath);
             return false;

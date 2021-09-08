@@ -16,7 +16,7 @@ public class RarTool
 
     string decompressionCmd = @"360zip.exe -x {RarPath} {AimPath}";
     string compressionCmd = @"360zip.exe -ar {FilePath} {ZipPath}";
-    string addFileCmd = @"360zip.exe -ar {FilePath} {ZipPath}";
+    //string addFileCmd = @"360zip.exe -ar {FilePath} {ZipPath}";
 
     public RarTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
     {
@@ -45,7 +45,7 @@ public class RarTool
         }
         else
         {
-            MessageBox.Show("!Directory.Exists " + aimPath);
+            OutPut("!解压时路径已存在 " + aimPath);
         }
     }
 

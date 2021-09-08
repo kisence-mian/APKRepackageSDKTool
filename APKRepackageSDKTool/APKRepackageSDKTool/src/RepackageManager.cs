@@ -152,8 +152,15 @@ namespace APKRepackageSDKTool
                         cmd.Execute(apkToolCmd);
 
                         //移除过长的YML
-                        MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
-                        channelTool.YMLLogic(aimPath);
+                        if (channelInfo.IsSimplifyYml)
+                        {
+                            MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
+                            channelTool.YMLLogic(aimPath);
+                        }
+                        else
+                        {
+                            MakeProgress("跳过移除过长的YML", i, channelList.Count, channelInfo.Name);
+                        }
 
                         //执行对应的文件操作
                         MakeProgress("执行对应的文件操作", i, channelList.Count, channelInfo.Name);
