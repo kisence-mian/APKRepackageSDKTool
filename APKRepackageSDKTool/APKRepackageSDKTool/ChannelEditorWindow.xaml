@@ -165,6 +165,7 @@
                     <Button Content="粘贴渠道配置" Margin="155,0,0,10" Click="Button_Click_paste" HorizontalAlignment="Left" Width="126" Height="19" VerticalAlignment="Bottom"/>
                     <CheckBox Content="精简Yml文件" Margin="328,34,0,0" VerticalAlignment="Top" IsChecked="{Binding IsSimplifyYml, Mode=TwoWay}" HorizontalAlignment="Left" Width="511" />
                     <TextBox HorizontalAlignment="Left" Text="{Binding SplitDexOffset,Mode=TwoWay}" Height="17" Margin="78,116,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.175,3.059"/>
+                    <CheckBox Content="提取so文件(android:extractNativeLibs)" Margin="328,54,0,0" VerticalAlignment="Top" IsChecked="{Binding IsExtractNativeLibs, Mode=TwoWay}" HorizontalAlignment="Left" Width="511" />
                 </Grid>
             </TabItem>
         </TabControl>

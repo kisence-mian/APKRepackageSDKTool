@@ -582,6 +582,15 @@ public class AndroidTool
 
     #endregion
 
+    #region so文件
+
+    public void ChangeExtractNativeLibs(string filePath)
+    {
+        string xmlPath = filePath + "\\AndroidManifest.xml";
+    }
+
+    #endregion
+
     public void AddActivity(string filePath, ActivityInfo info, SDKInfo sdkInfo, ChannelInfo channelInfo)
     {
         string xmlPath = filePath + "\\AndroidManifest.xml";

@@ -886,6 +886,10 @@ public class MavenTool
     class Pom
     {
         public string pomPath;
+
+        public string groupId = "No_groupID";
+        public string version = "No_version";
+
         public Pom parent;
         public Dictionary<string, string> properties = new Dictionary<string, string>();
         public List<MavenData> dependencies = new List<MavenData>();
@@ -908,7 +912,26 @@ public class MavenTool
                 XmlNode tmp = root.ChildNodes[i];
                 if (tmp.Name == "parent")
                 {
-                    //TODO 解析parent 的 parent
+                    //解析parent 的 parent
+                    for (int j = 0; j < tmp.ChildNodes.Count; j++)
+                    {
+                        XmlNode tmp2 = tmp.ChildNodes[j];
+
+                        if (tmp2.NodeType == XmlNodeType.Comment)
+                        {
+                            continue;
+                        }
+
+                        if(tmp2.Name == "groupId")
+                        {
+                            groupId = tmp2.InnerText;
+                        }
+
+                        if (tmp2.Name == "version")
+                        {
+                            version = tmp2.InnerText;
+                        }
+                    }
                 }
 
                 if (tmp.Name == "properties")
@@ -944,6 +967,16 @@ public class MavenTool
         public string GetProperties(string key)
         {
             string value = key.Replace("$", "").Replace("}", "").Replace("{", "");
+
+            if(value == "project.groupId")
+            {
+                return groupId;
+            }
+
+            if (value == "project.version")
+            {
+                return version;
+            }
 
             if (properties.ContainsKey(value))
             {

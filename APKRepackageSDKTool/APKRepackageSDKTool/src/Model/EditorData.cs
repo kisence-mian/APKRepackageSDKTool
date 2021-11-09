@@ -666,6 +666,8 @@ namespace APKRepackageSDKTool
         public bool isDeleteTempPath = true;  //删除临时目录
         public bool isSimplifyYml = true;     //精简YML
 
+        public bool isExtractNativeLibs = true;     //提取so文件
+
         public string apktoolVersion = "apktool";
 
         public List<SDKInfo> sdkList = new List<SDKInfo>();
@@ -704,6 +706,7 @@ namespace APKRepackageSDKTool
         public bool IsNoCompressResource { get => isNoCompressResource; set => isNoCompressResource = value; }
         public bool IsSimplifyYml { get => isSimplifyYml; set => isSimplifyYml = value; }
         public int SplitDexOffset { get => splitDexOffset; set => splitDexOffset = value; }
+        public bool IsExtractNativeLibs { get => isExtractNativeLibs; set => isExtractNativeLibs = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

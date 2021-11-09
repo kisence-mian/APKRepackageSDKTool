@@ -59,9 +59,35 @@ namespace APKRepackageSDKTool.UI
             allLanguage.Add("en-rAU:英语-澳大利亚");
             allLanguage.Add("en-rSG:英语-新加坡");
 
-            allLanguage.Add("ja:日语");
+            allLanguage.Add("pt:葡萄牙语");
+            allLanguage.Add("es:西班牙语");
 
+            allLanguage.Add("ja:日语");
+            allLanguage.Add("ko:韩语");
             allLanguage.Add("ru:俄语");
+
+            allLanguage.Add("fr:法语");
+            allLanguage.Add("de:德语");
+
+            allLanguage.Add("hi:印度语");
+            allLanguage.Add("mn:蒙古语");
+            allLanguage.Add("km:柬埔寨语");
+            allLanguage.Add("vi:越南语");
+            allLanguage.Add("th:泰语");
+            allLanguage.Add("ms:马来语");
+            allLanguage.Add("in:印度尼西亚语");
+
+            //保留r 名称以备用
+            //allLanguage.Add("pt_rPT:葡萄牙语");
+            //allLanguage.Add("fr_rFR:法语");
+            //allLanguage.Add("de_rDE:德语");
+
+            //allLanguage.Add("ko_rKR:韩语");
+            //allLanguage.Add("mn_rMN:蒙古语");
+            //allLanguage.Add("km_rKH:柬埔寨语");
+            //allLanguage.Add("vi_rVN:越南语");
+            //allLanguage.Add("th_rTH:泰语");
+            //allLanguage.Add("ms_rMY:马来语");
         }
 
         public KeyValueList CurrentLanuage {

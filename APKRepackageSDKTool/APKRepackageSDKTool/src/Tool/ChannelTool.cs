@@ -928,7 +928,8 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < list.Count; i++)
             {
                 string value = list[i].value;
-                if (value.Contains("video")
+                if (value.Contains(".video")
+                    || value.Contains(".so")
                      //|| value.Contains(".resource")
                      //|| value.Contains(".png")
                      )
