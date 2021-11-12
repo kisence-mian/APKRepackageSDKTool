@@ -587,6 +587,15 @@ public class AndroidTool
     public void ChangeExtractNativeLibs(string filePath)
     {
         string xmlPath = filePath + "\\AndroidManifest.xml";
+
+        string xml = FileTool.ReadStringByFile(xmlPath);
+
+        xml = xml.Replace("android:extractNativeLibs=\"false\"", "android:extractNativeLibs=\"true\"");
+
+        //直接保存
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xml);
+        xmlDoc.Save(xmlPath);
     }
 
     #endregion

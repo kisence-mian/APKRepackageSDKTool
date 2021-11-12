@@ -92,6 +92,11 @@ namespace APKRepackageSDKTool
                 androidTool.ChangeMainActity(filePath);
             }
 
+            if(info.IsExtractNativeLibs)
+            {
+                androidTool.ChangeExtractNativeLibs(filePath);
+            }
+            
             if (info.sdkList.Count > 0)
             {
                 OutPut("放入SDK接口 ");
