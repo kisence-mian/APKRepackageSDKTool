@@ -852,7 +852,15 @@ namespace APKRepackageSDKTool
 
         public bool assignMinAPILevel = false;
 
-        public bool force32bit; //强制32位执行
+        //public bool force32bit; //强制32位执行
+
+        public bool delete_armeabi;     //删除armeabi
+        public bool delete_armeabi_v8a; //删除armeabi-v8a
+        public bool delete_x86;         //删除x86
+        public bool delete_x86_64;      //删除x86_64
+        public bool delete_mips;        //删除mips
+        public bool delete_mip64;       //删除mip64
+
         public bool useMaven;   //使用Maven
         public bool useExtraFile; //放入额外文件
 
@@ -865,6 +873,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> usesList = new List<KeyValue>();
         public List<KeyValue> applicationHeadList = new List<KeyValue>();
         public List<string> firstDexList = new List<string>();
+        public List<string> excludeSmaliList = new List<string>();
 
         public string SdkName { get => sdkName; set => sdkName = value; }
 
@@ -929,12 +938,19 @@ namespace APKRepackageSDKTool
         public List<KeyValue> MetaInfoList { get => metaInfoList; set => metaInfoList = value; }
         public List<KeyValue> XmlHeadList { get => xmlHeadList; set => xmlHeadList = value; }
         public List<KeyValue> UsesList { get => usesList; set => usesList = value; }
-        public bool Force32bit { get => force32bit; set => force32bit = value; }
+        //public bool Force32bit { get => force32bit; set => force32bit = value; }
         public List<KeyValue> ApplicationHeadList { get => applicationHeadList; set => applicationHeadList = value; }
         public List<string> FirstDexList { get => firstDexList; set => firstDexList = value; }
         public bool UseMaven { get => useMaven; set => useMaven = value; }
         public bool AssignMinAPILevel { get => assignMinAPILevel; set => assignMinAPILevel = value; }
         public bool UseExtraFile { get => useExtraFile; set => useExtraFile = value; }
+        public bool Delete_armeabi_v8a { get => delete_armeabi_v8a; set => delete_armeabi_v8a = value; }
+        public bool Delete_armeabi { get => delete_armeabi; set => delete_armeabi = value; }
+        public bool Delete_x86 { get => delete_x86; set => delete_x86 = value; }
+        public bool Delete_mips { get => delete_mips; set => delete_mips = value; }
+        public bool Delete_mip64 { get => delete_mip64; set => delete_mip64 = value; }
+        public bool Delete_x86_64 { get => delete_x86_64; set => delete_x86_64 = value; }
+        public List<string> ExcludeSmaliList { get => excludeSmaliList; set => excludeSmaliList = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

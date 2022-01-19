@@ -39,6 +39,7 @@ namespace APKRepackageSDKTool.UI
         KeyValueList usesList;
         KeyValueList applicationHeadList;
         StringList firstDexList;
+        StringList excludeSmaliList;
 
         StringList mavenPathList;
         StringList mavenLibList;
@@ -465,6 +466,35 @@ namespace APKRepackageSDKTool.UI
             }
         }
 
+        private StringList ExcludeSmaliList
+        {
+            get
+            {
+                if (excludeSmaliList == null)
+                {
+                    excludeSmaliList = new StringList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.excludeSmaliList.Count; i++)
+                    {
+                        excludeSmaliList.Add(EditorData.CurrentSDKConfig.excludeSmaliList[i]);
+                    }
+                }
+
+                return excludeSmaliList;
+            }
+
+            set
+            {
+                excludeSmaliList = value;
+                excludeSmaliList.Change();
+
+                EditorData.CurrentSDKConfig.excludeSmaliList.Clear();
+                for (int i = 0; i < excludeSmaliList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.excludeSmaliList.Add(excludeSmaliList[i]);
+                }
+            }
+        }
+
         private StringList MavenPathList
         {
             get
@@ -545,6 +575,7 @@ namespace APKRepackageSDKTool.UI
             ListBox_UsesList.ItemsSource = UsesList;
             ListBox_ApplicationHeadList.ItemsSource = ApplicationHeadList;
             ListBox_FirstDexList.ItemsSource = FirstDexList;
+            ListBox_ExcludeSmaliList.ItemsSource = ExcludeSmaliList;
 
             ListBox_MavenPath.ItemsSource = MavenPathList;
             ListBox_MavenLib.ItemsSource = MavenLibList;
@@ -663,6 +694,30 @@ namespace APKRepackageSDKTool.UI
                 FirstDexList = FirstDexList;
 
                 TextBox_FirstDexName.Text = "";
+            }
+        }
+
+        #endregion
+
+        #region Smali剔除
+
+        private void Button_ClickDeleteSmali(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            string key = (string)btn.Tag;
+            ExcludeSmaliList.Remove(key);
+
+            ExcludeSmaliList = ExcludeSmaliList;
+        }
+
+        private void Button_ClickAddSmali(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_ExcludeSmaliName.Text))
+            {
+                ExcludeSmaliList.Add(TextBox_ExcludeSmaliName.Text);
+                ExcludeSmaliList = ExcludeSmaliList;
+
+                TextBox_ExcludeSmaliName.Text = "";
             }
         }
 

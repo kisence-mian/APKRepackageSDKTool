@@ -141,6 +141,7 @@
                     <Button Content="快速添加" Margin="0,0,10,10" Click="Button_QuickAddConfigKey" HorizontalAlignment="Right" Width="106" Height="19" VerticalAlignment="Bottom" />
                 </Grid>
             </TabItem>
+
             <TabItem Header="其他">
                 <Grid Background="#FFF9F9F9">
                     <!--<CheckBox Content="编译资源（解包时不会反编译Resources文件夹，不勾选时请确认SDK没有对res的操作）" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDecodeResource, Mode=TwoWay}" RenderTransformOrigin="0.993,0.225" IsEnabled="False" />-->

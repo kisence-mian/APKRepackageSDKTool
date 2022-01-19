@@ -112,8 +112,8 @@ namespace APKRepackageSDKTool
                 MavanLogic(filePath, info);
 
 
-                //强制32位模式
-                Force32Bit(filePath, info);
+                //指令集设置
+                ArmeabiConfig(filePath, info);
             }
 
             OutPut("移除编不过的资源");
@@ -520,6 +520,13 @@ namespace APKRepackageSDKTool
         {
             SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkName);
 
+            //代码剔除
+            if(config.excludeSmaliList.Count>0)
+            {
+                OutPut("准备剔除 Smali 文件，剔除设置数量为： " + config.excludeSmaliList.Count);
+                ExcludeSmali(filePath, config);
+            }
+
             //添加Jar
             OutPut("添加Jar " + info.sdkName);
             PutJar(filePath, info);
@@ -778,6 +785,32 @@ namespace APKRepackageSDKTool
         }
         #endregion
 
+        #region 代码剔除
+
+        void ExcludeSmali(string aimPath, SDKConfig config)
+        {
+            string smaliPath = aimPath.Replace("\\", "/") + "/smali";
+            List<string> list = FileTool.GetAllFileNamesByPath(smaliPath, new string[] { "smali" });
+
+            OutPut("Smali 总文件数目为 " + list.Count);
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace("\\", "/");
+                for (int j = 0; j < config.excludeSmaliList.Count; j++)
+                {
+                    if (list[i].Contains(config.excludeSmaliList[j]))
+                    {
+                        FileTool.DeleteFile(list[i]);
+                        //OutPut("剔除 Smali 文件 " + list[i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region 整合SDK
 
         public void SDKVersion(string filePath,ChannelInfo info)
@@ -847,38 +880,75 @@ namespace APKRepackageSDKTool
 
         #endregion 
 
-        #region 强制32位模式
+        #region 指令集设置
 
-        void Force32Bit(string filePath, ChannelInfo info)
+        void ArmeabiConfig(string filePath, ChannelInfo info)
         {
             //强制32位模式
-            bool force32bit = false;
+            bool delete_64v8a = false;
+            bool delete_armeabi = false;
+
+            bool delete_x86 = false;
+            bool delete_x86_64 = false;
+
+            bool delete_mips = false;
+            bool delete_mip64 = false;
 
             for (int i = 0; i < info.sdkList.Count; i++)
             {
                 //OutPut("强制32位模式 " + info.sdkList[i].sdkName + " " + config.force32bit);
 
                 SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(info.sdkList[i].sdkName);
-                force32bit |= config.force32bit;
+
+                delete_64v8a |= config.Delete_armeabi_v8a;
+                delete_armeabi |= config.Delete_armeabi;
+
+                delete_x86 |= config.Delete_x86;
+                delete_x86_64 |= config.Delete_x86_64;
+
+                delete_mips |= config.Delete_mips;
+                delete_mip64 |= config.Delete_mip64;
             }
 
-            if (force32bit)
-            {
-                OutPut("强制32位模式");
+            OutPut("删除不必要的的so库");
 
-                ////将 armeabi-v7a 的库移动到 armeabi 中去
-                //FileTool.CopyDirectory(filePath + "/lib/armeabi-v7a", filePath + " /lib/armeabi");
+            if (delete_armeabi)
+            {
+                OutPut("删除armeabi文件");
 
                 Delete(filePath + "/lib/armeabi");
+            }
+
+            if (delete_64v8a)
+            {
+                OutPut("删除arm64-v8a文件");
+                
                 Delete(filePath + "/lib/arm64-v8a");
             }
 
-            OutPut("删除不必要的的库");
-            Delete(filePath + "/lib/x86");
-            Delete(filePath + "/lib/x86_64");
+            if(delete_x86)
+            {
+                OutPut("删除x86文件");
+                Delete(filePath + "/lib/x86");
+            }
 
-            Delete(filePath + "/lib/mips");
-            Delete(filePath + "/lib/mips64");
+            if (delete_x86_64)
+            {
+                OutPut("删除x86_64文件");
+                Delete(filePath + "/lib/x86_64");
+            }
+
+            if (delete_mips)
+            {
+                OutPut("删除mips文件");
+                Delete(filePath + "/lib/mips");
+            }
+
+            if (delete_mip64)
+            {
+                OutPut("删除mips64文件");
+                Delete(filePath + "/lib/mips64");
+            }
         }
 
         void Delete(String path)
@@ -917,7 +987,6 @@ namespace APKRepackageSDKTool
         #endregion
 
         #region YML
-
 
         public void YMLLogic(string filePath)
         {

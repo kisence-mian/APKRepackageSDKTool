@@ -162,7 +162,7 @@
                     </Grid>
                     <Grid  Grid.Column="2">
                         <TextBox x:Name="TextBox_mainPropertyContent" Margin="10,34,10,10" TextWrapping="Wrap" TextChanged="TextBox_MainActivityPropertyContent_TextChanged"  VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsEnabled="False"/>
-                        <Button Content="说明（特殊）" HorizontalAlignment="Left" Margin="344,10,0,0" VerticalAlignment="Top" Width="95" Click="Button_MianActivityInfo_Click"/>
+                        <Button Content="说明（特殊）" Margin="536,10,10,0" VerticalAlignment="Top" Click="Button_MianActivityInfo_Click"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -432,7 +432,29 @@
                     </ListBox>
                     <Button Content="新增" Margin="0,0,10,10" Height="19" VerticalAlignment="Bottom" Click="Button_ClickAddFirstDex" HorizontalAlignment="Right" Width="75" />
                     <TextBox x:Name="TextBox_FirstDexName" Margin="10,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
-                    <Label Content="java包名包含下列字符串的会被放在第一个Dex包中,格式为 com/xxx/xxx" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="659"/>
+                    <Label Content="java包名包含下列字符串的会被放在第一个Dex包中,格式为 [smali/com/]xxx/xxx[.smali]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="659"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Smali剔除">
+                <Grid Background="#FFF9F9F9">
+                    <ListBox x:Name="ListBox_ExcludeSmaliList" Margin="10,41,10,34">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <Label Content="{Binding Path=.}"  HorizontalAlignment="Stretch" Margin="0,0,50,0" />
+                                    <Button Content="删除" HorizontalAlignment="Right" MinWidth="40" Tag="{Binding Path=.}" Click="Button_ClickDeleteSmali"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Content="新增" Margin="0,0,10,10" Height="19" VerticalAlignment="Bottom" Click="Button_ClickAddSmali" HorizontalAlignment="Right" Width="75" />
+                    <TextBox x:Name="TextBox_ExcludeSmaliName" Margin="10,0,90,5" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Bottom" />
+                    <Label Content="java包名包含下列字符串的会被剔除,格式为 [smali/com/]xxx/xxx[.smali],(不会剔除本sdk中的代码)" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="659"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Maven设置">
@@ -502,7 +524,15 @@
                     <TextBox Height="23" TextWrapping="Wrap" Text="{Binding ApplicationName}" Margin="155,88,10,0" VerticalAlignment="Top"/>
 
                     <CheckBox Content="编译时指定 min API Level" IsChecked="{Binding AssignMinAPILevel}" Margin="9,135,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="209"/>
-                    <CheckBox Content="强制以32位运行 (删除 armeabi-v7a 以外的所有so文件和文件夹)" IsChecked="{Binding Path=Force32bit}" Margin="9,179,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="746"/>
+                    <CheckBox Content="删除 armeabi" IsChecked="{Binding Delete_armeabi}" Margin="10,168,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137"/>
+                    <CheckBox Content="删除 armeabi-v8a" IsChecked="{Binding Delete_armeabi_v8a}" Margin="10,185,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137"/>
+
+                    <CheckBox Content="删除 x86" IsChecked="{Binding Delete_x86}" Margin="146,168,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137"/>
+                    <CheckBox Content="删除 x86-64" IsChecked="{Binding Delete_x86_64}" Margin="146,185,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137"/>
+
+                    <CheckBox Content="删除 mips" IsChecked="{Binding Delete_mips}" Margin="283,168,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137"/>
+                    <CheckBox Content="删除 mip64" IsChecked="{Binding Delete_mip64}" Margin="283,185,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137"/>
+
                     <CheckBox Content="使用额外文件夹" IsChecked="{Binding Path=UseExtraFile}" Margin="9,221,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="117"/>
 
                     <Button  Content="创建额外文件夹" Margin="221,218,0,0" Click="Button_CreateExtraPath_Click" HorizontalAlignment="Left" Width="138" Height="19" VerticalAlignment="Top"/>
