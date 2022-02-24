@@ -1349,7 +1349,14 @@ namespace APKRepackageSDKTool.UI
 
             var thread = new Thread(() =>
             {
-                mt.DowmLoadMaven(MavenPathList, MavenLibList);
+                try
+                {
+                    mt.DowmLoadMaven(MavenPathList, MavenLibList);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("预下载异常 \n" + ex.ToString());
+                }
             });
 
             thread.Start();

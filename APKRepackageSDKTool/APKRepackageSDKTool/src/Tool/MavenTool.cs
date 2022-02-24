@@ -261,8 +261,16 @@ public class MavenTool
 
             if (ht.HttpDownload(url, libPomPath))
             {
-                isFindMaven = true;
-                finalMaven = mavenPathList[i];
+                if(VerifyPom(libPomPath))
+                {
+                    isFindMaven = true;
+                    finalMaven = mavenPathList[i];
+                }
+                else
+                {
+                    OutPut("E: " + libPomPath + " 是错误的pom文件 url: "+ url);
+                    FileTool.DeleteFile(libPomPath);
+                }
 
                 break;
             }
@@ -294,20 +302,19 @@ public class MavenTool
             if (fileType == "aar")
             {
                 isDownload = DownLoadAar(finalMaven, urlpath, fileName);
-
             }
-            else if (fileType == "pom")
-            {
-                isDownload = DownLoadAar(finalMaven, urlpath, fileName);
-            }
-            else if (fileType == "jar" || fileType == "bundle")
-            {
-                isDownload = true;
-            }
-            //else if (fileType == "bundle")
+            //else if (fileType == "pom")
             //{
-            //    isDownload = DownLoadBundle(finalMaven, urlpath, fileName);
+            //    isDownload = DownLoadAar(finalMaven, urlpath, fileName);
             //}
+            else if (fileType == "jar" /*|| fileType == "bundle"*/)
+            {
+                isDownload = DownLoadJar(finalMaven, urlpath, fileName);
+            }
+            else if (fileType == "bundle")
+            {
+                isDownload = DownLoadBundle(finalMaven, urlpath, fileName);
+            }
             else
             {
                 ErrorOutPut("E: 意外的文件类型 " + fileType + " " + mavenLibName);
@@ -503,36 +510,61 @@ public class MavenTool
     /// <returns></returns>
     List<string> AnalysisPomDependencies(string pomPath)
     {
-        Pom pom = new Pom(pomPath);
-        pom.parent = AnlysisParentPom(pomPath);
-
-        List<string> result = new List<string>();
-
-        XmlDocument doc = new XmlDocument();
-        doc.Load(pomPath);
-
-        XmlElement root = doc.DocumentElement;
-
-        for (int i = 0; i < root.ChildNodes.Count; i++)
+        try
         {
-            XmlNode tmp = root.ChildNodes[i];
 
-            if (tmp.Name == "dependencies")
+            Pom pom = new Pom(pomPath);
+            //递归解析父节点
+            pom.parent = AnlysisParentPom(pomPath);
+
+            List<string> result = new List<string>();
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(pomPath);
+
+            XmlElement root = doc.DocumentElement;
+
+            for (int i = 0; i < root.ChildNodes.Count; i++)
             {
-                if (tmp.HasChildNodes)
+                XmlNode tmp = root.ChildNodes[i];
+
+                if (tmp.Name == "dependencies")
                 {
-                    //解析单个 依赖节点
-                    for (int j = 0; j < tmp.ChildNodes.Count; j++)
+                    if (tmp.HasChildNodes)
                     {
-                        if (IsDependenciesNode(tmp.ChildNodes[j]))
+                        //解析单个 依赖节点
+                        for (int j = 0; j < tmp.ChildNodes.Count; j++)
                         {
-                            result.Add(AnalysisSingleDependenciesXML(tmp.ChildNodes[j], pom));
+                            if (IsDependenciesNode(tmp.ChildNodes[j]))
+                            {
+                                result.Add(AnalysisSingleDependenciesXML(tmp.ChildNodes[j], pom));
+                            }
                         }
                     }
                 }
             }
+            return result;
         }
-        return result;
+        catch(Exception e)
+        {
+            throw new Exception("AnalysisPomDependencies  pomPath:" + pomPath + " Error: " + e.ToString());
+        }
+    }
+
+    //验证一个文件是否是正确的pom格式
+    bool VerifyPom(string path)
+    {
+        try
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(path);
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     string AnalysisPomByFileType(string pomPath)
@@ -656,6 +688,13 @@ public class MavenTool
             version = version.Replace("[", "").Replace("]", "");
         }
 
+        //[15.0.0, 17.0.0] -> 17.0.0
+        if (version.Contains(","))
+        {
+            string[] arr = version.Split(',');
+            version = arr[arr.Length - 1].Replace(" ", "");
+        }
+
         //[5,6)
 
         //5.+ 
@@ -736,7 +775,7 @@ public class MavenTool
                 }
                 else
                 {
-                    ErrorOutPut("E: 找不到资源 " + gradleName + " " + aimRarPath);
+                    ErrorOutPut("E: 找不到aar资源 >" + gradleName + "< >" + aimRarPath + "<");
                     return;
                 }
             }
@@ -749,7 +788,7 @@ public class MavenTool
             string aimJarPath = jarPath + "\\" + GradleName2fileName(gradleName) + ".jar";
             if (!File.Exists(aimJarPath))
             {
-                ErrorOutPut("E: 找不到资源 " + gradleName + " " + aimJarPath);
+                ErrorOutPut("E: 找不到jar资源 gradleName: >" + gradleName + "<  aimJarPath: >" + aimJarPath + "<");
                 return;
             }
 
@@ -800,14 +839,17 @@ public class MavenTool
 
             for (int i = 0; i < vs.Length; i++)
             {
-                try
+                int version = 0;
+                if(int.TryParse(vs[i], out version))
                 {
-                    mavenData.versions.Add(int.Parse(vs[i]));
+                    mavenData.versions.Add(version);
                 }
-                catch (Exception e)
+                else
                 {
-                    throw new Exception("GetMavenData  Parse version error ->" + mavenData.version + "<- " + gradleName  +"\n"+ e.ToString());
+                    //跳过解析这个版本
+                    mavenData.versions.Add(0);
                 }
+
             }
 
             return mavenData;
@@ -1037,5 +1079,7 @@ public class MavenTool
                 }
             }
         }
+
+
     }
 }

@@ -669,7 +669,7 @@ namespace APKRepackageSDKTool
                     }
                     else
                     {
-                        ErrorOutPut("E: 找不到资源 " + rarFilePath);
+                        ErrorOutPut("E: 找不到资源 >" + rarFilePath + "<");
                         return;
                     }
                 }
