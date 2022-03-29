@@ -152,9 +152,11 @@ namespace APKRepackageSDKTool
                         cmd.Execute(apkToolCmd);
 
                         //移除过长的YML
+                        string extensionsFilePath = aimPath + "\\doNotCompress.txt";
                         if (channelInfo.IsSimplifyYml)
                         {
                             MakeProgress("移除过长的YML", i, channelList.Count, channelInfo.Name);
+
                             channelTool.YMLLogic(aimPath);
                         }
                         else
@@ -192,7 +194,12 @@ namespace APKRepackageSDKTool
 
                         if (channelInfo.isUseAAPT2)
                         {
-                            options = "-a " + EditorData.GetAAPT2Path() + " --use-aapt2 ";
+                            if(channelInfo.IsCustomAAPT)
+                            {
+                                options += "-a " + EditorData.GetAAPT2Path();
+                            }
+
+                            options += " --use-aapt2 ";
                         }
 
                         if (channelInfo.GetAssignMinAPILevel())
@@ -289,8 +296,6 @@ namespace APKRepackageSDKTool
 
                         System.Diagnostics.Process.Start("Explorer", "/select," + finalPath);
                         MakeProgress("完成", i, channelList.Count, channelInfo.Name);
-
-
                     }
                 }
                 catch (Exception e)

@@ -20,6 +20,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.3.4.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.4.0.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("baksmali-2.5.2.jar")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bundletool-all-1.9.0.jar")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/dlls/b1plus.ui.baseapplications.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dotnetreactor/dlls/b1plus.ui.baseapplications_secure/b1plus.ui.baseapplications.d" +
     "ll")]

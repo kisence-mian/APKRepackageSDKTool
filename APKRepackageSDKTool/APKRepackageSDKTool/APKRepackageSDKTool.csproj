@@ -75,6 +75,7 @@
     <Compile Include="ChannelEditorWindow.xaml.cs">
       <DependentUpon>ChannelEditorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\Tool\AABTool.cs" />
     <Compile Include="src\Tool\AndroidTool.cs" />
     <Compile Include="src\Tool\AudioTool.cs" />
     <Compile Include="src\Tool\ChannelTool.cs" />
@@ -225,6 +226,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="baksmali-2.5.2.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bundletool-all-1.9.0.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DotNETReactor\dlls\B1Plus.UI.BaseApplications.dll">

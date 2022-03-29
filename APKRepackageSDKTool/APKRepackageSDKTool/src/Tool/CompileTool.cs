@@ -62,7 +62,7 @@ public class CompileTool
 
         //Jar to dex
         //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
-        cmd.Execute(EditorData.GetD8Path() + "" + options + "--output=" + tempPath + " " + jarPath, true, true);
+        cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=" + tempPath + " " + jarPath, true, true);
 
         ////dex to smali
         cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + smaliPath, true, true);

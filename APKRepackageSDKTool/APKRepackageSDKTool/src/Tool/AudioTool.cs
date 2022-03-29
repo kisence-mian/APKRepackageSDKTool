@@ -14,6 +14,6 @@ public class AudioTool
         player.Open(new Uri(uri, uriKind));
         player.Play();
 
-        player.Volume = 1;
+        //player.Volume = 1;
     }
 }

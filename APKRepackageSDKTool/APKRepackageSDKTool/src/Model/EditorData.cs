@@ -35,6 +35,7 @@ namespace APKRepackageSDKTool
         static string jetifierPath;
         static string apktoolVersion = "apktool_2.6.0";
         static string baksmaliVersion = "baksmali-2.4.0.jar";
+        static string bundletoolVersion = "bundletool-all-1.9.0.jar";
 
         static string buildToolVersion;
         static int apiLevel;
@@ -277,6 +278,22 @@ namespace APKRepackageSDKTool
                 RecordManager.SaveRecord(c_ConfigRecord, "BaksmaliVersion", baksmaliVersion);
             }
         }
+
+        public static string BundletoolVersion
+        {
+            get
+            {
+                JudgeInit();
+                return bundletoolVersion;
+            }
+
+            set
+            {
+                bundletoolVersion = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "BundletoolVersion", bundletoolVersion);
+            }
+        }
+
         public static string MavenCachePath
         {
             get
@@ -324,6 +341,8 @@ namespace APKRepackageSDKTool
 
 
 
+
+
         #endregion
 
         #region 初始化
@@ -355,6 +374,7 @@ namespace APKRepackageSDKTool
 
                 baksmaliVersion = RecordManager.GetRecord(c_ConfigRecord, "BaksmaliVersion", "baksmali-2.1.3.jar");
                 apktoolVersion = RecordManager.GetRecord(c_ConfigRecord, "ApktoolVersion", "apktool_2.5.0");
+                bundletoolVersion = RecordManager.GetRecord(c_ConfigRecord, "BundletoolVersion", "bundletool-all-1.9.0.jar");
                 mavenCachePath = RecordManager.GetRecord(c_ConfigRecord, "MavenCachePath", null);
                 RARdocompressCmd = RecordManager.GetRecord(c_ConfigRecord, "RARdocompressCmd", "360zip.exe -x {RarPath} {AimPath}");
                 RARcompressCmd = RecordManager.GetRecord(c_ConfigRecord, "RARcompressCmd", "360zip.exe -ar {FilePath} {ZipPath}");
@@ -586,8 +606,13 @@ namespace APKRepackageSDKTool
             return BaksmaliVersion;
         }
 
+        public static string GetBundletoolPath()
+        {
+            return BaksmaliVersion;
+        }
 
-        
+
+
 
         #endregion
     }
@@ -665,8 +690,11 @@ namespace APKRepackageSDKTool
         public bool isZipalign = true; //字节对齐
         public bool isDeleteTempPath = true;  //删除临时目录
         public bool isSimplifyYml = true;     //精简YML
+        public bool isCustomAAPT = true;     //使用自定义的aapt
 
         public bool isExtractNativeLibs = true;     //提取so文件
+
+        public bool isExportAAB = true;     //导出aab包
 
         public string apktoolVersion = "apktool";
 
@@ -707,6 +735,8 @@ namespace APKRepackageSDKTool
         public bool IsSimplifyYml { get => isSimplifyYml; set => isSimplifyYml = value; }
         public int SplitDexOffset { get => splitDexOffset; set => splitDexOffset = value; }
         public bool IsExtractNativeLibs { get => isExtractNativeLibs; set => isExtractNativeLibs = value; }
+        public bool IsCustomAAPT { get => isCustomAAPT; set => isCustomAAPT = value; }
+        public bool IsExportAAB { get => isExportAAB; set => isExportAAB = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

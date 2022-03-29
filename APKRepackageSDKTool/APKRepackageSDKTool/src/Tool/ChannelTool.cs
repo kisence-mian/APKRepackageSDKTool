@@ -1024,6 +1024,38 @@ namespace APKRepackageSDKTool
             yml.save();
         }
 
+        ///// <summary>
+        ///// 创建额外文件并清空yml doNotCompress 节点
+        ///// </summary>
+        //public void CreateExtensionsFileAndClearDoNotCompressNode(string filePath,string extensionsFilePath)
+        //{
+        //    string content = "";
+
+        //    string path = filePath + @"\apktool.yml";
+        //    var input = new StringReader(path);
+
+        //    YML yml = new YML(path);
+
+        //    var list = yml.FindChilenList("doNotCompress");
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        string value = list[i].value;
+
+        //        content += value;
+
+        //        if( i != list.Count -1)
+        //        {
+        //            content += "\n";
+        //        }
+        //    }
+
+        //    yml.DeleteAllChildNode("doNotCompress");
+        //    yml.save();
+
+        //    //写入额外文件
+        //    FileTool.WriteStringByFile(extensionsFilePath, content);
+        //}
+
         #endregion
 
         #region 混淆Dll
