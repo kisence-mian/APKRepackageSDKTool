@@ -2,7 +2,7 @@
 using APKRepackageSDKTool.src;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Pri.LongPath;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -163,6 +163,8 @@ public class AndroidTool
 
         OutPut("I: R.java 构造完成");
     }
+
+
 
     //string GenerateValue(RData rData)
     //{
@@ -1000,6 +1002,36 @@ public class AndroidTool
 
             AddActivity(filePath, activityInfo, null, null);
         }
+    }
+
+    public void ChangeVersionCode(string filePath, int code)
+    {
+        string xmlPath = filePath + "\\AndroidManifest.xml";
+        string xml = FileTool.ReadStringByFile(xmlPath);
+
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xml);
+
+        XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
+        XmlElement nodeEle = (XmlElement)manifest;
+
+        nodeEle.SetAttribute("versionCode", "http://schemas.android.com/apk/res/android", code.ToString());
+        xmlDoc.Save(xmlPath);
+    }
+
+    internal void ChangeVersionName(string filePath, string versionName)
+    {
+        string xmlPath = filePath + "\\AndroidManifest.xml";
+        string xml = FileTool.ReadStringByFile(xmlPath);
+
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xml);
+
+        XmlNode manifest = xmlDoc.SelectSingleNode("manifest");
+        XmlElement nodeEle = (XmlElement)manifest;
+
+        nodeEle.SetAttribute("versionName", "http://schemas.android.com/apk/res/android", versionName);
+        xmlDoc.Save(xmlPath);
     }
 
     public void ChangePackageName(string filePath, string packageName)

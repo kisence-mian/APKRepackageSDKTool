@@ -2,16 +2,10 @@
 using APKRepackageSDKTool.src.YML;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Xml;
-using YamlDotNet.Serialization.NamingConventions;
+using Pri.LongPath;
+
 
 namespace APKRepackageSDKTool
 {
@@ -92,7 +86,19 @@ namespace APKRepackageSDKTool
                 androidTool.ChangeMainActity(filePath);
             }
 
-            if(info.IsExtractNativeLibs)
+            if (info.BundleVersionCode != -1)
+            {
+                OutPut("替换VersionCode " + info.BundleVersionCode);
+                androidTool.ChangeVersionCode(filePath,info.BundleVersionCode);
+            }
+
+            if (info.VersionName != "")
+            {
+                OutPut("替换VersionName " + info.VersionName);
+                androidTool.ChangeVersionName(filePath, info.VersionName);
+            }
+
+            if (info.IsExtractNativeLibs)
             {
                 androidTool.ChangeExtractNativeLibs(filePath);
             }
@@ -297,8 +303,14 @@ namespace APKRepackageSDKTool
                 string fileName = FileTool.GetFileNameByPath(list[i]);
                 if (fileName.StartsWith("R$"))
                 {
-                    template.Add(fileName, FileTool.ReadStringByFile(list[i]));
-
+                    if(!template.ContainsKey(fileName))
+                    {
+                        template.Add(fileName, FileTool.ReadStringByFile(list[i]));
+                    }
+                    else
+                    {
+                        OutPut("重复的模板文件： " + fileName + " " + list[i]);
+                    }
                     //OutPut("构造模板 " + fileName + " " + list[i]);
                 }
             }
@@ -991,7 +1003,7 @@ namespace APKRepackageSDKTool
         public void YMLLogic(string filePath)
         {
             string path = filePath + @"\apktool.yml";
-            var input = new StringReader(path);
+            var input = new System.IO.StringReader(path);
 
             YML yml = new YML(path);
 
@@ -1002,7 +1014,7 @@ namespace APKRepackageSDKTool
             for (int i = 0; i < list.Count; i++)
             {
                 string value = list[i].value;
-                if (value.Contains(".video")
+                if (value.Contains("video")
                     || value.Contains(".so")
                      //|| value.Contains(".resource")
                      //|| value.Contains(".png")

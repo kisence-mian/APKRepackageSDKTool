@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.IO;
+using Pri.LongPath;
 using System;
 using System.Text;
 using System.Collections.Generic;
@@ -102,17 +102,17 @@ public class FileTool
     /// <param name="destinationPath">目标路径</param>
     public static void CopyDirectory(string sourcePath, string destinationPath, FileRepeatErrorHandle repeatCallBack = null)
     {
-        DirectoryInfo info = new DirectoryInfo(sourcePath);
-        Directory.CreateDirectory(destinationPath);
+        Pri.LongPath.DirectoryInfo info = new Pri.LongPath.DirectoryInfo(sourcePath);
+        Pri.LongPath.Directory.CreateDirectory(destinationPath);
 
-        foreach (FileSystemInfo fsi in info.GetFileSystemInfos())
+        foreach (Pri.LongPath.FileSystemInfo fsi in info.GetFileSystemInfos())
         {
-            string destName = Path.Combine(destinationPath, fsi.Name);
+            string destName = Pri.LongPath.Path.Combine(destinationPath, fsi.Name);
             //Debug.Log(destName);
 
-            if (fsi is FileInfo)          //如果是文件，复制文件
+            if (fsi is Pri.LongPath.FileInfo)          //如果是文件，复制文件
             {
-                if(File.Exists(destName) && repeatCallBack != null)
+                if(Pri.LongPath.File.Exists(destName) && repeatCallBack != null)
                 {
                     repeatCallBack(fsi.FullName, destName);
                 }
@@ -124,7 +124,7 @@ public class FileTool
             //如果是文件夹，新建文件夹，递归
             else
             {
-                Directory.CreateDirectory(destName);
+                Pri.LongPath.Directory.CreateDirectory(destName);
                 CopyDirectory(fsi.FullName, destName, repeatCallBack);
             }
         }
@@ -139,13 +139,13 @@ public class FileTool
     {
         try
         {
-            File.Copy(from, to);
+            Pri.LongPath.File.Copy(from, to);
         }
         catch(Exception)
         {
             StringBuilder line = new StringBuilder();
 
-            StreamReader sr = File.OpenText(from);
+            System.IO.StreamReader sr = Pri.LongPath.File.OpenText(from);
             line.Append(sr.ReadToEnd());
 
             sr.Close();
@@ -165,13 +165,13 @@ public class FileTool
     {
         try
         {
-            File.Move(from, to);
+            Pri.LongPath.File.Move(from, to);
         }
         catch (Exception)
         {
             StringBuilder line = new StringBuilder();
 
-            StreamReader sr = File.OpenText(from);
+            System.IO.StreamReader sr = Pri.LongPath.File.OpenText(from);
             line.Append(sr.ReadToEnd());
 
             sr.Close();
@@ -191,15 +191,15 @@ public class FileTool
     /// <param name="destinationPath">目标路径</param>
     public static void CopyDirectoryAndExecute(string sourcePath, string destinationPath,string expandName, FileRepeatErrorHandle repeatCallBack = null, FileRepeatAndExecuteHandle executeHandle = null)
     {
-        DirectoryInfo info = new DirectoryInfo(sourcePath);
-        Directory.CreateDirectory(destinationPath);
+        Pri.LongPath.DirectoryInfo info = new Pri.LongPath.DirectoryInfo(sourcePath);
+        Pri.LongPath.Directory.CreateDirectory(destinationPath);
 
-        foreach (FileSystemInfo fsi in info.GetFileSystemInfos())
+        foreach (Pri.LongPath.FileSystemInfo fsi in info.GetFileSystemInfos())
         {
-            string destName = Path.Combine(destinationPath, fsi.Name);
+            string destName = Pri.LongPath.Path.Combine(destinationPath, fsi.Name);
             //Debug.Log(destName);
 
-            if (fsi is FileInfo)          //如果是文件，复制文件
+            if (fsi is Pri.LongPath.FileInfo)          //如果是文件，复制文件
             {
                 if(fsi.FullName.EndsWith("." + expandName)  && executeHandle != null)
                 {
@@ -207,20 +207,20 @@ public class FileTool
                 }
                 else
                 {
-                    if (File.Exists(destName) && repeatCallBack != null)
+                    if (Pri.LongPath.File.Exists(destName) && repeatCallBack != null)
                     {
                         repeatCallBack(fsi.FullName, destName);
                     }
                     else
                     {
-                        File.Copy(fsi.FullName, destName);
+                        Pri.LongPath.File.Copy(fsi.FullName, destName);
                     }
                 }
             }
             //如果是文件夹，新建文件夹，递归
             else
             {
-                Directory.CreateDirectory(destName);
+                Pri.LongPath.Directory.CreateDirectory(destName);
                 CopyDirectoryAndExecute(fsi.FullName, destName,expandName, repeatCallBack, executeHandle);
             }
         }
@@ -335,7 +335,7 @@ public class FileTool
     //取出一个路径下的文件名
     public static string GetFileNameByPath(string path)
     {
-        FileInfo fi = new FileInfo(path);
+        Pri.LongPath.FileInfo fi = new Pri.LongPath.FileInfo(path);
         return fi.Name; // text.txt
     }
 
@@ -407,7 +407,7 @@ public class FileTool
     /// <returns>文件的编码类型</returns> 
     public static Encoding GetEncodingType(string FILE_NAME)
     {
-        FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
+        System.IO.FileStream fs = new System.IO.FileStream(FILE_NAME, System.IO.FileMode.Open, System.IO.FileAccess.Read);
         Encoding r = GetEncodingType(fs);
         fs.Close();
         return r;
@@ -418,14 +418,14 @@ public class FileTool
     /// </summary> 
     /// <param name="fs">文件流</param> 
     /// <returns>文件的编码类型</returns> 
-    public static Encoding GetEncodingType(FileStream fs)
+    public static Encoding GetEncodingType(System.IO.FileStream fs)
     {
         //byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
         //byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
         //byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //带BOM 
         Encoding reVal = Encoding.Default;
 
-        BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
+        System.IO.BinaryReader r = new System.IO.BinaryReader(fs, System.Text.Encoding.Default);
         int i;
         int.TryParse(fs.Length.ToString(), out i);
         byte[] ss = r.ReadBytes(i);
@@ -612,7 +612,7 @@ public class FileTool
                 return "";
             }
 
-            StreamReader sr = File.OpenText(path);
+            System.IO.StreamReader sr = File.OpenText(path);
             line.Append(sr.ReadToEnd());
 
             sr.Close();

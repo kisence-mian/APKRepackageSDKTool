@@ -2,7 +2,7 @@
 using Mono.Web;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Pri.LongPath;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -87,7 +87,10 @@ public class CompileTool
             OutPut("读取Smali 缓存 " + cachePath);
         }
 
-        FileTool.CopyDirectory(cachePath, smaliPath,(fileA,fileB)=>{ });
+        FileTool.CopyDirectory(cachePath, smaliPath,(fileA,fileB)=>{
+
+            OutPut("生成smali文件时遇到相同文件 fileA:" + fileA + " fileB:" + fileB);
+        });
     }
 
     //通过缓存提高解析速度

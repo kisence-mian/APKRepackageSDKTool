@@ -1,7 +1,7 @@
 ﻿using APKRepackageSDKTool;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Pri.LongPath;
 using System.Linq;
 using System.Text;
 using System.Threading;

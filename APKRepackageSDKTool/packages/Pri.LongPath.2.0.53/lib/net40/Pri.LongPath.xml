@@ -1,0 +1,1418 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Pri.LongPath</name>
+    </assembly>
+    <members>
+        <member name="T:Pri.LongPath.Directory">
+            <summary>Exposes static methods for creating, moving, and enumerating through directories and subdirectories. This class cannot be inherited.</summary>
+        </member>
+        <member name="M:Pri.LongPath.Directory.Delete(System.String)">
+            <summary>
+                Deletes the specified empty directory.
+            </summary>
+            <param name="path">
+                 A <see cref="T:System.String"/> containing the path of the directory to delete.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a directory that is read-only.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a directory that is not empty.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a directory that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.Directory.Exists(System.String)">
+            <summary>
+                Returns a value indicating whether the specified path refers to an existing directory.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path to check.
+            </param>
+            <returns>
+                <see langword="true"/> if <paramref name="path"/> refers to an existing directory;
+                otherwise, <see langword="false"/>.
+            </returns>
+            <remarks>
+                Note that this method will return false if any error occurs while trying to determine
+                if the specified directory exists. This includes situations that would normally result in
+                thrown exceptions including (but not limited to); passing in a directory name with invalid
+                or too many characters, an I/O error such as a failing or missing disk, or if the caller
+                does not have Windows or Code Access Security (CAS) permissions to to read the directory.
+            </remarks>
+        </member>
+        <member name="M:Pri.LongPath.Directory.EnumerateDirectories(System.String)">
+            <summary>
+                Returns a enumerable containing the directory names of the specified directory.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the directory names within <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> contains one or more directories that could not be
+                found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.Directory.EnumerateFiles(System.String)">
+            <summary>
+                Returns a enumerable containing the file names of the specified directory.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file names within <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> contains one or more directories that could not be
+                found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.Directory.EnumerateFiles(System.String,System.String)">
+            <summary>
+                Returns a enumerable containing the file names of the specified directory that
+                match the specified search pattern.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <param name="searchPattern">
+                A <see cref="T:System.String"/> containing search pattern to match against the names of the
+                files in <paramref name="path"/>, otherwise, <see langword="null"/> or an empty
+                string ("") to use the default search pattern, "*".
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file names within <paramref name="path"/>
+                that match <paramref name="searchPattern"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> contains one or more directories that could not be
+                found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.Directory.EnumerateFileSystemEntries(System.String)">
+            <summary>
+                Returns a enumerable containing the file and directory names of the specified directory.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file and directory names within
+                <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> contains one or more directories that could not be
+                found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.Directory.EnumerateFileSystemEntries(System.String,System.String)">
+            <summary>
+                Returns a enumerable containing the file and directory names of the specified directory
+                that match the specified search pattern.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the directory to search.
+            </param>
+            <param name="searchPattern">
+                A <see cref="T:System.String"/> containing search pattern to match against the names of the
+                files and directories in <paramref name="path"/>, otherwise, <see langword="null"/>
+                or an empty string ("") to use the default search pattern, "*".
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the file and directory names within
+                <paramref name="path"/>that match <paramref name="searchPattern"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> contains one or more directories that could not be
+                found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.Directory.CreateDirectory(System.String)">
+            <summary>
+                Creates the specified directory.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the directory to create.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                <paramref name="path"/> contains one or more directories that could not be
+                found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> is a file.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+            <remarks>
+                Note: Unlike <see cref="M:Pri.LongPath.Directory.CreateDirectory(System.String)"/>, this method only creates
+                the last directory in <paramref name="path"/>.
+            </remarks>
+        </member>
+        <member name="T:Pri.LongPath.DirectoryInfo">
+            <summary>Exposes instance methods for creating, moving, and enumerating through directories and subdirectories. This class cannot be inherited.</summary>
+        </member>
+        <member name="P:Pri.LongPath.DirectoryInfo.SystemInfo">
+            <!-- No matching elements were found for the following include tag --><include path="doc/members/member[@name=&quot;P:System.IO.FileSystemInfo.SystemInfo&quot;]/*" file="..\ref\mscorlib.xml" />
+        </member>
+        <member name="P:Pri.LongPath.DirectoryInfo.Exists">
+            <summary>Gets a value indicating whether the directory exists.</summary><returns>
+        <see langword="true" /> if the directory exists; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="P:Pri.LongPath.DirectoryInfo.Name">
+            <summary>Gets the name of this <see cref="T:System.IO.DirectoryInfo" /> instance.</summary><returns>The directory name.</returns>
+        </member>
+        <member name="P:Pri.LongPath.DirectoryInfo.Parent">
+            <summary>Gets the parent directory of a specified subdirectory.</summary><returns>The parent directory, or <see langword="null" /> if the path is null or if the file path denotes a root (such as "\", "C:", or * "\\server\share").</returns><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="P:Pri.LongPath.DirectoryInfo.Root">
+            <summary>Gets the root portion of the directory.</summary><returns>An object that represents the root of the directory.</returns><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:System.IO.DirectoryInfo" /> class on the specified path.</summary><param name="path">A string specifying the path on which to create the <see langword="DirectoryInfo" />.</param><exception cref="T:System.ArgumentNullException">
+        <paramref name="path" /> is <see langword="null" />.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains invalid characters such as ", &lt;, &gt;, or |.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.Create">
+            <summary>Creates a directory.</summary><exception cref="T:System.IO.IOException">The directory cannot be created.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.CreateSubdirectory(System.String)">
+            <summary>Creates a subdirectory or subdirectories on the specified path. The specified path can be relative to this instance of the <see cref="T:System.IO.DirectoryInfo" /> class.</summary><param name="path">The specified path. This cannot be a different disk volume or Universal Naming Convention (UNC) name.</param><returns>The last directory specified in <paramref name="path" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> does not specify a valid file path or contains invalid <see langword="DirectoryInfo" /> characters.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.IO.IOException">The subdirectory cannot be created.  
+ -or-  
+ A file or directory already has the name specified by <paramref name="path" />.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.Security.SecurityException">The caller does not have code access permission to create the directory.  
+ -or-  
+ The caller does not have code access permission to read the directory described by the returned <see cref="T:System.IO.DirectoryInfo" /> object.  This can occur when the <paramref name="path" /> parameter describes an existing directory.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="path" /> contains a colon character (:) that is not part of a drive label ("C:\").</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.Delete">
+            <summary>Deletes this <see cref="T:System.IO.DirectoryInfo" /> if it is empty.</summary><exception cref="T:System.UnauthorizedAccessException">The directory contains a read-only file.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The directory described by this <see cref="T:System.IO.DirectoryInfo" /> object does not exist or could not be found.</exception><exception cref="T:System.IO.IOException">The directory is not empty.  
+ -or-  
+ The directory is the application's current working directory.  
+ -or-  
+ There is an open handle on the directory, and the operating system is Windows XP or earlier. This open handle can result from enumerating directories. For more information, see How to: Enumerate Directories and Files.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.Delete(System.Boolean)">
+            <summary>Deletes this instance of a <see cref="T:System.IO.DirectoryInfo" />, specifying whether to delete subdirectories and files.</summary><param name="recursive">
+        <see langword="true" /> to delete this directory, its subdirectories, and all files; otherwise, <see langword="false" />.</param><exception cref="T:System.UnauthorizedAccessException">The directory contains a read-only file.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The directory described by this <see cref="T:System.IO.DirectoryInfo" /> object does not exist or could not be found.</exception><exception cref="T:System.IO.IOException">The directory is read-only.  
+ -or-  
+ The directory contains one or more files or subdirectories and <paramref name="recursive" /> is <see langword="false" />.  
+ -or-  
+ The directory is the application's current working directory.  
+ -or-  
+ There is an open handle on the directory or on one of its files, and the operating system is Windows XP or earlier. This open handle can result from enumerating directories and files. For more information, see How to: Enumerate Directories and Files.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateDirectories(System.String)">
+            <summary>Returns an enumerable collection of directory information that matches a specified search pattern.</summary><param name="searchPattern">The search string to match against the names of directories.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><returns>An enumerable collection of directories that matches <paramref name="searchPattern" />.</returns><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateDirectories(System.String,System.IO.SearchOption)">
+            <summary>Returns an enumerable collection of directory information that matches a specified search pattern and search subdirectory option.</summary><param name="searchPattern">The search string to match against the names of directories.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories. The default value is <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param><returns>An enumerable collection of directories that matches <paramref name="searchPattern" /> and <paramref name="searchOption" />.</returns><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="searchOption" /> is not a valid <see cref="T:System.IO.SearchOption" /> value.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateFiles">
+            <summary>Returns an enumerable collection of file information in the current directory.</summary><returns>An enumerable collection of the files in the current directory.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateFiles(System.String)">
+            <summary>Returns an enumerable collection of file information that matches a search pattern.</summary><param name="searchPattern">The search string to match against the names of files.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><returns>An enumerable collection of files that matches <paramref name="searchPattern" />.</returns><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid, (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateFiles(System.String,System.IO.SearchOption)">
+            <summary>Returns an enumerable collection of file information that matches a specified search pattern and search subdirectory option.</summary><param name="searchPattern">The search string to match against the names of files.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories. The default value is <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param><returns>An enumerable collection of files that matches <paramref name="searchPattern" /> and <paramref name="searchOption" />.</returns><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="searchOption" /> is not a valid <see cref="T:System.IO.SearchOption" /> value.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateFileSystemInfos">
+            <summary>Returns an enumerable collection of file system information in the current directory.</summary><returns>An enumerable collection of file system information in the current directory.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateFileSystemInfos(System.String)">
+            <summary>Returns an enumerable collection of file system information that matches a specified search pattern.</summary><param name="searchPattern">The search string to match against the names of directories.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><returns>An enumerable collection of file system information objects that matches <paramref name="searchPattern" />.</returns><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.MoveTo(System.String)">
+            <summary>Moves a <see cref="T:System.IO.DirectoryInfo" /> instance and its contents to a new path.</summary><param name="destDirName">The name and path to which to move this directory. The destination cannot be another disk volume or a directory with the identical name. It can be an existing directory to which you want to add this directory as a subdirectory.</param><exception cref="T:System.ArgumentNullException">
+        <paramref name="destDirName" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentException">
+        <paramref name="destDirName" /> is an empty string (''").</exception><exception cref="T:System.IO.IOException">An attempt was made to move a directory to a different volume.  
+ -or-  
+ <paramref name="destDirName" /> already exists.  
+ -or-  
+ You are not authorized to access this path.  
+ -or-  
+ The directory being moved and the destination directory have the same name.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The destination directory cannot be found.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.Create(System.Security.AccessControl.DirectorySecurity)">
+            <summary>Creates a directory using a <see cref="T:System.Security.AccessControl.DirectorySecurity" /> object.</summary><param name="directorySecurity">The access control to apply to the directory.</param><exception cref="T:System.IO.IOException">The directory specified by <paramref name="path" /> is read-only or is not empty.</exception><exception cref="T:System.UnauthorizedAccessException">The caller does not have the required permission.</exception><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> is a zero-length string, contains only white space, or contains one or more invalid characters as defined by <see cref="F:System.IO.Path.InvalidPathChars" />.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path" /> is <see langword="null" />.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.NotSupportedException">Creating a directory with only the colon (:) character was attempted.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.CreateSubdirectory(System.String,System.Security.AccessControl.DirectorySecurity)">
+            <summary>Creates a subdirectory or subdirectories on the specified path with the specified security. The specified path can be relative to this instance of the <see cref="T:System.IO.DirectoryInfo" /> class.</summary><param name="path">The specified path. This cannot be a different disk volume or Universal Naming Convention (UNC) name.</param><param name="directorySecurity">The security to apply.</param><returns>The last directory specified in <paramref name="path" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> does not specify a valid file path or contains invalid <see langword="DirectoryInfo" /> characters.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.IO.IOException">The subdirectory cannot be created.  
+ -or-  
+ A file or directory already has the name specified by <paramref name="path" />.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.Security.SecurityException">The caller does not have code access permission to create the directory.  
+ -or-  
+ The caller does not have code access permission to read the directory described by the returned <see cref="T:System.IO.DirectoryInfo" /> object.  This can occur when the <paramref name="path" /> parameter describes an existing directory.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="path" /> contains a colon character (:) that is not part of a drive label ("C:\").</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.EnumerateDirectories">
+            <summary>Returns an enumerable collection of directory information in the current directory.</summary><returns>An enumerable collection of directories in the current directory.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetAccessControl">
+            <summary>Gets a <see cref="T:System.Security.AccessControl.DirectorySecurity" /> object that encapsulates the access control list (ACL) entries for the directory described by the current <see cref="T:System.IO.DirectoryInfo" /> object.</summary><returns>A <see cref="T:System.Security.AccessControl.DirectorySecurity" /> object that encapsulates the access control rules for the directory.</returns><exception cref="T:System.SystemException">The directory could not be found or modified.</exception><exception cref="T:System.UnauthorizedAccessException">The directory is read-only.  
+ -or-  
+ This operation is not supported on the current platform.  
+ -or-  
+ The caller does not have the required permission.</exception><exception cref="T:System.IO.IOException">An I/O error occurred while opening the directory.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows 2000 or later.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetAccessControl(System.Security.AccessControl.AccessControlSections)">
+            <summary>Gets a <see cref="T:System.Security.AccessControl.DirectorySecurity" /> object that encapsulates the specified type of access control list (ACL) entries for the directory described by the current <see cref="T:System.IO.DirectoryInfo" /> object.</summary><param name="includeSections">One of the <see cref="T:System.Security.AccessControl.AccessControlSections" /> values that specifies the type of access control list (ACL) information to receive.</param><returns>A <see cref="T:System.Security.AccessControl.DirectorySecurity" /> object that encapsulates the access control rules for the file described by the <paramref name="path" /> parameter.  
+ Exceptions  
+  Exception type  
+
+  Condition  
+
+ <see cref="T:System.SystemException" /> The directory could not be found or modified.  
+
+ <see cref="T:System.UnauthorizedAccessException" /> The current process does not have access to open the directory.  
+
+ <see cref="T:System.IO.IOException" /> An I/O error occurred while opening the directory.  
+
+ <see cref="T:System.PlatformNotSupportedException" /> The current operating system is not Microsoft Windows 2000 or later.  
+
+ <see cref="T:System.UnauthorizedAccessException" /> The directory is read-only.  
+
+ -or-  
+
+ This operation is not supported on the current platform.  
+
+ -or-  
+
+ The caller does not have the required permission.</returns>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetDirectories">
+            <summary>Returns the subdirectories of the current directory.</summary><returns>An array of <see cref="T:System.IO.DirectoryInfo" /> objects.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see cref="T:System.IO.DirectoryInfo" /> object is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.UnauthorizedAccessException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetDirectories(System.String)">
+            <summary>Returns an array of directories in the current <see cref="T:System.IO.DirectoryInfo" /> matching the given search criteria.</summary><param name="searchPattern">The search string to match against the names of directories.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><returns>An array of type <see langword="DirectoryInfo" /> matching <paramref name="searchPattern" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="searchPattern" /> contains one or more invalid characters defined by the <see cref="M:System.IO.Path.GetInvalidPathChars" /> method.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see langword="DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.UnauthorizedAccessException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetDirectories(System.String,System.IO.SearchOption)">
+            <summary>Returns an array of directories in the current <see cref="T:System.IO.DirectoryInfo" /> matching the given search criteria and using a value to determine whether to search subdirectories.</summary><param name="searchPattern">The search string to match against the names of directories.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories.</param><returns>An array of type <see langword="DirectoryInfo" /> matching <paramref name="searchPattern" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="searchPattern" /> contains one or more invalid characters defined by the <see cref="M:System.IO.Path.GetInvalidPathChars" /> method.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="searchOption" /> is not a valid <see cref="T:System.IO.SearchOption" /> value.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path encapsulated in the <see langword="DirectoryInfo" /> object is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.UnauthorizedAccessException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetFiles(System.String)">
+            <summary>Returns a file list from the current directory matching the given search pattern.</summary><param name="searchPattern">The search string to match against the names of files.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><returns>An array of type <see cref="T:System.IO.FileInfo" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="searchPattern" /> contains one or more invalid characters defined by the <see cref="M:System.IO.Path.GetInvalidPathChars" /> method.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetFiles(System.String,System.IO.SearchOption)">
+            <summary>Returns a file list from the current directory matching the given search pattern and using a value to determine whether to search subdirectories.</summary><param name="searchPattern">The search string to match against the names of files.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories.</param><returns>An array of type <see cref="T:System.IO.FileInfo" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="searchPattern" /> contains one or more invalid characters defined by the <see cref="M:System.IO.Path.GetInvalidPathChars" /> method.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="searchOption" /> is not a valid <see cref="T:System.IO.SearchOption" /> value.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetFiles">
+            <summary>Returns a file list from the current directory.</summary><returns>An array of type <see cref="T:System.IO.FileInfo" />.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The path is invalid, such as being on an unmapped drive.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetFileSystemInfos(System.String)">
+            <summary>Retrieves an array of strongly typed <see cref="T:System.IO.FileSystemInfo" /> objects representing the files and subdirectories that match the specified search criteria.</summary><param name="searchPattern">The search string to match against the names of directories and files.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><returns>An array of strongly typed <see langword="FileSystemInfo" /> objects matching the search criteria.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="searchPattern" /> contains one or more invalid characters defined by the <see cref="M:System.IO.Path.GetInvalidPathChars" /> method.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetFileSystemInfos(System.String,System.IO.SearchOption)">
+            <summary>Retrieves an array of <see cref="T:System.IO.FileSystemInfo" /> objects that represent the files and subdirectories matching the specified search criteria.</summary><param name="searchPattern">The search string to match against the names of directories and filesa.  This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param><param name="searchOption">One of the enumeration values that specifies whether the search operation should include only the current directory or all subdirectories. The default value is <see cref="F:System.IO.SearchOption.TopDirectoryOnly" />.</param><returns>An array of file system entries that match the search criteria.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="searchPattern" /> contains one or more invalid characters defined by the <see cref="M:System.IO.Path.GetInvalidPathChars" /> method.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="searchPattern" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="searchOption" /> is not a valid <see cref="T:System.IO.SearchOption" /> value.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid (for example, it is on an unmapped drive).</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.GetFileSystemInfos">
+            <summary>Returns an array of strongly typed <see cref="T:System.IO.FileSystemInfo" /> entries representing all the files and subdirectories in a directory.</summary><returns>An array of strongly typed <see cref="T:System.IO.FileSystemInfo" /> entries.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The path is invalid (for example, it is on an unmapped drive).</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.SetAccessControl(System.Security.AccessControl.DirectorySecurity)">
+            <summary>Applies access control list (ACL) entries described by a <see cref="T:System.Security.AccessControl.DirectorySecurity" /> object to the directory described by the current <see cref="T:System.IO.DirectoryInfo" /> object.</summary><param name="directorySecurity">An object that describes an ACL entry to apply to the directory described by the <paramref name="path" /> parameter.</param><exception cref="T:System.ArgumentNullException">The <paramref name="directorySecurity" /> parameter is <see langword="null" />.</exception><exception cref="T:System.SystemException">The file could not be found or modified.</exception><exception cref="T:System.UnauthorizedAccessException">The current process does not have access to open the file.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows 2000 or later.</exception>
+        </member>
+        <member name="M:Pri.LongPath.DirectoryInfo.ToString">
+            <summary>Returns the original path that was passed by the user.</summary><returns>The original path that was passed by the user.</returns>
+        </member>
+        <member name="M:Pri.LongPath.File.Copy(System.String,System.String,System.Boolean)">
+            <summary>
+                Copies the specified file to a specified new file, indicating whether to overwrite an existing file.
+            </summary>
+            <param name="sourcePath">
+                A <see cref="T:System.String"/> containing the path of the file to copy.
+            </param>
+            <param name="destinationPath">
+                A <see cref="T:System.String"/> containing the new path of the file.
+            </param>
+            <param name="overwrite">
+                <see langword="true"/> if <paramref name="destinationPath"/> should be overwritten
+                if it refers to an existing file, otherwise, <see langword="false"/>.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is
+                <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is
+                an empty string (""), contains only white space, or contains one or more
+                invalid characters as defined in <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/>
+                contains one or more components that exceed the drive-defined maximum length.
+                For example, on Windows-based platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/>
+                exceeds the system-defined maximum length. For example, on Windows-based platforms,
+                paths must not exceed 32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">
+                <paramref name="sourcePath"/> could not be found.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                One or more directories in <paramref name="sourcePath"/> and/or
+                <paramref name="destinationPath"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+                <para>
+                    -or-
+                </para>
+                <paramref name="overwrite"/> is true and <paramref name="destinationPath"/> refers to a
+                file that is read-only.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="overwrite"/> is false and <paramref name="destinationPath"/> refers to
+                a file that already exists.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is a
+                directory.
+                <para>
+                    -or-
+                </para>
+                <paramref name="overwrite"/> is true and <paramref name="destinationPath"/> refers to
+                a file that already exists and is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> refers to a file that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> specifies
+                a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.File.Delete(System.String)">
+            <summary>
+                Deletes the specified file.
+            </summary>
+            <param name="path">
+                 A <see cref="T:System.String"/> containing the path of the file to delete.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">
+                <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a file that is read-only.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> refers to a file that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.File.Exists(System.String)">
+            <summary>
+                Returns a value indicating whether the specified path refers to an existing file.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path to check.
+            </param>
+            <returns>
+                <see langword="true"/> if <paramref name="path"/> refers to an existing file;
+                otherwise, <see langword="false"/>.
+            </returns>
+            <remarks>
+                Note that this method will return false if any error occurs while trying to determine
+                if the specified file exists. This includes situations that would normally result in
+                thrown exceptions including (but not limited to); passing in a file name with invalid
+                or too many characters, an I/O error such as a failing or missing disk, or if the caller
+                does not have Windows or Code Access Security (CAS) permissions to to read the file.
+            </remarks>
+        </member>
+        <member name="M:Pri.LongPath.File.Open(System.String,System.IO.FileMode,System.IO.FileAccess)">
+            <summary>
+                Opens the specified file.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the file to open.
+            </param>
+            <param name="access">
+                One of the <see cref="T:System.IO.FileAccess"/> value that specifies the operations that can be
+                performed on the file.
+            </param>
+            <param name="mode">
+                One of the <see cref="T:System.IO.FileMode"/> values that specifies whether a file is created
+                if one does not exist, and determines whether the contents of existing files are
+                retained or overwritten.
+            </param>
+            <returns>
+                A <see cref="T:System.IO.FileStream"/> that provides access to the file specified in
+                <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a file that is read-only and <paramref name="access"/>
+                is not <see cref="F:System.IO.FileAccess.Read"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> refers to a file that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.File.Open(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)">
+            <summary>
+                Opens the specified file.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the file to open.
+            </param>
+            <param name="access">
+                One of the <see cref="T:System.IO.FileAccess"/> value that specifies the operations that can be
+                performed on the file.
+            </param>
+            <param name="mode">
+                One of the <see cref="T:System.IO.FileMode"/> values that specifies whether a file is created
+                if one does not exist, and determines whether the contents of existing files are
+                retained or overwritten.
+            </param>
+            <param name="share">
+                One of the <see cref="T:System.IO.FileShare"/> values specifying the type of access other threads
+                have to the file.
+            </param>
+            <returns>
+                A <see cref="T:System.IO.FileStream"/> that provides access to the file specified in
+                <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a file that is read-only and <paramref name="access"/>
+                is not <see cref="F:System.IO.FileAccess.Read"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> refers to a file that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.File.Open(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32,System.IO.FileOptions)">
+            <summary>
+                Opens the specified file.
+            </summary>
+            <param name="path">
+                A <see cref="T:System.String"/> containing the path of the file to open.
+            </param>
+            <param name="access">
+                One of the <see cref="T:System.IO.FileAccess"/> value that specifies the operations that can be
+                performed on the file.
+            </param>
+            <param name="mode">
+                One of the <see cref="T:System.IO.FileMode"/> values that specifies whether a file is created
+                if one does not exist, and determines whether the contents of existing files are
+                retained or overwritten.
+            </param>
+            <param name="share">
+                One of the <see cref="T:System.IO.FileShare"/> values specifying the type of access other threads
+                have to the file.
+            </param>
+            <param name="bufferSize">
+                An <see cref="T:System.Int32"/> containing the number of bytes to buffer for reads and writes
+                to the file, or 0 to specified the default buffer size, 1024.
+            </param>
+            <param name="options">
+                One or more of the <see cref="T:System.IO.FileOptions"/> values that describes how to create or
+                overwrite the file.
+            </param>
+            <returns>
+                A <see cref="T:System.IO.FileStream"/> that provides access to the file specified in
+                <paramref name="path"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="path"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="path"/> is an empty string (""), contains only white
+                space, or contains one or more invalid characters as defined in
+                <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> contains one or more components that exceed
+                the drive-defined maximum length. For example, on Windows-based
+                platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="bufferSize"/> is less than 0.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="path"/> exceeds the system-defined maximum length.
+                For example, on Windows-based platforms, paths must not exceed
+                32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                One or more directories in <paramref name="path"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> refers to a file that is read-only and <paramref name="access"/>
+                is not <see cref="F:System.IO.FileAccess.Read"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> is a directory.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="path"/> refers to a file that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="path"/> specifies a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.File.Move(System.String,System.String)">
+            <summary>
+                Moves the specified file to a new location.
+            </summary>
+            <param name="sourcePath">
+                A <see cref="T:System.String"/> containing the path of the file to move.
+            </param>
+            <param name="destinationPath">
+                A <see cref="T:System.String"/> containing the new path of the file.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is
+                <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is
+                an empty string (""), contains only white space, or contains one or more
+                invalid characters as defined in <see cref="M:Pri.LongPath.Path.GetInvalidPathChars"/>.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/>
+                contains one or more components that exceed the drive-defined maximum length.
+                For example, on Windows-based platforms, components must not exceed 255 characters.
+            </exception>
+            <exception cref="T:System.IO.PathTooLongException">
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/>
+                exceeds the system-defined maximum length. For example, on Windows-based platforms,
+                paths must not exceed 32,000 characters.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">
+                <paramref name="sourcePath"/> could not be found.
+            </exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+                One or more directories in <paramref name="sourcePath"/> and/or
+                <paramref name="destinationPath"/> could not be found.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+                The caller does not have the required access permissions.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+                <paramref name="destinationPath"/> refers to a file that already exists.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> is a
+                directory.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> refers to a file that is in use.
+                <para>
+                    -or-
+                </para>
+                <paramref name="sourcePath"/> and/or <paramref name="destinationPath"/> specifies
+                a device that is not ready.
+            </exception>
+        </member>
+        <member name="M:Pri.LongPath.File.CreateStreamWriter(System.String,System.Boolean)">
+            <remarks>
+            replaces "new StreamWriter(path, true|false)"
+            </remarks>
+        </member>
+        <member name="M:Pri.LongPath.File.CreateStreamReader(System.String,System.Text.Encoding,System.Boolean,System.Int32)">
+            <remarks>
+            replaces "new StreamReader(path, true|false)"
+            </remarks>
+        </member>
+        <member name="T:Pri.LongPath.FileInfo">
+            <summary>Provides properties and instance methods for the creation, copying, deletion, moving, and opening of files, and aids in the creation of <see cref="T:System.IO.FileStream" /> objects. This class cannot be inherited.</summary>
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.Directory">
+            <summary>Gets an instance of the parent directory.</summary><returns>A <see cref="T:System.IO.DirectoryInfo" /> object representing the parent directory of this file.</returns><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.SysFileInfo">
+            <!-- No matching elements were found for the following include tag --><include path="doc/members/member[@name=&quot;P:System.IO.FileInfo.SysFileInfo&quot;]/*" file="..\ref\mscorlib.xml" />
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.SystemInfo">
+            <!-- No matching elements were found for the following include tag --><include path="doc/members/member[@name=&quot;P:System.IO.FileInfo.SystemInfo&quot;]/*" file="..\ref\mscorlib.xml" />
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.DirectoryName">
+            <summary>Gets a string representing the directory's full path.</summary><returns>A string representing the directory's full path.</returns><exception cref="T:System.ArgumentNullException">
+        <see langword="null" /> was passed in for the directory name.</exception><exception cref="T:System.IO.PathTooLongException">The fully qualified path name exceeds the system-defined maximum length.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.Exists">
+            <summary>Gets a value indicating whether a file exists.</summary><returns>
+        <see langword="true" /> if the file exists; <see langword="false" /> if the file does not exist or if the file is a directory.</returns>
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.Length">
+            <summary>Gets the size, in bytes, of the current file.</summary><returns>The size of the current file in bytes.</returns><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot update the state of the file or directory.</exception><exception cref="T:System.IO.FileNotFoundException">The file does not exist.  
+ -or-  
+ The <see langword="Length" /> property is called for a directory.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.Name">
+            <summary>Gets the name of the file.</summary><returns>The name of the file.</returns>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:System.IO.FileInfo" /> class, which acts as a wrapper for a file path.</summary><param name="fileName">The fully qualified name of the new file, or the relative file name. Do not end the path with the directory separator character.</param><exception cref="T:System.ArgumentNullException">
+        <paramref name="fileName" /> is <see langword="null" />.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.ArgumentException">The file name is empty, contains only white spaces, or contains invalid characters.</exception><exception cref="T:System.UnauthorizedAccessException">Access to <paramref name="fileName" /> is denied.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="fileName" /> contains a colon (:) in the middle of the string.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.GetFileLength">
+            <!-- No matching elements were found for the following include tag --><include path="doc/members/member[@name=&quot;M:System.IO.FileInfo.GetFileLength&quot;]/*" file="..\ref\mscorlib.xml" />
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.AppendText">
+            <summary>Creates a <see cref="T:System.IO.StreamWriter" /> that appends text to the file represented by this instance of the <see cref="T:System.IO.FileInfo" />.</summary><returns>A new <see langword="StreamWriter" />.</returns>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.CopyTo(System.String)">
+            <summary>Copies an existing file to a new file, disallowing the overwriting of an existing file.</summary><param name="destFileName">The name of the new file to copy to.</param><returns>A new file with a fully qualified path.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="destFileName" /> is empty, contains only white spaces, or contains invalid characters.</exception><exception cref="T:System.IO.IOException">An error occurs, or the destination file already exists.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="destFileName" /> is <see langword="null" />.</exception><exception cref="T:System.UnauthorizedAccessException">A directory path is passed in, or the file is being moved to a different drive.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The directory specified in <paramref name="destFileName" /> does not exist.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="destFileName" /> contains a colon (:) within the string but does not specify the volume.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.CopyTo(System.String,System.Boolean)">
+            <summary>Copies an existing file to a new file, allowing the overwriting of an existing file.</summary><param name="destFileName">The name of the new file to copy to.</param><param name="overwrite">
+        <see langword="true" /> to allow an existing file to be overwritten; otherwise, <see langword="false" />.</param><returns>A new file, or an overwrite of an existing file if <paramref name="overwrite" /> is <see langword="true" />. If the file exists and <paramref name="overwrite" /> is <see langword="false" />, an <see cref="T:System.IO.IOException" /> is thrown.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="destFileName" /> is empty, contains only white spaces, or contains invalid characters.</exception><exception cref="T:System.IO.IOException">An error occurs, or the destination file already exists and <paramref name="overwrite" /> is <see langword="false" />.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="destFileName" /> is <see langword="null" />.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The directory specified in <paramref name="destFileName" /> does not exist.</exception><exception cref="T:System.UnauthorizedAccessException">A directory path is passed in, or the file is being moved to a different drive.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="destFileName" /> contains a colon (:) in the middle of the string.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Create">
+            <summary>Creates a file.</summary><returns>A new file.</returns>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.CreateText">
+            <summary>Creates a <see cref="T:System.IO.StreamWriter" /> that writes a new text file.</summary><returns>A new <see langword="StreamWriter" />.</returns><exception cref="T:System.UnauthorizedAccessException">The file name is a directory.</exception><exception cref="T:System.IO.IOException">The disk is read-only.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Delete">
+            <summary>Permanently deletes a file.</summary><exception cref="T:System.IO.IOException">The target file is open or memory-mapped on a computer running Microsoft Windows NT.  
+ -or-  
+ There is an open handle on the file, and the operating system is Windows XP or earlier. This open handle can result from enumerating directories and files. For more information, see How to: Enumerate Directories and Files.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.UnauthorizedAccessException">The path is a directory.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.MoveTo(System.String)">
+            <summary>Moves a specified file to a new location, providing the option to specify a new file name.</summary><param name="destFileName">The path to move the file to, which can specify a different file name.</param><exception cref="T:System.IO.IOException">An I/O error occurs, such as the destination file already exists or the destination device is not ready.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="destFileName" /> is <see langword="null" />.</exception><exception cref="T:System.ArgumentException">
+        <paramref name="destFileName" /> is empty, contains only white spaces, or contains invalid characters.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.UnauthorizedAccessException">
+        <paramref name="destFileName" /> is read-only or is a directory.</exception><exception cref="T:System.IO.FileNotFoundException">The file is not found.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="destFileName" /> contains a colon (:) in the middle of the string.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Open(System.IO.FileMode)">
+            <summary>Opens a file in the specified mode.</summary><param name="mode">A <see cref="T:System.IO.FileMode" /> constant specifying the mode (for example, <see langword="Open" /> or <see langword="Append" />) in which to open the file.</param><returns>A file opened in the specified mode, with read/write access and unshared.</returns><exception cref="T:System.IO.FileNotFoundException">The file is not found.</exception><exception cref="T:System.UnauthorizedAccessException">The file is read-only or is a directory.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.IO.IOException">The file is already open.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Open(System.IO.FileMode,System.IO.FileAccess)">
+            <summary>Opens a file in the specified mode with read, write, or read/write access.</summary><param name="mode">A <see cref="T:System.IO.FileMode" /> constant specifying the mode (for example, <see langword="Open" /> or <see langword="Append" />) in which to open the file.</param><param name="access">A <see cref="T:System.IO.FileAccess" /> constant specifying whether to open the file with <see langword="Read" />, <see langword="Write" />, or <see langword="ReadWrite" /> file access.</param><returns>A <see cref="T:System.IO.FileStream" /> object opened in the specified mode and access, and unshared.</returns><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.IO.FileNotFoundException">The file is not found.</exception><exception cref="T:System.UnauthorizedAccessException">
+        <paramref name="path" /> is read-only or is a directory.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.IO.IOException">The file is already open.</exception><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> is empty or contains only white spaces.</exception><exception cref="T:System.ArgumentNullException">One or more arguments is null.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Open(System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)">
+            <summary>Opens a file in the specified mode with read, write, or read/write access and the specified sharing option.</summary><param name="mode">A <see cref="T:System.IO.FileMode" /> constant specifying the mode (for example, <see langword="Open" /> or <see langword="Append" />) in which to open the file.</param><param name="access">A <see cref="T:System.IO.FileAccess" /> constant specifying whether to open the file with <see langword="Read" />, <see langword="Write" />, or <see langword="ReadWrite" /> file access.</param><param name="share">A <see cref="T:System.IO.FileShare" /> constant specifying the type of access other <see langword="FileStream" /> objects have to this file.</param><returns>A <see cref="T:System.IO.FileStream" /> object opened with the specified mode, access, and sharing options.</returns><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.IO.FileNotFoundException">The file is not found.</exception><exception cref="T:System.UnauthorizedAccessException">
+        <paramref name="path" /> is read-only or is a directory.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception><exception cref="T:System.IO.IOException">The file is already open.</exception><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> is empty or contains only white spaces.</exception><exception cref="T:System.ArgumentNullException">One or more arguments is null.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.OpenText">
+            <summary>Creates a <see cref="T:System.IO.StreamReader" /> with UTF8 encoding that reads from an existing text file.</summary><returns>A new <see langword="StreamReader" /> with UTF8 encoding.</returns><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception><exception cref="T:System.IO.FileNotFoundException">The file is not found.</exception><exception cref="T:System.UnauthorizedAccessException">
+        <paramref name="path" /> is read-only or is a directory.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.OpenWrite">
+            <summary>Creates a write-only <see cref="T:System.IO.FileStream" />.</summary><returns>A write-only unshared <see cref="T:System.IO.FileStream" /> object for a new or existing file.</returns><exception cref="T:System.UnauthorizedAccessException">The path specified when creating an instance of the <see cref="T:System.IO.FileInfo" /> object is read-only or is a directory.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The path specified when creating an instance of the <see cref="T:System.IO.FileInfo" /> object is invalid, such as being on an unmapped drive.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.ToString">
+            <summary>Returns the path as a string.</summary><returns>A string representing the path.</returns>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Encrypt">
+            <summary>Encrypts a file so that only the account used to encrypt the file can decrypt it.</summary><exception cref="T:System.IO.DriveNotFoundException">An invalid drive was specified.</exception><exception cref="T:System.IO.FileNotFoundException">The file described by the current <see cref="T:System.IO.FileInfo" /> object could not be found.</exception><exception cref="T:System.IO.IOException">An I/O error occurred while opening the file.</exception><exception cref="T:System.NotSupportedException">The file system is not NTFS.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows NT or later.</exception><exception cref="T:System.UnauthorizedAccessException">The file described by the current <see cref="T:System.IO.FileInfo" /> object is read-only.  
+ -or-  
+ This operation is not supported on the current platform.  
+ -or-  
+ The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Decrypt">
+            <summary>Decrypts a file that was encrypted by the current account using the <see cref="M:System.IO.FileInfo.Encrypt" /> method.</summary><exception cref="T:System.IO.DriveNotFoundException">An invalid drive was specified.</exception><exception cref="T:System.IO.FileNotFoundException">The file described by the current <see cref="T:System.IO.FileInfo" /> object could not be found.</exception><exception cref="T:System.IO.IOException">An I/O error occurred while opening the file.</exception><exception cref="T:System.NotSupportedException">The file system is not NTFS.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows NT or later.</exception><exception cref="T:System.UnauthorizedAccessException">The file described by the current <see cref="T:System.IO.FileInfo" /> object is read-only.  
+ -or-  
+ This operation is not supported on the current platform.  
+ -or-  
+ The caller does not have the required permission.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileInfo.IsReadOnly">
+            <summary>Gets or sets a value that determines if the current file is read only.</summary><returns>
+        <see langword="true" /> if the current file is read only; otherwise, <see langword="false" />.</returns><exception cref="T:System.IO.FileNotFoundException">The file described by the current <see cref="T:System.IO.FileInfo" /> object could not be found.</exception><exception cref="T:System.IO.IOException">An I/O error occurred while opening the file.</exception><exception cref="T:System.UnauthorizedAccessException">This operation is not supported on the current platform.  
+ -or-  
+ The caller does not have the required permission.</exception><exception cref="T:System.ArgumentException">The user does not have write permission, but attempted to set this property to <see langword="false" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Replace(System.String,System.String)">
+            <summary>Replaces the contents of a specified file with the file described by the current <see cref="T:System.IO.FileInfo" /> object, deleting the original file, and creating a backup of the replaced file.</summary><param name="destinationFileName">The name of a file to replace with the current file.</param><param name="destinationBackupFileName">The name of a file with which to create a backup of the file described by the <paramref name="destFileName" /> parameter.</param><returns>A <see cref="T:System.IO.FileInfo" /> object that encapsulates information about the file described by the <paramref name="destFileName" /> parameter.</returns><exception cref="T:System.ArgumentException">The path described by the <paramref name="destFileName" /> parameter was not of a legal form.  
+ -or-  
+ The path described by the <paramref name="destBackupFileName" /> parameter was not of a legal form.</exception><exception cref="T:System.ArgumentNullException">The <paramref name="destFileName" /> parameter is <see langword="null" />.</exception><exception cref="T:System.IO.FileNotFoundException">The file described by the current <see cref="T:System.IO.FileInfo" /> object could not be found.  
+ -or-  
+ The file described by the <paramref name="destinationFileName" /> parameter could not be found.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows NT or later.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.Replace(System.String,System.String,System.Boolean)">
+            <summary>Replaces the contents of a specified file with the file described by the current <see cref="T:System.IO.FileInfo" /> object, deleting the original file, and creating a backup of the replaced file.  Also specifies whether to ignore merge errors.</summary><param name="destinationFileName">The name of a file to replace with the current file.</param><param name="destinationBackupFileName">The name of a file with which to create a backup of the file described by the <paramref name="destFileName" /> parameter.</param><param name="ignoreMetadataErrors">
+        <see langword="true" /> to ignore merge errors (such as attributes and ACLs) from the replaced file to the replacement file; otherwise <see langword="false" />.</param><returns>A <see cref="T:System.IO.FileInfo" /> object that encapsulates information about the file described by the <paramref name="destFileName" /> parameter.</returns><exception cref="T:System.ArgumentException">The path described by the <paramref name="destFileName" /> parameter was not of a legal form.  
+ -or-  
+ The path described by the <paramref name="destBackupFileName" /> parameter was not of a legal form.</exception><exception cref="T:System.ArgumentNullException">The <paramref name="destFileName" /> parameter is <see langword="null" />.</exception><exception cref="T:System.IO.FileNotFoundException">The file described by the current <see cref="T:System.IO.FileInfo" /> object could not be found.  
+ -or-  
+ The file described by the <paramref name="destinationFileName" /> parameter could not be found.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows NT or later.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.GetAccessControl">
+            <summary>Gets a <see cref="T:System.Security.AccessControl.FileSecurity" /> object that encapsulates the access control list (ACL) entries for the file described by the current <see cref="T:System.IO.FileInfo" /> object.</summary><returns>A <see cref="T:System.Security.AccessControl.FileSecurity" /> object that encapsulates the access control rules for the current file.</returns><exception cref="T:System.IO.IOException">An I/O error occurred while opening the file.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows 2000 or later.</exception><exception cref="T:System.Security.AccessControl.PrivilegeNotHeldException">The current system account does not have administrative privileges.</exception><exception cref="T:System.SystemException">The file could not be found.</exception><exception cref="T:System.UnauthorizedAccessException">This operation is not supported on the current platform.  
+ -or-  
+ The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.GetAccessControl(System.Security.AccessControl.AccessControlSections)">
+            <summary>Gets a <see cref="T:System.Security.AccessControl.FileSecurity" /> object that encapsulates the specified type of access control list (ACL) entries for the file described by the current <see cref="T:System.IO.FileInfo" /> object.</summary><param name="includeSections">One of the <see cref="T:System.Security.AccessControl.AccessControlSections" /> values that specifies which group of access control entries to retrieve.</param><returns>A <see cref="T:System.Security.AccessControl.FileSecurity" /> object that encapsulates the access control rules for the current file.</returns><exception cref="T:System.IO.IOException">An I/O error occurred while opening the file.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows 2000 or later.</exception><exception cref="T:System.Security.AccessControl.PrivilegeNotHeldException">The current system account does not have administrative privileges.</exception><exception cref="T:System.SystemException">The file could not be found.</exception><exception cref="T:System.UnauthorizedAccessException">This operation is not supported on the current platform.  
+ -or-  
+ The caller does not have the required permission.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileInfo.SetAccessControl(System.Security.AccessControl.FileSecurity)">
+            <summary>Applies access control list (ACL) entries described by a <see cref="T:System.Security.AccessControl.FileSecurity" /> object to the file described by the current <see cref="T:System.IO.FileInfo" /> object.</summary><param name="fileSecurity">A <see cref="T:System.Security.AccessControl.FileSecurity" /> object that describes an access control list (ACL) entry to apply to the current file.</param><exception cref="T:System.ArgumentNullException">The <paramref name="fileSecurity" /> parameter is <see langword="null" />.</exception><exception cref="T:System.SystemException">The file could not be found or modified.</exception><exception cref="T:System.UnauthorizedAccessException">The current process does not have access to open the file.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Microsoft Windows 2000 or later.</exception>
+        </member>
+        <member name="T:Pri.LongPath.FileSystemInfo">
+            <summary>Provides the base class for both <see cref="T:System.IO.FileInfo" /> and <see cref="T:System.IO.DirectoryInfo" /> objects.</summary>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.SystemInfo">
+            <!-- No matching elements were found for the following include tag --><include path="doc/members/member[@name=&quot;P:System.IO.FileSystemInfo.SystemInfo&quot;]/*" file="..\ref\mscorlib.xml" />
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.Attributes">
+            <summary>Gets or sets the attributes for the current file or directory.</summary><returns>
+        <see cref="T:System.IO.FileAttributes" /> of the current <see cref="T:System.IO.FileSystemInfo" />.</returns><exception cref="T:System.IO.FileNotFoundException">The specified file doesn't exist. Only thrown when setting the property value.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid. For example, it's on an unmapped drive. Only thrown when setting the property value.</exception><exception cref="T:System.Security.SecurityException">The caller doesn't have the required permission.</exception><exception cref="T:System.ArgumentException">The caller attempts to set an invalid file attribute.  
+ -or-  
+ The user attempts to set an attribute value but doesn't have write permission.</exception><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot initialize the data.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.CreationTime">
+            <summary>Gets or sets the creation time of the current file or directory.</summary><returns>The creation date and time of the current <see cref="T:System.IO.FileSystemInfo" /> object.</returns><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot initialize the data.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid; for example, it is on an unmapped drive.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Windows NT or later.</exception><exception cref="T:System.ArgumentOutOfRangeException">The caller attempts to set an invalid creation time.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.CreationTimeUtc">
+            <summary>Gets or sets the creation time, in coordinated universal time (UTC), of the current file or directory.</summary><returns>The creation date and time in UTC format of the current <see cref="T:System.IO.FileSystemInfo" /> object.</returns><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot initialize the data.</exception><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid; for example, it is on an unmapped drive.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Windows NT or later.</exception><exception cref="T:System.ArgumentOutOfRangeException">The caller attempts to set an invalid access time.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.LastWriteTime">
+            <summary>Gets or sets the time when the current file or directory was last written to.</summary><returns>The time the current file was last written.</returns><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot initialize the data.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Windows NT or later.</exception><exception cref="T:System.ArgumentOutOfRangeException">The caller attempts to set an invalid write time.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.LastAccessTime">
+            <summary>Gets or sets the time the current file or directory was last accessed.</summary><returns>The time that the current file or directory was last accessed.</returns><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot initialize the data.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Windows NT or later.</exception><exception cref="T:System.ArgumentOutOfRangeException">The caller attempts to set an invalid access time</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.LastAccessTimeUtc">
+            <summary>Gets or sets the time, in coordinated universal time (UTC), that the current file or directory was last accessed.</summary><returns>The UTC time that the current file or directory was last accessed.</returns><exception cref="T:System.IO.IOException">
+        <see cref="M:System.IO.FileSystemInfo.Refresh" /> cannot initialize the data.</exception><exception cref="T:System.PlatformNotSupportedException">The current operating system is not Windows NT or later.</exception><exception cref="T:System.ArgumentOutOfRangeException">The caller attempts to set an invalid access time.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.FullName">
+            <summary>Gets the full path of the directory or file.</summary><returns>A string containing the full path.</returns><exception cref="T:System.IO.PathTooLongException">The fully qualified path and file name exceed the system-defined maximum length.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.Extension">
+            <summary>Gets the string representing the extension part of the file.</summary><returns>A string containing the <see cref="T:System.IO.FileSystemInfo" /> extension.</returns>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.Name">
+            <summary>For files, gets the name of the file. For directories, gets the name of the last directory in the hierarchy if a hierarchy exists. Otherwise, the <see langword="Name" /> property gets the name of the directory.</summary><returns>A string that is the name of the parent directory, the name of the last directory in the hierarchy, or the name of a file, including the file name extension.</returns>
+        </member>
+        <member name="P:Pri.LongPath.FileSystemInfo.Exists">
+            <summary>Gets a value indicating whether the file or directory exists.</summary><returns>
+        <see langword="true" /> if the file or directory exists; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Pri.LongPath.FileSystemInfo.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> object with the file name and additional exception information.</summary><param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param><param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Pri.LongPath.FileSystemInfo.Refresh">
+            <summary>Refreshes the state of the object.</summary><exception cref="T:System.IO.IOException">A device such as a disk drive is not ready.</exception>
+        </member>
+        <member name="M:Pri.LongPath.FileSystemInfo.Delete">
+            <summary>Deletes a file or directory.</summary><exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid; for example, it is on an unmapped drive.</exception><exception cref="T:System.IO.IOException">There is an open handle on the file or directory, and the operating system is Windows XP or earlier. This open handle can result from enumerating directories and files. For more information, see How to: Enumerate Directories and Files.</exception>
+        </member>
+        <member name="T:Pri.LongPath.JunctionPoint">
+            <summary>
+            PRELIMINARY Provides access to NTFS junction points in .Net.
+            </summary>
+        </member>
+        <member name="M:Pri.LongPath.JunctionPoint.Create(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a junction point from the specified directory to the specified target directory.
+            </summary>
+            <remarks>
+            Only works on NTFS.
+            </remarks>
+            <param name="junctionPoint">The junction point path</param>
+            <param name="targetDir">The target directory</param>
+            <param name="overwrite">If true overwrites an existing reparse point or empty directory</param>
+            <exception cref="T:System.IO.IOException">Thrown when the junction point could not be created or when
+            an existing directory was found and <paramref name="overwrite" /> if false</exception>
+        </member>
+        <member name="M:Pri.LongPath.JunctionPoint.Delete(System.String)">
+            <summary>
+            Deletes a junction point at the specified source directory along with the directory itself.
+            Does nothing if the junction point does not exist.
+            </summary>
+            <remarks>
+            Only works on NTFS.
+            </remarks>
+            <param name="junctionPoint">The junction point path</param>
+        </member>
+        <member name="M:Pri.LongPath.JunctionPoint.Exists(System.String)">
+            <summary>
+            Determines whether the specified path exists and refers to a junction point.
+            </summary>
+            <param name="path">The junction point path</param>
+            <returns>True if the specified path represents a junction point</returns>
+            <exception cref="T:System.IO.IOException">Thrown if the specified path is invalid
+            or some other error occurs</exception>
+        </member>
+        <member name="M:Pri.LongPath.JunctionPoint.GetTarget(System.String)">
+            <summary>
+            Gets the target of the specified junction point.
+            </summary>
+            <remarks>
+            Only works on NTFS.
+            </remarks>
+            <param name="junctionPoint">The junction point path</param>
+            <returns>The target of the junction point</returns>
+            <exception cref="T:System.IO.IOException">Thrown when the specified path does not
+            exist, is invalid, is not a junction point, or some other error occurs</exception>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.ERROR_NOT_A_REPARSE_POINT">
+            <summary>
+            The file or directory is not a reparse point.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.ERROR_REPARSE_ATTRIBUTE_CONFLICT">
+            <summary>
+            The reparse point attribute cannot be set because it conflicts with an existing attribute.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.ERROR_INVALID_REPARSE_DATA">
+            <summary>
+            The data present in the reparse point buffer is invalid.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.ERROR_REPARSE_TAG_INVALID">
+            <summary>
+            The tag present in the reparse point buffer is invalid.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.ERROR_REPARSE_TAG_MISMATCH">
+            <summary>
+            There is a mismatch between the tag specified in the request and the tag present in the reparse point.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.FSCTL_SET_REPARSE_POINT">
+            <summary>
+            Command to set the reparse point data block.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.FSCTL_GET_REPARSE_POINT">
+            <summary>
+            Command to get the reparse point data block.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.FSCTL_DELETE_REPARSE_POINT">
+            <summary>
+            Command to delete the reparse point data base.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.IO_REPARSE_TAG_MOUNT_POINT">
+            <summary>
+            Reparse point tag used to identify mount points and junction points.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.NonInterpretedPathPrefix">
+            <summary>
+            This prefix indicates to NTFS that the path is to be treated as a non-interpreted
+            path in the virtual file system.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.ReparseTag">
+            <summary>
+            Reparse point tag. Must be a Microsoft reparse point tag.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.ReparseDataLength">
+            <summary>
+            Size, in bytes, of the data after the Reserved member. This can be calculated by:
+            (4 * sizeof(ushort)) + SubstituteNameLength + PrintNameLength + 
+            (namesAreNullTerminated ? 2 * sizeof(char) : 0);
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.Reserved">
+            <summary>
+            Reserved; do not use. 
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.SubstituteNameOffset">
+            <summary>
+            Offset, in bytes, of the substitute name string in the PathBuffer array.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.SubstituteNameLength">
+            <summary>
+            Length, in bytes, of the substitute name string. If this string is null-terminated,
+            SubstituteNameLength does not include space for the null character.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.PrintNameOffset">
+            <summary>
+            Offset, in bytes, of the print name string in the PathBuffer array.
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.PrintNameLength">
+            <summary>
+            Length, in bytes, of the print name string. If this string is null-terminated,
+            PrintNameLength does not include space for the null character. 
+            </summary>
+        </member>
+        <member name="F:Pri.LongPath.JunctionPoint.REPARSE_DATA_BUFFER.PathBuffer">
+            <summary>
+            A buffer containing the unicode-encoded path string. The path string contains
+            the substitute name string and print name string.
+            </summary>
+        </member>
+        <member name="T:Pri.LongPath.Path">
+            <summary>Performs operations on <see cref="T:System.String" /> instances that contain file or directory path information. These operations are performed in a cross-platform manner.</summary>
+        </member>
+        <member name="F:Pri.LongPath.Path.InvalidPathChars">
+            <summary>Provides a platform-specific array of characters that cannot be specified in path string arguments passed to members of the <see cref="T:System.IO.Path" /> class.</summary>
+        </member>
+        <member name="F:Pri.LongPath.Path.DirectorySeparatorChar">
+            <summary>Provides a platform-specific character used to separate directory levels in a path string that reflects a hierarchical file system organization.</summary>
+        </member>
+        <member name="F:Pri.LongPath.Path.AltDirectorySeparatorChar">
+            <summary>Provides a platform-specific alternate character used to separate directory levels in a path string that reflects a hierarchical file system organization.</summary>
+        </member>
+        <member name="F:Pri.LongPath.Path.VolumeSeparatorChar">
+            <summary>Provides a platform-specific volume separator character.</summary>
+        </member>
+        <member name="F:Pri.LongPath.Path.PathSeparator">
+            <summary>A platform-specific separator character used to separate path strings in environment variables.</summary>
+        </member>
+        <member name="M:Pri.LongPath.Path.Combine(System.String,System.String)">
+            <summary>Combines two strings into a path.</summary><param name="path1">The first path to combine.</param><param name="path2">The second path to combine.</param><returns>The combined paths. If one of the specified paths is a zero-length string, this method returns the other path. If <paramref name="path2" /> contains an absolute path, this method returns <paramref name="path2" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path1" /> or <paramref name="path2" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path1" /> or <paramref name="path2" /> is <see langword="null" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.IsPathRooted(System.String)">
+            <summary>Gets a value indicating whether the specified path string contains a root.</summary><param name="path">The path to test.</param><returns>
+        <see langword="true" /> if <paramref name="path" /> contains a root; otherwise, <see langword="false" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.Combine(System.String,System.String,System.String)">
+            <summary>Combines three strings into a path.</summary><param name="path1">The first path to combine.</param><param name="path2">The second path to combine.</param><param name="path3">The third path to combine.</param><returns>The combined paths.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path1" />, <paramref name="path2" />, or <paramref name="path3" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path1" />, <paramref name="path2" />, or <paramref name="path3" /> is <see langword="null" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.Combine(System.String,System.String,System.String,System.String)">
+            <summary>Combines four strings into a path.</summary><param name="path1">The first path to combine.</param><param name="path2">The second path to combine.</param><param name="path3">The third path to combine.</param><param name="path4">The fourth path to combine.</param><returns>The combined paths.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path1" />, <paramref name="path2" />, <paramref name="path3" />, or <paramref name="path4" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path1" />, <paramref name="path2" />, <paramref name="path3" />, or <paramref name="path4" /> is <see langword="null" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetFileName(System.String)">
+            <summary>Returns the file name and extension of the specified path string.</summary><param name="path">The path string from which to obtain the file name and extension.</param><returns>The characters after the last directory character in <paramref name="path" />. If the last character of <paramref name="path" /> is a directory or volume separator character, this method returns <see cref="F:System.String.Empty" />. If <paramref name="path" /> is <see langword="null" />, this method returns <see langword="null" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetFullPath(System.String)">
+            <summary>Returns the absolute path for the specified path string.</summary><param name="path">The file or directory for which to obtain absolute path information.</param><returns>The fully qualified location of <paramref name="path" />, such as "C:\MyFile.txt".</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> is a zero-length string, contains only white space, or contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.  
+-or-  
+The system could not retrieve the absolute path.</exception><exception cref="T:System.Security.SecurityException">The caller does not have the required permissions.</exception><exception cref="T:System.ArgumentNullException">
+        <paramref name="path" /> is <see langword="null" />.</exception><exception cref="T:System.NotSupportedException">
+        <paramref name="path" /> contains a colon (":") that is not part of a volume identifier (for example, "c:\").</exception><exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetDirectoryName(System.String)">
+            <summary>Returns the directory information for the specified path string.</summary><param name="path">The path of a file or directory.</param><returns>Directory information for <paramref name="path" />, or <see langword="null" /> if <paramref name="path" /> denotes a root directory or is null. Returns <see cref="F:System.String.Empty" /> if <paramref name="path" /> does not contain directory information.</returns><exception cref="T:System.ArgumentException">The <paramref name="path" /> parameter contains invalid characters, is empty, or contains only white spaces.</exception><exception cref="T:System.IO.PathTooLongException">In the .NET for Windows Store apps or the Portable Class Library, catch the base class exception, <see cref="T:System.IO.IOException" />, instead.  
+
+
+            
+
+ The <paramref name="path" /> parameter is longer than the system-defined maximum length.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetInvalidPathChars">
+            <summary>Gets an array containing the characters that are not allowed in path names.</summary><returns>An array containing the characters that are not allowed in path names.</returns>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetInvalidFileNameChars">
+            <summary>Gets an array containing the characters that are not allowed in file names.</summary><returns>An array containing the characters that are not allowed in file names.</returns>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetRandomFileName">
+            <summary>Returns a random folder name or file name.</summary><returns>A random folder name or file name.</returns>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetPathRoot(System.String)">
+            <summary>Gets the root directory information of the specified path.</summary><param name="path">The path from which to obtain root directory information.</param><returns>The root directory of <paramref name="path" />, or <see langword="null" /> if <paramref name="path" /> is <see langword="null" />, or an empty string if <paramref name="path" /> does not contain root directory information.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.  
+-or-  
+<see cref="F:System.String.Empty" /> was passed to <paramref name="path" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetExtension(System.String)">
+            <summary>Returns the extension of the specified path string.</summary><param name="path">The path string from which to get the extension.</param><returns>The extension of the specified path (including the period "."), or <see langword="null" />, or <see cref="F:System.String.Empty" />. If <paramref name="path" /> is <see langword="null" />, <see cref="M:System.IO.Path.GetExtension(System.String)" /> returns <see langword="null" />. If <paramref name="path" /> does not have extension information, <see cref="M:System.IO.Path.GetExtension(System.String)" /> returns <see cref="F:System.String.Empty" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.HasExtension(System.String)">
+            <summary>Determines whether a path includes a file name extension.</summary><param name="path">The path to search for an extension.</param><returns>
+        <see langword="true" /> if the characters that follow the last directory separator (\\ or /) or volume separator (:) in the path include a period (.) followed by one or more characters; otherwise, <see langword="false" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetTempPath">
+            <summary>Returns the path of the current user's temporary folder.</summary><returns>The path to the temporary folder, ending with a backslash.</returns><exception cref="T:System.Security.SecurityException">The caller does not have the required permissions.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetTempFileName">
+            <summary>Creates a uniquely named, zero-byte temporary file on disk and returns the full path of that file.</summary><returns>The full path of the temporary file.</returns><exception cref="T:System.IO.IOException">An I/O error occurs, such as no unique temporary file name is available.  
+-or-
+ This method was unable to create a temporary file.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.GetFileNameWithoutExtension(System.String)">
+            <summary>Returns the file name of the specified path string without the extension.</summary><param name="path">The path of the file.</param><returns>The string returned by <see cref="M:System.IO.Path.GetFileName(System.String)" />, minus the last period (.) and all characters following it.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.ChangeExtension(System.String,System.String)">
+            <summary>Changes the extension of a path string.</summary><param name="path">The path information to modify. The path cannot contain any of the characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</param><param name="extension">The new extension (with or without a leading period). Specify <see langword="null" /> to remove an existing extension from <paramref name="path" />.</param><returns>The modified path information.  
+ On Windows-based desktop platforms, if <paramref name="path" /> is <see langword="null" /> or an empty string (""), the path information is returned unmodified. If <paramref name="extension" /> is <see langword="null" />, the returned string contains the specified path with its extension removed. If <paramref name="path" /> has no extension, and <paramref name="extension" /> is not <see langword="null" />, the returned path string contains <paramref name="extension" /> appended to the end of <paramref name="path" />.</returns><exception cref="T:System.ArgumentException">
+        <paramref name="path" /> contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception>
+        </member>
+        <member name="M:Pri.LongPath.Path.Combine(System.String[])">
+            <summary>Combines an array of strings into a path.</summary><param name="paths">An array of parts of the path.</param><returns>The combined paths.</returns><exception cref="T:System.ArgumentException">One of the strings in the array contains one or more of the invalid characters defined in <see cref="M:System.IO.Path.GetInvalidPathChars" />.</exception><exception cref="T:System.ArgumentNullException">One of the strings in the array is <see langword="null" />.</exception>
+        </member>
+        <member name="T:Pri.LongPath.Privilege">
+            <summary>
+            From MSDN Magazine March 2005
+            </summary>
+        </member>
+    </members>
+</doc>

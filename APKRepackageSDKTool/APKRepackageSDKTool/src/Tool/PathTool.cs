@@ -10,7 +10,7 @@ namespace APKRepackageSDKTool
     {
         public static string GetCurrentPath()
         {
-            return System.IO.Directory.GetCurrentDirectory();
+            return Pri.LongPath.Directory.GetCurrentDirectory();
         }
 
         /// <summary>

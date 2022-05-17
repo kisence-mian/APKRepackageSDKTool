@@ -608,7 +608,7 @@ namespace APKRepackageSDKTool
 
         public static string GetBundletoolPath()
         {
-            return BaksmaliVersion;
+            return BundletoolVersion;
         }
 
 
@@ -674,6 +674,9 @@ namespace APKRepackageSDKTool
         public string appIcon;
         public string appBanner;
 
+        public int bundleVersionCode = -1;
+        public string versionName = "";
+
         public bool isSplitDex = true; //分包
         public bool isResplitDex = true; //重新分包
         public int splitDexOffset = 0;   //分包补偿
@@ -694,7 +697,8 @@ namespace APKRepackageSDKTool
 
         public bool isExtractNativeLibs = true;     //提取so文件
 
-        public bool isExportAAB = true;     //导出aab包
+        public bool isExportAAB = false;     //导出aab包
+        public string noCompressFileList_AAB = "";     //导出aab时不压缩的文件
 
         public string apktoolVersion = "apktool";
 
@@ -737,6 +741,9 @@ namespace APKRepackageSDKTool
         public bool IsExtractNativeLibs { get => isExtractNativeLibs; set => isExtractNativeLibs = value; }
         public bool IsCustomAAPT { get => isCustomAAPT; set => isCustomAAPT = value; }
         public bool IsExportAAB { get => isExportAAB; set => isExportAAB = value; }
+        public string NoCompressFileList_AAB { get => noCompressFileList_AAB; set => noCompressFileList_AAB = value; }
+        public int BundleVersionCode { get => bundleVersionCode; set => bundleVersionCode = value; }
+        public string VersionName { get => versionName; set => versionName = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -810,8 +817,58 @@ namespace APKRepackageSDKTool
                 }
             }
 
+            if (minApiLevel <= 0)
+            {
+                minApiLevel = 16;
+            }
+
             return minApiLevel;
         }
+
+        /// <summary>
+        /// 目标APILevel
+        /// </summary>
+        /// <returns></returns>
+        public int GetTargetAPILevel()
+        {
+            int targetApiLevel = -1;
+            for(int i=0;i<SdkList.Count;i++)
+            {
+                SDKConfig config = EditorData.TotalSDKInfo.GetSDKConfig(sdkList[i].sdkName);
+                if(config.TargetSDKVersion>targetApiLevel)
+                {
+                    targetApiLevel = config.TargetSDKVersion;
+                }
+            }
+
+            if (targetApiLevel <= 0)
+            {
+                targetApiLevel = 30;
+            }
+
+            return targetApiLevel;
+        }
+
+        public int GetBundleVersionCode()
+        {
+            int versionCode = BundleVersionCode;
+            if(versionCode<0)
+            {
+                versionCode = 1;
+            }
+            return versionCode;
+        }
+
+        public string GetVersionName()
+        {
+            string versionName = VersionName;
+            if(string.IsNullOrEmpty(versionName))
+            {
+                versionName = "1.0.1";
+            }
+            return versionName;
+        }
+
     }
 
     public class TotalSDKConfig : List<SDKConfig>, INotifyCollectionChanged

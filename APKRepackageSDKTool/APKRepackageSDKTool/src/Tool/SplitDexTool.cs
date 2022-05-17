@@ -1,7 +1,7 @@
 ﻿using APKRepackageSDKTool;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Pri.LongPath;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,11 +48,13 @@ public class SplitDexTool
             allName.Add(item, new Dictionary<string, string>());
         }
 
+        var mainDexList =  GenerateMainDexList(info);
+
         //计算主dex 的数据
         for (int i = 0; i < list.Count; i++)
         {
             list[i] = list[i].Replace("\\", "/");
-            if (JudgeMainDex(list[i], info))
+            if (JudgeMainDex(list[i], mainDexList))
             {
                 string content = FileTool.ReadStringByFile(list[i]);
 
@@ -75,8 +77,9 @@ public class SplitDexTool
         {
             list[i] = list[i].Replace("\\", "/");
             //剔除所有不需要分包的类
-            if (JudgeMainDex(list[i], info))
+            if (JudgeMainDex(list[i], mainDexList))
             {
+                OutPut("留在主包的文件：" + list[i]);
                 continue;
             }
 
@@ -474,8 +477,7 @@ public class SplitDexTool
     #endregion
 
 
-
-    bool JudgeMainDex(string path, ChannelInfo info)
+    List<string> GenerateMainDexList( ChannelInfo info)
     {
         List<string> mainDexList = new List<string>();
 
@@ -489,7 +491,7 @@ public class SplitDexTool
         mainDexList.Add("Service");
         mainDexList.Add("Receiver");
         mainDexList.Add("Provider");
-        
+
         //mainDexList.Add("Instrumentation");
         //mainDexList.Add("BackupAgent");
         //mainDexList.Add("Annotation");
@@ -508,6 +510,19 @@ public class SplitDexTool
                 }
             }
         }
+
+        OutPut("主包列表： " + mainDexList.Count);
+
+        for (int i = 0; i < mainDexList.Count; i++)
+        {
+            OutPut( mainDexList[i]);
+        }
+
+        return mainDexList;
+    }
+
+    bool JudgeMainDex(string path, List<string> mainDexList)
+    {
 
         //将重要的类都放到主包里
         for (int i = 0; i < mainDexList.Count; i++)

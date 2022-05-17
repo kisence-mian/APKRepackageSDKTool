@@ -111,6 +111,13 @@ namespace APKRepackageSDKTool
 
                         if (!string.IsNullOrEmpty(channelInfo.suffix))
                         {
+                            string version = "";
+
+                            if(channelInfo.BundleVersionCode >0)
+                            {
+                                version += "_" + channelInfo.versionName +"_" + channelInfo.BundleVersionCode;
+                            }
+
                             if(EditorData.IsTimeStamp)
                             {
                                 //移除旧的时间戳和渠道
@@ -120,11 +127,11 @@ namespace APKRepackageSDKTool
                                 fileName = Regex.Replace(fileName, @"_\d+_\d+", "");
 
                                 //加时间戳
-                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix+"_" + now.ToString("yyyyMMdd_HHmm") + ".apk";
+                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + version + "_" + channelInfo.suffix+"_" + now.ToString("yyyyMMdd_HHmm") + ".apk";
                             }
                             else
                             {
-                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + "_" + channelInfo.suffix + ".apk";
+                                finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + version + "_" + channelInfo.suffix + ".apk";
                             }
                         }
 
@@ -148,7 +155,7 @@ namespace APKRepackageSDKTool
                         {
                             apkToolCmd += " --only-main-classes";
                         }
-
+                        
                         cmd.Execute(apkToolCmd);
 
                         //移除过长的YML
@@ -241,6 +248,12 @@ namespace APKRepackageSDKTool
                             + " " + apkPath
                             + " " + channelInfo.KeyStoreAlias
                             );
+                        }
+
+                        if(channelInfo.IsExportAAB)//aab打包
+                        {
+                            AABTool aab = new AABTool(OutPutCallBack, ErrorCallBack);
+                            aab.ExportAABPackage(apkPath, channelInfo,repackageInfo,finalPath);
                         }
 
                         if (channelInfo.IsZipalign)
