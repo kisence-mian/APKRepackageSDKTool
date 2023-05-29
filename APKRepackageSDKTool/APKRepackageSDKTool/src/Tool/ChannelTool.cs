@@ -33,6 +33,7 @@ namespace APKRepackageSDKTool
             //指定编译版本
             compileTool.assignMinAPILevel = info.GetAssignMinAPILevel();
             compileTool.minAPILevel = info.GetMinAPILevel();
+            compileTool.useD8 = info.IsUseD8;
 
             if (info.IsExecuteInvalidFile)
             {

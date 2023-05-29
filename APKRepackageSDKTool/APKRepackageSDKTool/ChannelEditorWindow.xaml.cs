@@ -417,6 +417,5 @@ namespace APKRepackageSDKTool
             EditorData.CurrentGameChannelList = EditorData.CurrentGameChannelList;
             MessageBox.Show("保存成功");
         }
-
     }
 }

@@ -685,6 +685,7 @@ namespace APKRepackageSDKTool
         public bool isForceManifest = false; //强制反编译清单文件(反编译Resource文件)
         public bool isOnlyMainClasses = false; //只反编译主Classes文件(解决混淆问题)
         public bool isNoCompressResource = false; //不压缩Resource文件
+        public bool isUseD8 = true; //使用D8
         public bool isUseAAPT2 = true; //使用AAPT2
         public bool isChangeMainApplication = false; //修改ManinApplication
         public bool isChangeMainActivity = true; //修改ManinActivity
@@ -744,6 +745,7 @@ namespace APKRepackageSDKTool
         public string NoCompressFileList_AAB { get => noCompressFileList_AAB; set => noCompressFileList_AAB = value; }
         public int BundleVersionCode { get => bundleVersionCode; set => bundleVersionCode = value; }
         public string VersionName { get => versionName; set => versionName = value; }
+        public bool IsUseD8 { get => isUseD8; set => isUseD8 = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 

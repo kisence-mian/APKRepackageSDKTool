@@ -15,6 +15,7 @@ public class CompileTool
     OutPutCallBack errorCallBack;
     CmdService cmd;
 
+    public bool useD8 = false;
     public bool assignMinAPILevel = false;
     public int minAPILevel = 16;
 
@@ -116,11 +117,19 @@ public class CompileTool
         }
 
         //Jar to dex
-        //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
-        cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=" + tempPath + " " + jarPath, true, true);
+        if(!useD8)
+        {
+            cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
+        }
+        else
+        {
+            cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=" + tempPath + " " + jarPath, true, false);
+        }
+
+
 
         ////dex to smali
-        cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + cachePath, true, true);
+        cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + cachePath, true, false);
         //cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath, true, true);
 
         //删除临时目录
