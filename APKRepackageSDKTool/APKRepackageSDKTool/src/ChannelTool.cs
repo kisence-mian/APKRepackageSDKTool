@@ -606,7 +606,9 @@ namespace APKRepackageSDKTool
 
                 OutPut("Jar to dex");
                 //Jar to dex
-                cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+
+                //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+                cmd.Execute(EditorData.GetD8Path() + " --output=./R_path/classes.dex ./R_path/R.jar", true, true);
 
                 OutPut("dex to smali");
                 //dex to smali

@@ -8,6 +8,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shell;
 
 public class CompileTool
 {
@@ -117,19 +118,17 @@ public class CompileTool
         }
 
         //Jar to dex
-        if(!useD8)
+        if (!useD8)
         {
             cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
         }
         else
         {
-            cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=" + tempPath + " " + jarPath, true, false);
+            cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=" + tempPath + " " + jarPath, true, true);
         }
 
-
-
         ////dex to smali
-        cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + cachePath, true, false);
+        cmd.Execute("java -jar baksmali-2.5.2.jar d " + tempPath + " -o " + cachePath, true, true);
         //cmd.Execute("java -jar baksmali-2.1.3.jar --o=" + smaliPath + " " + tempPath, true, true);
 
         //删除临时目录
@@ -196,7 +195,8 @@ public class CompileTool
 
             OutPut("Jar to dex");
             //Jar to dex
-            cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output="+ dexPath + " " + jarPath);
+            cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + dexPath + " " + jarPath);
+
 
             File.Delete(jarPath);
 
@@ -297,6 +297,7 @@ public class CompileTool
         cmd.Execute("javac  -classpath " + libs + " " + JavaCompileSrcPath + "\\*.java -d " + classFilePath);
 
         //class to dex
+
         cmd.Execute("java -jar " + EditorData.GetDxPath() + " --verbose --dex --output=" + dexFilePath + " " + classFilePath);
 
         //dex to smali

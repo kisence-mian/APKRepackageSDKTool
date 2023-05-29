@@ -565,7 +565,9 @@ namespace APKRepackageSDKTool
         /// <returns></returns>
         public static string GetDxPath()
         {
-            return androidSdkPath + "\\build-tools\\"+ buildToolVersion + "\\lib\\dx.jar";
+            //改为使用内置的dx
+            return "dx.jar";
+            //return androidSdkPath + "\\build-tools\\"+ buildToolVersion + "\\lib\\dx.jar";
         }
 
         /// <summary>
