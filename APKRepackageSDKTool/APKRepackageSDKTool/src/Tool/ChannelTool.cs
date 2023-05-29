@@ -203,9 +203,9 @@ namespace APKRepackageSDKTool
             {
                 cmd.Execute(EditorData.GetAAPTPath() + " package -f"
                     + " -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) 
-                    + " -m -J " + R_Path 
-                    + " -S " + resPath
-                    + " -M " + manifest);
+                    + " -m -J \"" + R_Path  + "\""
+                    + " -S \"" + resPath + "\""
+                    + " -M \"" + manifest + "\"");
             }
             else
             {
@@ -214,14 +214,14 @@ namespace APKRepackageSDKTool
                 string tempAPK = PathTool.GetCurrentPath() + "\\apk.apk";
 
                 //编译
-                cmd.Execute(EditorData.GetAAPT2Path() + " compile --dir " + resPath + " -o " + tempRes,true,true);
+                cmd.Execute(EditorData.GetAAPT2Path() + " compile --dir \"" + resPath + "\" -o \"" + tempRes + "\"", true,true);
                 //链接
                 cmd.Execute(EditorData.GetAAPT2Path() + " link " 
-                    + tempRes
-                    + " -I " + EditorData.GetAndroidJarPath(EditorData.APILevel) 
+                    +"\"" + tempRes + "\""
+                    + " -I \"" + EditorData.GetAndroidJarPath(EditorData.APILevel) + "\""
                     + " --java " + R_Path 
-                    + " --manifest " + manifest 
-                    + " -o " + tempAPK, true, true);
+                    + " --manifest \"" + manifest + "\""
+                    + " -o \"" + tempAPK + "\"", true, true);
 
                 //删除临时文件
                 File.Delete(tempAPK);

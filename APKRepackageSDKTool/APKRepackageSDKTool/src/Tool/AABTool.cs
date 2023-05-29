@@ -48,12 +48,12 @@ public class AABTool
         
         //首先是用apktool解压apk
         string apkDirPath = tempDirPath + "\\decode_apk_dir";
-        string apkDirCmd = "java -jar " + EditorData.ApktoolVersion + ".jar d -f " + apkPath + " -s -o " + apkDirPath;
+        string apkDirCmd = "java -jar " + EditorData.ApktoolVersion + ".jar d -f \"" + apkPath + "\" -s -o \"" + apkDirPath + "\"";
         cmd.Execute(apkDirCmd);
 
         //然后是生成resources资源压缩文件
         string apkResPath = tempDirPath + "\\compiled_resources.zip";
-        string apkResCmd = EditorData.GetAAPT2Path()+ " compile --no-crunch --dir " + apkDirPath + "\\res -o " + apkResPath;
+        string apkResCmd = EditorData.GetAAPT2Path()+ " compile --no-crunch --dir \"" + apkDirPath + "\\res\" -o \"" + apkResPath+ "\"";
         cmd.Execute(apkResCmd);
 
         //再然后是生成base.apk
@@ -70,8 +70,8 @@ public class AABTool
                             "--target-sdk-version "+targetSdkVersion +" "+
                             "--version-code "+ bundleVersionCode + " " +
                             "--version-name "+ versionName + " "+
-                            "--manifest "+apkDirPath+"\\AndroidManifest.xml "+
-                            "-R "+apkResPath+" "+
+                            "--manifest \"" + apkDirPath+ "\\AndroidManifest.xml\" " +
+                            "-R \"" + apkResPath+ "\" " +
                             "--auto-add-overlay";
         cmd.Execute(apkBaseCmd,true,true);
 
@@ -122,11 +122,11 @@ public class AABTool
             string bundleConfigPath = tempDirPath + "\\BundleConfig.json";
             string bundleStr = "{\n\"compression\":{\n\"uncompressedGlob\":["+noCompressFileList_AAB+"]\n}\n}";
             FileTool.WriteStringByFile(bundleConfigPath, bundleStr);
-            cmd.Execute("java -jar " + EditorData.GetBundletoolPath() + " build-bundle --config=" + bundleConfigPath + " --modules=" + tempDirPath + "\\base.zip --output=" + aabDirPth+"\\"+apkName+".aab");
+            cmd.Execute("java -jar " + EditorData.GetBundletoolPath() + " build-bundle --config=\"" + bundleConfigPath + "\" --modules=\"" + tempDirPath + "\\base.zip\" --output=\"" + aabDirPth+"\\"+apkName+ ".aab\"");
         }
         else
         {
-            cmd.Execute("java -jar " + EditorData.GetBundletoolPath() + " build-bundle --modules=" + tempDirPath + "\\base.zip --output=" + aabDirPth+"\\"+apkName+".aab");
+            cmd.Execute("java -jar " + EditorData.GetBundletoolPath() + " build-bundle --modules=\"" + tempDirPath + "\\base.zip\" --output=\"" + aabDirPth+"\\"+apkName+ ".aab\"");
         }
 
         //再然后是签名
@@ -134,7 +134,7 @@ public class AABTool
         string fairGuardPath = Directory.GetCurrentDirectory().Replace("\\bin\\Debug", "") + "\\FairGuard\\FairGuard3.1.8.jar";
         string configStr = "[gamekey]\nkey=" + "Test" + "\n[signinfo]\nkeystore-path=" + channelInfo.JksPath + "\nalias=" + channelInfo.KeyStoreAlias + "\npassword=" + channelInfo.KeyStorePassWord + "\nalias-pwd=" + channelInfo.KeyStoreAliasPassWord;
         FileTool.WriteStringByFile(fairGuardConfigPath, configStr);
-        cmd.Execute("java -jar " + fairGuardPath + " -optype_sign_jar -inputfile " + aabDirPth+"\\" + apkName + ".aab -outputfile "+ aabDirPth + "\\" + apkName+"_sign.aab");
+        cmd.Execute("java -jar " + fairGuardPath + " -optype_sign_jar -inputfile \"" + aabDirPth+"\\" + apkName + ".aab\" -outputfile \"" + aabDirPth + "\\" + apkName+ "_sign.aab\"");
         File.Delete(aabDirPth + "\\" + apkName + ".aab");
         File.Move(aabDirPth + "\\" + apkName + "_sign.aab", aabDirPth + "\\" + apkName + ".aab");
 

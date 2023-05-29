@@ -520,7 +520,7 @@ public class AndroidTool
                     }
                     else
                     {
-                        OutPut("I: 重复的 recevicer " + name);
+                        OutPut("I: 重复的 meta-data " + name);
                     }
                 }
 

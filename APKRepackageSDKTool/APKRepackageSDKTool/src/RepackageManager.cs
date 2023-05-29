@@ -144,7 +144,7 @@ namespace APKRepackageSDKTool
                         //反编译APK
                         MakeProgress("反编译APK ",i, channelList.Count,channelInfo.Name);
 
-                        string apkToolCmd = "java -jar " + EditorData.ApktoolVersion + ".jar d -f " + repackageInfo.apkPath + " -o " + aimPath;
+                        string apkToolCmd = "java -jar " + EditorData.ApktoolVersion + ".jar d -f \"" + repackageInfo.apkPath + "\" -o \"" + aimPath + "\"";
 
                         if (channelInfo.isForceManifest)
                         {
@@ -219,7 +219,7 @@ namespace APKRepackageSDKTool
                             options += "--no-crunch ";
                         }
 
-                        cmd.Execute("java -jar "+ EditorData.ApktoolVersion + ".jar " + options + "b " + aimPath,true,true);
+                        cmd.Execute("java -jar "+ EditorData.ApktoolVersion + ".jar " + options + "b \"" + aimPath + "\"",true,true);
 
                         //判断apk是否存在
                         if(!File.Exists(apkPath))
@@ -245,7 +245,7 @@ namespace APKRepackageSDKTool
                             + " -storepass " + channelInfo.KeyStorePassWord
                             + " -keystore " + channelInfo.KeyStorePath
                             + " -sigFile CERT"  //强制将RSA文件更名为CERT
-                            + " " + apkPath
+                            + " \"" + apkPath + "\""
                             + " " + channelInfo.KeyStoreAlias
                             );
                         }
@@ -260,7 +260,7 @@ namespace APKRepackageSDKTool
                         {
                             //进行字节对齐并导出到最终目录
                             MakeProgress("进行字节对齐并导出到最终目录", i, channelList.Count, channelInfo.Name);
-                            cmd.Execute(EditorData.GetZipalignPath() + " -f  4 " + apkPath + " " + finalPath);
+                            cmd.Execute(EditorData.GetZipalignPath() + " -f  4 \"" + apkPath + "\" \"" + finalPath + "\"");
                         }
                         else
                         {
@@ -277,8 +277,8 @@ namespace APKRepackageSDKTool
                                 + "--ks-key-alias " + channelInfo.KeyStoreAlias + " "
                                 + "--ks-pass pass:" + channelInfo.KeyStorePassWord + " "
                                 + "--key-pass pass:" + channelInfo.keyStoreAliasPassWord + " "
-                                + "--out " + finalPath
-                                + " " + finalPath;
+                                + "--out \"" + finalPath + "\""
+                                + " \"" + finalPath + "\"";
 
                             cmd.Execute(v2SignCmd);
                             //删掉多余的idsig文件
@@ -292,7 +292,7 @@ namespace APKRepackageSDKTool
                         {
                             //自动安装
                             MakeProgress("自动安装", i, channelList.Count, channelInfo.Name);
-                            cmd.Execute("adb install -r " + finalPath,true,true);
+                            cmd.Execute("adb install -r \"" + finalPath + "\"", true,true);
                         }
 
                         if(channelInfo.IsDeleteTempPath)
