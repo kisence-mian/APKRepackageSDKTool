@@ -197,7 +197,7 @@ public class CompileTool
 
             OutPut("编译R.java文件");
             //编译R.java文件
-            cmd.Execute("javac -encoding UTF-8 -source 1.7 -target 1.7 \"" + javaPath + "\"", true, true);
+            cmd.Execute("javac -encoding UTF-8 -source 1.8 -target 1.8 \"" + javaPath + "\"", true, true);
 
             //取第一个文件夹名作为命令开头
             string fileName = FileTool.GetDirectoryName(Directory.GetDirectories(R_Path)[0]);
