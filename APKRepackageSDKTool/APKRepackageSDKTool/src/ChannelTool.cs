@@ -604,11 +604,19 @@ namespace APKRepackageSDKTool
                 //生成的R文件的jar
                 cmd.Execute("jar cvf ./R.jar ./" + fileName, path: R_Path);
 
-                OutPut("Jar to dex");
+                OutPut("Jar to dex -Rebuild_R_Table");
                 //Jar to dex
-
-                //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
-                cmd.Execute(EditorData.GetD8Path() + " --output=./R_path/classes.dex ./R_path/R.jar", true, true);
+                if (useD8)
+                {
+                    string zipPath = R_Path + "classes.zip";
+                    cmd.Execute(EditorData.GetD8Path() + " --output=" + zipPath + " " + jarPath);
+                    //解压
+                    rar.Decompression(zipPath);
+                }
+                else
+                {
+                    cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=./R_path/classes.dex ./R_path/R.jar ", true, true);
+                }
 
                 OutPut("dex to smali");
                 //dex to smali

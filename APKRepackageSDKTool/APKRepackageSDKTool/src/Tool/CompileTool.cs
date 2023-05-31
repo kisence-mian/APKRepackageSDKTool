@@ -15,6 +15,7 @@ public class CompileTool
     OutPutCallBack callBack;
     OutPutCallBack errorCallBack;
     CmdService cmd;
+    RarTool rar;
 
     public bool useD8 = false;
     public bool assignMinAPILevel = false;
@@ -26,6 +27,7 @@ public class CompileTool
         this.errorCallBack = errorCallBack;
 
         cmd = new CmdService(OutPut, errorCallBack);
+        rar = new RarTool(callBack, errorCallBack);
     }
 
     public void OutPut(string content)
@@ -63,8 +65,19 @@ public class CompileTool
         }
 
         //Jar to dex
-        //cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath , true,true);
-        cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=\"" + tempPath + "\" \"" + jarPath+ "\"", true, true);
+        //cmd.Execute(EditorData.GetD8Path() + " " + options + "--output=\"" + tempPath + "\" \"" + jarPath+ "\"", true, true);
+
+        if (useD8)
+        {
+            string zipPath = PathTool.GetCurrentPath() + "\\JavaTempPath\\classes.zip ";
+            cmd.Execute(EditorData.GetD8Path() + " --output=" + zipPath + " " + jarPath);
+            //解压
+            rar.Decompression(zipPath);
+        }
+        else
+        {
+            cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + tempPath + " " + jarPath, true, true);
+        }
 
         ////dex to smali
         cmd.Execute("java -jar baksmali-2.5.2.jar d \"" + tempPath + "\" -o \"" + smaliPath + "\"", true, true);
@@ -193,9 +206,19 @@ public class CompileTool
             //生成的R文件的jar
             cmd.Execute("jar cvf \"./R.jar\" \"./" + fileName + "\"", path: R_Path);
 
-            OutPut("Jar to dex");
+            OutPut("Jar to dex -RJava2Smali");
             //Jar to dex
-            cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + dexPath + " " + jarPath);
+            if(useD8)
+            {
+                string zipPath = R_Path + "classes.zip";
+                cmd.Execute( EditorData.GetD8Path() + " --output=" + zipPath + " " + jarPath);
+                //解压
+                rar.Decompression(zipPath, R_Path);
+            }
+            else
+            {
+                cmd.Execute("java -jar " + EditorData.GetDxPath() + " --dex --output=" + dexPath + " " + jarPath);
+            }
 
 
             File.Delete(jarPath);

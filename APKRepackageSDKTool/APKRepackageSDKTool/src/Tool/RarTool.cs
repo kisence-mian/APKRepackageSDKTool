@@ -54,11 +54,15 @@ public class RarTool
     /// </summary>
     /// <param name="rarFile"></param>
     /// <param name="aimPath"></param>
-    public void Decompression(string rarFile,string aimPath)
+    public void Decompression(string rarFile,string aimPath,bool delectAimPath = false)
     {
-        if (Directory.Exists(aimPath))
+        if(delectAimPath)
         {
-            Directory.Delete(aimPath);
+            if (Directory.Exists(aimPath))
+            {
+                FileTool.DeleteDirectoryComplete(aimPath);
+                //Directory.Delete(aimPath);
+            }
         }
 
         string cmd = decompressionCmd.Replace("{AimPath}", aimPath).Replace("{RarPath}", rarFile);

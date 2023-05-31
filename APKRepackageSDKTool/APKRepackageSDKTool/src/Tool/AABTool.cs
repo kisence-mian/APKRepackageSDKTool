@@ -77,7 +77,7 @@ public class AABTool
 
         //再然后解压base.apk
         string tempBasePath = tempDirPath + "\\base";
-        rar.Decompression(baseApkPath, tempBasePath);
+        rar.Decompression(baseApkPath, tempBasePath,true);
 
         //再然后是资源整合拷贝等
         string targetPath = tempDirPath + "\\TempBase";

@@ -311,6 +311,11 @@ namespace APKRepackageSDKTool
             System.Diagnostics.Process.Start(cachePath);
         }
 
+        private void Button_OpenCurrentPath_Click(object sender, RoutedEventArgs e)
+        {
+            string cachePath = PathTool.GetCurrentPath();
+            System.Diagnostics.Process.Start(cachePath);
+        }
 
 
         #endregion
@@ -540,6 +545,7 @@ namespace APKRepackageSDKTool
         {
             System.Windows.Clipboard.SetDataObject(this.output);
         }
+
 
 
     }

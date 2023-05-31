@@ -101,9 +101,10 @@
                     <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,272,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
 
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
-                    <Button Content="打开APK打包缓存目录" Margin="10,0,10,34" Click="Button_OpenAPKCachePath_Click" Height="19" VerticalAlignment="Bottom"/>
+                    <Button Content="打开当前目录" Margin="10,0,10,34" Click="Button_OpenCurrentPath_Click" Height="19" VerticalAlignment="Bottom"/>
+                    <Button Content="打开APK打包缓存目录" Margin="10,0,10,58" Click="Button_OpenAPKCachePath_Click" VerticalAlignment="Bottom"/>
                     <!--<Button Content="测试" Height="100" Width="75" Margin="10,0,0,58" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_ClickTest"/>-->
-               </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
