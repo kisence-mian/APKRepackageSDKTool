@@ -126,6 +126,11 @@ namespace APKRepackageSDKTool
                                 //移除旧的时间戳
                                 fileName = Regex.Replace(fileName, @"_\d+_\d+", "");
 
+                                if(EditorData.isRemoveSpace)
+                                {
+                                    fileName = fileName.Replace(" ", "");
+                                }
+
                                 //加时间戳
                                 finalPath = repackageInfo.exportPath + "\\" + FileTool.RemoveExpandName(fileName) + version + "_" + channelInfo.suffix+"_" + now.ToString("yyyyMMdd_HHmm") + ".apk";
                             }

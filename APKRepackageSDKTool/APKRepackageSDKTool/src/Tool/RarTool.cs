@@ -18,6 +18,9 @@ public class RarTool
     string compressionCmd = @"360zip.exe -ar {FilePath} {ZipPath}";
     //string addFileCmd = @"360zip.exe -ar {FilePath} {ZipPath}";
 
+    // 压缩 Bandizip.exe c -y {ZipPath} {FilePath} 
+    // 解压 Bandizip.exe x -y -o:{AimPath}  {RarPath} 
+
     public RarTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
     {
         this.callBack = callBack;

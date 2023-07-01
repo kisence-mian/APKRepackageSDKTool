@@ -464,6 +464,7 @@ namespace APKRepackageSDKTool
             Text_RarDocompressCmd.Text = EditorData._RARdocompressCmd;
 
             CheckBox_IsTimeStamp.IsChecked = EditorData.IsTimeStamp;
+            CheckBox_RemoveSpace.IsChecked = EditorData.IsRemoveSpace;
             CheckBox_IsPutCMD.IsChecked = EditorData.IsOutPutCMD;
             CheckBox_IsAutoInstall.IsChecked = EditorData.IsAutoInstall;
 
@@ -503,6 +504,11 @@ namespace APKRepackageSDKTool
         private void ChexkBox_IsTimeStamp_Checked(object sender, RoutedEventArgs e)
         {
             EditorData.IsTimeStamp = CheckBox_IsTimeStamp.IsChecked ?? true;
+        }
+
+        private void CheckBox_RemoveSpace_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorData.IsRemoveSpace = CheckBox_RemoveSpace.IsChecked ?? true;
         }
 
         private void ChexkBox_IsPutCMD_Checked(object sender, RoutedEventArgs e)
@@ -545,7 +551,6 @@ namespace APKRepackageSDKTool
         {
             System.Windows.Clipboard.SetDataObject(this.output);
         }
-
 
 
     }

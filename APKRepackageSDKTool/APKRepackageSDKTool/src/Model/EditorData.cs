@@ -44,6 +44,7 @@ namespace APKRepackageSDKTool
         static string RARcompressCmd = "360zip.exe -ar {FilePath} {ZipPath}";
 
         public static bool isTimeStamp = false;      //时间戳
+        public static bool isRemoveSpace = false;    //移除空格
         public static bool isOutPutCMD = false;      //输出原始命令
         public static bool isAutoInstall = false;      //自动安装
 
@@ -203,6 +204,21 @@ namespace APKRepackageSDKTool
 
         }
 
+        public static bool IsRemoveSpace 
+        {
+            get
+            {
+                JudgeInit();
+                return isRemoveSpace;
+            }
+
+            set
+            {
+                isRemoveSpace = value;
+                RecordManager.SaveRecord(c_ConfigRecord, "IsRemoveSpace", isRemoveSpace);
+            }
+        }
+
         public static bool IsOutPutCMD 
         { 
             get
@@ -343,6 +359,8 @@ namespace APKRepackageSDKTool
 
 
 
+
+
         #endregion
 
         #region 初始化
@@ -371,6 +389,7 @@ namespace APKRepackageSDKTool
                 isOutPutCMD = RecordManager.GetRecord(c_ConfigRecord, "IsOutPutCMD", false);
                 isAutoInstall = RecordManager.GetRecord(c_ConfigRecord, "IsAutoInstall", false);
                 isTimeStamp = RecordManager.GetRecord(c_ConfigRecord, "IsTimeStamp", false);
+                isRemoveSpace = RecordManager.GetRecord(c_ConfigRecord, "IsRemoveSpace", false);
 
                 baksmaliVersion = RecordManager.GetRecord(c_ConfigRecord, "BaksmaliVersion", "baksmali-2.1.3.jar");
                 apktoolVersion = RecordManager.GetRecord(c_ConfigRecord, "ApktoolVersion", "apktool_2.5.0");

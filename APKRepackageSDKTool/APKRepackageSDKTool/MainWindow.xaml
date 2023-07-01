@@ -97,12 +97,13 @@
                     <TextBox x:Name="Text_RarDocompressCmd" TextChanged="Text_RarDocompressCmd_TextChanged" Margin="130,202,400,0"   InputMethod.IsInputMethodEnabled="False" TextWrapping="NoWrap" RenderTransformOrigin="0.673,4.796" MaxLines="1" Height="19" VerticalAlignment="Top"/>
 
                     <CheckBox x:Name="CheckBox_IsTimeStamp" Content="APK名称添加时间戳" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsTimeStamp_Checked" Checked="ChexkBox_IsTimeStamp_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,252,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
-                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,272,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsPutCMD" Content="输出原始命令" HorizontalAlignment="Left" Margin="10,272,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsPutCMD_Checked" Checked="ChexkBox_IsPutCMD_Checked" RenderTransformOrigin="0.993,0.225" />
+                    <CheckBox x:Name="CheckBox_IsAutoInstall" Content="自动安装" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top" Unchecked="ChexkBox_IsAutoInstall_Checked" Checked="ChexkBox_IsAutoInstall_Checked" RenderTransformOrigin="0.993,0.225" />
 
                     <Button Content="保存" Margin="10,0,10,10" Click="Button_ClickSave" Height="19" VerticalAlignment="Bottom"/>
                     <Button Content="打开当前目录" Margin="10,0,10,34" Click="Button_OpenCurrentPath_Click" Height="19" VerticalAlignment="Bottom"/>
                     <Button Content="打开APK打包缓存目录" Margin="10,0,10,58" Click="Button_OpenAPKCachePath_Click" VerticalAlignment="Bottom"/>
+                    <CheckBox x:Name="CheckBox_RemoveSpace" Content="输出名称去掉空格" HorizontalAlignment="Left" Margin="44,252,0,0" VerticalAlignment="Top"  RenderTransformOrigin="0.993,0.225" Checked="CheckBox_RemoveSpace_Checked" Unchecked="CheckBox_RemoveSpace_Checked"/>
                     <!--<Button Content="测试" Height="100" Width="75" Margin="10,0,0,58" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_ClickTest"/>-->
                 </Grid>
             </TabItem>

@@ -223,6 +223,11 @@ public class CompileTool
 
             File.Delete(jarPath);
 
+            if(!File.Exists(dexPath))
+            {
+                ErrorOutPut("没有输出Dex 文件，请检查D8 或者Dx 工具是否正常工作");
+            }
+
             OutPut("dex to smali");
             //dex to smali
             cmd.Execute("java -jar baksmali-2.1.3.jar --o=\"" + aimPath + "/smali\" " + dexPath);
