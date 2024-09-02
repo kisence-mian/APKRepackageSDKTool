@@ -22,6 +22,7 @@ namespace APKRepackageSDKTool
             //APK路径正确性校验
             if(string.IsNullOrEmpty(info.apkPath))
             {
+                Console.WriteLine("APK不能为空！");
                 MessageBox.Show("APK不能为空！");
             }
 

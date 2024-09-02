@@ -66,6 +66,9 @@ namespace APKRepackageSDKTool
 
                 //更新界面
                 UpdateContent();
+
+                //读取命令
+                RepackageAPKByCmd();
             }
             catch(Exception ex)
             {
@@ -393,6 +396,8 @@ namespace APKRepackageSDKTool
 
         void RepackCallBack(float progress, string content, string output)
         {
+            Console.WriteLine(output);
+
             this.progress = progress;
             this.content = content;
 
@@ -497,6 +502,138 @@ namespace APKRepackageSDKTool
             {
                 ListBox_channel.ItemsSource = null;
             }
+        }
+
+        #endregion
+
+        #region 命令行打包
+
+        public static Dictionary<string, string> ParseArguments(string[] args)
+        {
+            var arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].StartsWith("-") && i + 1 < args.Length)
+                {
+                    string key = args[i];
+                    string value = args[i + 1];
+
+                    // 确保下一个值不是另一个开关参数
+                    if (!value.StartsWith("-"))
+                    {
+                        arguments[key] = value;
+                        i++; // 跳过值，因为它已处理
+                    }
+                    else
+                    {
+                        arguments[key] = null; // 处理类似 `-flag` 的情况（没有值）
+                    }
+                }
+            }
+
+            return arguments;
+        }
+
+        /// <summary>
+        /// 接受来自命令行的打包
+        /// </summary>
+        public void RepackageAPKByCmd()
+        {
+            var dict = ParseArguments(Environment.GetCommandLineArgs());
+
+            //没有任何命令启动 
+            if (dict.Count == 0)
+            {
+                return;
+            }
+
+            //获取游戏名称 -gameName
+            string gameName = dict["-gameName"];
+            //获取渠道 -channel
+            string channelName = dict["-channelName"];
+            //获取apk路径 -apkPath
+            string apkPath = dict["-apkPath"];
+            //获取导出路径 -outPath
+            string outPath = dict["-outPath"];
+
+            if (!isBuilding)
+            {
+                //获取游戏
+                EditorData.SetChannelList(gameName);
+
+                //获取ChannelInfo
+                List<ChannelInfo> list = new List<ChannelInfo>();
+                for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
+                {
+                    if (EditorData.CurrentGameChannelList[i].channelName == channelName)
+                    {
+                        list.Add(EditorData.CurrentGameChannelList[i]);
+                    }
+                }
+
+                if (list.Count == 0)
+                {
+                    Console.WriteLine("没有渠道被选中");
+                    return;
+                }
+
+                RepackageInfo ri = new RepackageInfo();
+                ri.apkPath = apkPath;
+                ri.exportPath = outPath;
+
+                repackageManager.Repackage(ri, list, RepackCallBackByCmd, RepackCallBackErrorByCmd);
+                isBuilding = true;
+                UpdateRepackButton();
+
+                currentTotalStep = list.Count * c_totalStep;
+            }
+            else
+            {
+                Console.WriteLine("存在正在打包的项目！");
+            }
+        }
+
+
+        void RepackCallBackByCmd(float progress, string content, string output)
+        {
+            Console.WriteLine(output);
+
+            this.progress = progress;
+            this.content = content;
+
+            line++;
+            this.output += "[" + line + "]" + output + "\n";
+
+            Action ac = new Action(UpdateContent);
+            Dispatcher.BeginInvoke(ac);
+
+            //打包完成退出程序
+            if(content == "完成")
+            {
+                System.Environment.Exit(0);
+            }
+        }
+
+        void RepackCallBackErrorByCmd(float progress, string content, string output)
+        {
+            Console.WriteLine(output);
+
+            this.progress = progress;
+            this.content = "打包异常";
+
+            line++;
+            this.output += "<Error>[" + line + "]" + output + "\n";
+            isBuilding = false;
+            progress = 0;
+
+            Action ac = new Action(UpdateContent);
+            Dispatcher.BeginInvoke(ac);
+
+            repackageManager.CancelRepack();
+
+            //出现错误退出程序
+            System.Environment.Exit(0);
         }
 
         #endregion
