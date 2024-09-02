@@ -2,5 +2,16 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
+    <PublishUrlHistory>publish\</PublishUrlHistory>
+    <InstallUrlHistory />
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>zh-CN</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>-gameName 最终坚守 -channelName 4399-上线 -apkPath "Y:\Resources\Export\Guardians Of Holme\Android\China\Guardians Of Holme_v1.0.13_1_Base_20240902_1103_Android_China.apk" -outPath G:\Work\FN_Repack</StartArguments>
   </PropertyGroup>
 </Project>

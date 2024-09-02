@@ -3,32 +3,46 @@
   "WorkspaceRootPath": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\tool\\compiletool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\tool\\compiletool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|f:\\tool\\apkrepackagesdktool\\apkrepackagesdktool\\apkrepackagesdktool\\src\\tool\\rartool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|f:\\tool\\apkrepackagesdktool\\apkrepackagesdktool\\apkrepackagesdktool\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|f:\\tool\\apkrepackagesdktool\\apkrepackagesdktool\\apkrepackagesdktool\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kisence\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\tool\\rartool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\tool\\rartool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|APKRepackageSDKTool||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\model\\editordata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\model\\editordata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\repackagemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\repackagemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|f:\\tool\\apkrepackagesdktool\\apkrepackagesdktool\\apkrepackagesdktool\\src\\tool\\compiletool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\tool\\compiletool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\tool\\aabtool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\tool\\aabtool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\model\\editordata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\model\\editordata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\channeltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,10 +51,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\tool\\extrafiletool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\tool\\extrafiletool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\obj\\Debug\\MainWindow.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:APKRepackageSDKTool\\obj\\Debug\\MainWindow.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\minijson.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -87,9 +97,6 @@
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\src\\tool\\mergexmltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|APKRepackageSDKTool||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\filetool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:apkrepackagesdktool\\src\\filetool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -100,6 +107,9 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\pathtool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:apkrepackagesdktool\\src\\pathtool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|f:\\tool\\apkrepackagesdktool\\apkrepackagesdktool\\apkrepackagesdktool\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|6185191f-1008-4fb2-a715-3a4e4f27e610"
     }
   ],
   "DocumentGroupContainers": [
@@ -109,59 +119,123 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ResourcePart.cs",
+              "DocumentMoniker": "C:\\Users\\kisence\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs",
+              "ToolTip": "C:\\Users\\kisence\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs [\u53EA\u8BFB]",
+              "ViewState": "AQIAACIAAAAAAAAAAAAswCsAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-02T10:40:06.128Z",
+              "EditorCaption": " [\u53EA\u8BFB]"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "App.xaml",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\App.xaml",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\App.xaml",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\App.xaml",
+              "RelativeToolTip": "APKRepackageSDKTool\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-09-02T06:18:42.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\App.xaml.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\App.xaml.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\App.xaml.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\App.xaml.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAAAoAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-02T06:18:41.472Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\MainWindow.xaml.cs",
               "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml.cs",
               "RelativeToolTip": "APKRepackageSDKTool\\MainWindow.xaml.cs",
-              "ViewState": "AQIAAPEBAAAAAAAAAAAAAPkBAABMAAAA",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADjSURBVDhPY0AGretv/t9x7tl/KJd0sOfii/\u002Bimfv\u002Bbzv7lGhDGBlid2Eo1pTkZNiSLsVQWVkJFWFgYGdnZygoKGAwNjZmhAphgt0XnsFd8P79\u002B/9Pnz6F47CwsP/R0dH/z549i2IhE5QGg1P3PzMsTtVgsFTiYvj27RtUFAF\u002B//7N0NfXx4BsCIoBIVoMDOaKnFg1wwDIkAkTJkB5oDBAAnFxcf/b29uhPNygsLCQYdWqVWC9KC748eMHlEU8QDGAHDBqABUMQEkHmZmZ/9\u002B\u002BfQvl4QbCwsIM06dPx50niAcMDADfJl5g9BqhpwAAAABJRU5ErkJggg==",
-              "WhenOpened": "2024-06-28T07:05:07.846Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "FileTool.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\FileTool.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\FileTool.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\FileTool.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\src\\FileTool.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4CAAAAAAAA",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABvSURBVDhPY6AqCAsL\u002B//06dP/2Og3b978hypDAYxQGgxAiqFMrICdnZ1BREQERQ8TlAaDwsJCKAsVwMSzsrIY0F1CkgtgANklJLkA2SUwQJYLQEBaWpp4F6ADZHWjLqCCC1AAvryATkO1DDhgYAAAlvRiHkD5NeAAAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "WhenOpened": "2024-06-28T07:05:08.005Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ChannelTool.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\ChannelTool.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\ChannelTool.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\ChannelTool.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\src\\ChannelTool.cs",
-              "ViewState": "AQIAAFcCAAAAAAAAAAAuwF4CAAAYAAAA",
+              "ViewState": "AQIAANIBAAAAAAAAAAAiwLYBAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-28T07:05:08.006Z"
+              "WhenOpened": "2024-06-28T07:05:07.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\MainWindow.xaml",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml",
+              "RelativeToolTip": "APKRepackageSDKTool\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-06-28T07:05:08.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CompileTool.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
+              "ViewState": "AQIAADQAAAAAAAAAAAAcwIIAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-28T07:05:08.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AABTool.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
+              "ViewState": "AQIAADMAAAAAAAAAAAAowE8AAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-28T07:05:08.01Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RarTool.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAiwBcAAABJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-28T07:05:08.1Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "RepackageManager.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\RepackageManager.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\RepackageManager.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\RepackageManager.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\src\\RepackageManager.cs",
-              "ViewState": "AQIAAHQAAAAAAAAAAAAAwIAAAAA7AAAA",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADtSURBVDhPYxgFCHDh4YX/sQtj/6u3qP9XblL\u002BHzk/8j9UiuHtx7f/VZpVwHxkNggwgohLjy79D18SzmAua86QZJbEwM/Bz3D91XWGCNMIRpAGo34jsGJkwMrMynCn9g5YP0PK0pT/3tO9/3/58gVuMjLA5wImEHH68WkGN3U3Bh4eHoiJJACwAb/\u002B/gI7CRuAeeH3398M8g3ycDayKxjC5oX9D54TjNX5IIDPC2Ann7x78n/E4ggGDw0PhgiDCLBrLj2/xJBhl0HQS3AFe67t\u002BT/lyBSGO2/uMHCxcTHYK9szdAd2kxwmIw8wMAAAESl0qwYO77cAAAAASUVORK5CYII=",
-              "WhenOpened": "2024-06-28T07:05:08.007Z"
+              "Title": "APKRepackageSDKTool",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
+              "RelativeToolTip": "APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2023-01-16T03:14:31.271Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 22,
               "Title": "MergeResTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\MergeResTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\MergeResTool.cs",
@@ -173,80 +247,57 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\MainWindow.xaml",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml",
-              "RelativeToolTip": "APKRepackageSDKTool\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-06-28T07:05:08.009Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CompileTool.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\src\\Tool\\CompileTool.cs",
-              "ViewState": "AQIAAJUAAAAAAAAAAAAiwJ8AAAB8AAAA",
+              "DocumentIndex": 7,
+              "Title": "RepackageManager.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\RepackageManager.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\RepackageManager.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\RepackageManager.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\src\\RepackageManager.cs",
+              "ViewState": "AQIAAEcBAAAAAAAAAAAMwFABAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-28T07:05:08.009Z",
+              "WhenOpened": "2024-06-28T07:05:08.007Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AABTool.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\src\\Tool\\AABTool.cs",
-              "ViewState": "AQIAAEIAAAAAAAAAAAAuwE8AAAA4AAAA",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADtSURBVDhPYxgFCHDh4YX/sQtj/6u3qP9XblL\u002BHzk/8j9UiuHtx7f/VZpVwHxkNggwgohLjy79D18SzmAua86QZJbEwM/Bz3D91XWGCNMIRpAGo34jsGJkwMrMynCn9g5YP0PK0pT/3tO9/3/58gVuMjLA5wImEHH68WkGN3U3Bh4eHoiJJACwAb/\u002B/gI7CRuAeeH3398M8g3ycDayKxjC5oX9D54TjNX5IIDPC2Ann7x78n/E4ggGDw0PhgiDCLBrLj2/xJBhl0HQS3AFe67t\u002BT/lyBSGO2/uMHCxcTHYK9szdAd2kxwmIw8wMAAAESl0qwYO77cAAAAASUVORK5CYII=",
-              "WhenOpened": "2024-06-28T07:05:08.01Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "RarTool.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAABJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-28T07:05:08.1Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "MainWindow.g.cs",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\obj\\Debug\\MainWindow.g.cs",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\obj\\Debug\\MainWindow.g.cs",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\obj\\Debug\\MainWindow.g.cs",
-              "RelativeToolTip": "APKRepackageSDKTool\\obj\\Debug\\MainWindow.g.cs",
-              "ViewState": "AQIAAMUBAAAAAAAAAAAnwP0BAABrAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-28T07:05:08.269Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "EditorData.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Model\\EditorData.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Model\\EditorData.cs",
               "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Model\\EditorData.cs",
               "RelativeToolTip": "APKRepackageSDKTool\\src\\Model\\EditorData.cs",
-              "ViewState": "AQIAAHIBAAAAAAAAAAAAwIUBAABgAAAA",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADtSURBVDhPYxgFCHDh4YX/sQtj/6u3qP9XblL\u002BHzk/8j9UiuHtx7f/VZpVwHxkNggwgohLjy79D18SzmAua86QZJbEwM/Bz3D91XWGCNMIRpAGo34jsGJkwMrMynCn9g5YP0PK0pT/3tO9/3/58gVuMjLA5wImEHH68WkGN3U3Bh4eHoiJJACwAb/\u002B/gI7CRuAeeH3398M8g3ycDayKxjC5oX9D54TjNX5IIDPC2Ann7x78n/E4ggGDw0PhgiDCLBrLj2/xJBhl0HQS3AFe67t\u002BT/lyBSGO2/uMHCxcTHYK9szdAd2kxwmIw8wMAAAESl0qwYO77cAAAAASUVORK5CYII=",
-              "WhenOpened": "2024-06-28T07:05:08.27Z"
+              "ViewState": "AQIAAGIBAAAAAAAAAAAewLABAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-28T07:05:08.27Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
+              "Title": "ChannelTool.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\ChannelTool.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\ChannelTool.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\ChannelTool.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\src\\ChannelTool.cs",
+              "ViewState": "AQIAAFcCAAAAAAAAAAAuwF4CAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-28T07:05:08.006Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "FileTool.cs",
+              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\FileTool.cs",
+              "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\FileTool.cs",
+              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\FileTool.cs",
+              "RelativeToolTip": "APKRepackageSDKTool\\src\\FileTool.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4CAAAAAAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABvSURBVDhPY6AqCAsL\u002B//06dP/2Og3b978hypDAYxQGgxAiqFMrICdnZ1BREQERQ8TlAaDwsJCKAsVwMSzsrIY0F1CkgtgANklJLkA2SUwQJYLQEBaWpp4F6ADZHWjLqCCC1AAvryATkO1DDhgYAAAlvRiHkD5NeAAAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "WhenOpened": "2024-06-28T07:05:08.005Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "ExtraFileTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\ExtraFileTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\ExtraFileTool.cs",
@@ -258,7 +309,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "DeJson.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\DeJson.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\DeJson.cs",
@@ -270,7 +321,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "PathTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\PathTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\PathTool.cs",
@@ -282,7 +333,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "MiniJSON.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\MiniJSON.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\MiniJSON.cs",
@@ -294,7 +345,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "ChannelTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\ChannelTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\ChannelTool.cs",
@@ -306,7 +357,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "CmdService.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\CmdService.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\CmdService.cs",
@@ -318,18 +369,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "APKRepackageSDKTool",
-              "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
-              "RelativeDocumentMoniker": "APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
-              "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
-              "RelativeToolTip": "APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADlSURBVDhPYxhwwAgiMjMz/799\u002BxYsQCwQFhZmmD59OiMLiAPS3N/fD5YgFhQWFoJpJjBJAUAx4NffXwwTjk9gCF0RyhC9Jpph953dYHGr2VYoNDJAMWDG6RkMn39\u002BZlgWtoxhachSBhsFGwzN6IagGLDz9k6GTLNMBlYmVjCfk4WT4VjqMTAbnYYBFAN\u002B/vnJwMIEDlc4IMkFFnIWDPPPzWf4\u002B/8vw////xm\u002B/PpCmguKrYoZ3nx7wxCyPIQhak0Uw7ln58DiuDSDAIp7BTkFGVpdWqE84gCKC8gBFCdlKHfAAAMDAL0bWuvhSIWKAAAAAElFTkSuQmCC",
-              "WhenOpened": "2023-01-16T03:14:31.271Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 23,
               "Title": "MergeXMLTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\MergeXMLTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\MergeXMLTool.cs",
@@ -341,7 +381,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "SdkEditorWindow.xaml",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\UI\\SdkEditorWindow.xaml",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\UI\\SdkEditorWindow.xaml",
@@ -352,7 +392,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "ChannelEditorWindow.xaml.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\ChannelEditorWindow.xaml.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\ChannelEditorWindow.xaml.cs",
@@ -364,7 +404,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 20,
               "Title": "YmlTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\YML\\YmlTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\YML\\YmlTool.cs",
@@ -376,7 +416,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 21,
               "Title": "YML.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\YML\\YML.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\YML\\YML.cs",
@@ -388,7 +428,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "SplitDexTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\SplitDexTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\SplitDexTool.cs",
@@ -400,7 +440,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "AndroidTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\AndroidTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\AndroidTool.cs",
