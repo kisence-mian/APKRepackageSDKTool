@@ -540,6 +540,9 @@ namespace APKRepackageSDKTool
         /// </summary>
         public void RepackageAPKByCmd()
         {
+            //隐藏界面
+            this.Hide();
+
             var dict = ParseArguments(Environment.GetCommandLineArgs());
 
             //没有任何命令启动 

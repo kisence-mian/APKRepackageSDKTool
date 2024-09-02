@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|f:\\tool\\apkrepackagesdktool\\apkrepackagesdktool\\apkrepackagesdktool\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,10 +27,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|APKRepackageSDKTool||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|solutionrelative:apkrepackagesdktool\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EB2480D-CDCC-4B70-984F-814FA54EF689}|APKRepackageSDKTool\\APKRepackageSDKTool.csproj|F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\apkrepackagesdktool\\src\\repackagemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -123,7 +123,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ResourcePart.cs",
               "DocumentMoniker": "C:\\Users\\kisence\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs",
               "ToolTip": "C:\\Users\\kisence\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs [\u53EA\u8BFB]",
@@ -134,7 +134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "App.xaml",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\App.xaml",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\App.xaml",
@@ -146,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\App.xaml.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\App.xaml.cs",
@@ -165,14 +165,14 @@
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\MainWindow.xaml.cs",
               "ToolTip": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml.cs",
               "RelativeToolTip": "APKRepackageSDKTool\\MainWindow.xaml.cs",
-              "ViewState": "AQIAANIBAAAAAAAAAAAiwLYBAAAsAAAA",
+              "ViewState": "AQIAABICAAAAAAAAAAAuwB8CAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-28T07:05:07.846Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\MainWindow.xaml",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\MainWindow.xaml",
@@ -210,7 +210,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "RarTool.cs",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\src\\Tool\\RarTool.cs",
@@ -223,7 +223,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "APKRepackageSDKTool",
               "DocumentMoniker": "F:\\Tool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
               "RelativeDocumentMoniker": "APKRepackageSDKTool\\APKRepackageSDKTool.csproj",
