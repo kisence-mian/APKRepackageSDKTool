@@ -540,9 +540,6 @@ namespace APKRepackageSDKTool
         /// </summary>
         public void RepackageAPKByCmd()
         {
-            //隐藏界面
-            this.Hide();
-
             var dict = ParseArguments(Environment.GetCommandLineArgs());
 
             //没有任何命令启动 
@@ -550,6 +547,9 @@ namespace APKRepackageSDKTool
             {
                 return;
             }
+
+            //隐藏界面
+            this.Hide();
 
             //获取游戏名称 -gameName
             string gameName = dict["-gameName"];
@@ -560,24 +560,39 @@ namespace APKRepackageSDKTool
             //获取导出路径 -outPath
             string outPath = dict["-outPath"];
 
+            Console.WriteLine("gameName:"+ gameName + " channelName:" + channelName  + " apkPath:" + apkPath + " outPath:" + outPath);
+
             if (!isBuilding)
             {
+                Console.WriteLine("游戏数量:" + EditorData.GameList.Count);
+                //for (int i = 0; i < EditorData.GameList.Count; i++)
+                //{
+                //    Console.WriteLine(EditorData.GameList[i].GameName + " " + (EditorData.GameList[i].GameName == gameName));
+                //}
+
                 //获取游戏
                 EditorData.SetChannelList(gameName);
 
+                Console.WriteLine("渠道数量 :" + EditorData.CurrentGameChannelList.Count);
+
                 //获取ChannelInfo
-                List<ChannelInfo> list = new List<ChannelInfo>();
+                List <ChannelInfo> list = new List<ChannelInfo>();
                 for (int i = 0; i < EditorData.CurrentGameChannelList.Count; i++)
                 {
                     if (EditorData.CurrentGameChannelList[i].channelName == channelName)
                     {
                         list.Add(EditorData.CurrentGameChannelList[i]);
                     }
+                    //else
+                    //{
+                    //    Console.WriteLine("渠道名称不匹配 " + EditorData.CurrentGameChannelList[i].channelName);
+                    //}
                 }
 
                 if (list.Count == 0)
                 {
                     Console.WriteLine("没有渠道被选中");
+                    System.Environment.Exit(0);
                     return;
                 }
 
@@ -594,6 +609,7 @@ namespace APKRepackageSDKTool
             else
             {
                 Console.WriteLine("存在正在打包的项目！");
+                System.Environment.Exit(0);
             }
         }
 
@@ -612,8 +628,9 @@ namespace APKRepackageSDKTool
             Dispatcher.BeginInvoke(ac);
 
             //打包完成退出程序
-            if(content == "完成")
+            if(content.Contains("完成"))
             {
+                Console.WriteLine("完成并退出");
                 System.Environment.Exit(0);
             }
         }

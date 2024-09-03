@@ -249,8 +249,6 @@ namespace APKRepackageSDKTool.src.YML
                 findChildren(node, fNodeList);
             }
 
-            Console.WriteLine("完成");
-
             // 指针指向格式化后的
             nodeList = fNodeList;
         }
