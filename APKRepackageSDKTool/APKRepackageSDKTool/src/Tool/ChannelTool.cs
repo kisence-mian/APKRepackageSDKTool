@@ -390,29 +390,155 @@ namespace APKRepackageSDKTool
 
         void ChangeAppIcon(string filePath, string appIcon)
         {
-            string exportPath = filePath + "\\res\\drawable-hdpi-v4\\app_icon.png";
+            //适配mipmap的方式
+            string prefix = "mipmap";
+            string exportPath = filePath + "\\res\\" + prefix + "-hdpi\\app_icon.png";
+
+            //适配drawable的方式
+            if (File.Exists(exportPath))
+            {
+                OutPut("替换 mipmap 格式 icon");
+                ChangeMipMapAppIcon(exportPath, appIcon);
+            }
+            //else
+            //{
+            //    OutPut("没有找到 mipmap 文件 " + exportPath);
+            //}
+
+            prefix = "drawable";
+            exportPath = filePath + "\\res\\" + prefix + "-hdpi-v4\\app_icon.png";
+
+            if (File.Exists(exportPath))
+            {
+                OutPut("替换 drawable 格式 icon");
+                ChangeDrwableAppIcon(exportPath, appIcon);
+            }
+            //else
+            //{
+            //    OutPut("没有找到 drawable 文件 " + exportPath);
+            //}
+        }
+
+        void ChangeDrwableAppIcon(string filePath, string appIcon)
+        {
+            string prefix = "drawable";
+
+            string exportPath = filePath + "\\res\\" + prefix + "-hdpi-v4\\";
             if (File.Exists(exportPath))
                 ExportImage(exportPath, appIcon, 72, 72);
 
-            exportPath = filePath + "\\res\\drawable-ldpi-v4\\app_icon.png";
+            exportPath = filePath + "\\res\\" + prefix + "-ldpi-v4\\app_icon.png";
             if (File.Exists(exportPath))
                 ExportImage(exportPath, appIcon, 36, 36);
 
-            exportPath = filePath + "\\res\\drawable-mdpi-v4\\app_icon.png";
+            exportPath = filePath + "\\res\\" + prefix + "-mdpi-v4\\app_icon.png";
             if (File.Exists(exportPath))
                 ExportImage(exportPath, appIcon, 48, 48);
 
-            exportPath = filePath + "\\res\\drawable-xhdpi-v4\\app_icon.png";
+            exportPath = filePath + "\\res\\" + prefix + "-xhdpi-v4\\app_icon.png";
             if (File.Exists(exportPath))
                 ExportImage(exportPath, appIcon, 96, 96);
 
-            exportPath = filePath + "\\res\\drawable-xxhdpi-v4\\app_icon.png";
-            if(File.Exists(exportPath))
+            exportPath = filePath + "\\res\\" + prefix + "-xxhdpi-v4\\app_icon.png";
+            if (File.Exists(exportPath))
                 ExportImage(exportPath, appIcon, 144, 144);
 
-            exportPath = filePath + "\\res\\drawable-xxxhdpi-v4\\app_icon.png";
+            exportPath = filePath + "\\res\\" + prefix + "-xxxhdpi-v4\\app_icon.png";
             if (File.Exists(exportPath))
                 ExportImage(exportPath, appIcon, 192, 192);
+        }
+
+        void ChangeMipMapAppIcon(string filePath, string appIcon)
+        {
+            string prefix = "mipmap";
+            string iconName = "app_icon.png";
+            string roundIconName = "app_icon_round.png";
+
+            string exportPath = filePath + "\\res\\" + prefix + "-hdpi\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 72, 72);
+                ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-ldpi\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 36, 36);
+                ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-mdpi\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 48, 48);
+                ExportImage(exportPath + roundIconName, appIcon, 48, 48);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-xhdpi\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 96, 96);
+                ExportImage(exportPath + roundIconName, appIcon, 96, 96);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-xxhdpi\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 144, 144);
+                ExportImage(exportPath + roundIconName, appIcon, 144, 144);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-xxxhdpi\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 192, 192);
+                ExportImage(exportPath + roundIconName, appIcon, 192, 192);
+            }
+
+            //--------------------v4-----------------------------
+
+            exportPath = filePath + "\\res\\" + prefix + "-hdpi-v4\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 72, 72);
+                ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-ldpi-v4\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 36, 36);
+                ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-mdpi-v4\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 48, 48);
+                ExportImage(exportPath + roundIconName, appIcon, 48, 48);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-xhdpi-v4\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 96, 96);
+                ExportImage(exportPath + roundIconName, appIcon, 96, 96);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-xxhdpi-v4\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 144, 144);
+                ExportImage(exportPath + roundIconName, appIcon, 144, 144);
+            }
+
+            exportPath = filePath + "\\res\\" + prefix + "-xxxhdpi-v4\\";
+            if (File.Exists(exportPath))
+            {
+                ExportImage(exportPath + iconName, appIcon, 192, 192);
+                ExportImage(exportPath + roundIconName, appIcon, 192, 192);
+            }
         }
 
         void ChangeAppBanner(string filePath, string appBanner)

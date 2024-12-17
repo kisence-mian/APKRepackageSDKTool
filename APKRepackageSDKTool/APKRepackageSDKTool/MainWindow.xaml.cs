@@ -28,7 +28,7 @@ namespace APKRepackageSDKTool
         int currentTotalStep = 9;
 
         RepackageManager repackageManager = new RepackageManager();
-        bool isBuilding = false;
+        bool isBuilding = false;  
 
         string gameName;
         string apkPath;
