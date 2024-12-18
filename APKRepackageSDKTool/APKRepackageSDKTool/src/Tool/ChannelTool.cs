@@ -398,7 +398,7 @@ namespace APKRepackageSDKTool
             if (File.Exists(exportPath))
             {
                 OutPut("替换 mipmap 格式 icon");
-                ChangeMipMapAppIcon(exportPath, appIcon);
+                ChangeMipMapAppIcon(filePath, appIcon);
             }
             //else
             //{
@@ -411,7 +411,7 @@ namespace APKRepackageSDKTool
             if (File.Exists(exportPath))
             {
                 OutPut("替换 drawable 格式 icon");
-                ChangeDrwableAppIcon(exportPath, appIcon);
+                ChangeDrwableAppIcon(filePath, appIcon);
             }
             //else
             //{
@@ -455,89 +455,117 @@ namespace APKRepackageSDKTool
             string roundIconName = "app_icon_round.png";
 
             string exportPath = filePath + "\\res\\" + prefix + "-hdpi\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 72, 72);
                 ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+
+                OutPut("替换 " + exportPath + iconName);
+            }
+            else
+            {
+                OutPut("找不到 " + exportPath + iconName);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-ldpi\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 36, 36);
                 ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-mdpi\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 48, 48);
                 ExportImage(exportPath + roundIconName, appIcon, 48, 48);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-xhdpi\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 96, 96);
                 ExportImage(exportPath + roundIconName, appIcon, 96, 96);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-xxhdpi\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 144, 144);
                 ExportImage(exportPath + roundIconName, appIcon, 144, 144);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-xxxhdpi\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 192, 192);
                 ExportImage(exportPath + roundIconName, appIcon, 192, 192);
+
+                OutPut("替换 " + exportPath);
             }
 
             //--------------------v4-----------------------------
 
             exportPath = filePath + "\\res\\" + prefix + "-hdpi-v4\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 72, 72);
                 ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-ldpi-v4\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 36, 36);
                 ExportImage(exportPath + roundIconName, appIcon, 72, 72);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-mdpi-v4\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 48, 48);
                 ExportImage(exportPath + roundIconName, appIcon, 48, 48);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-xhdpi-v4\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 96, 96);
                 ExportImage(exportPath + roundIconName, appIcon, 96, 96);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-xxhdpi-v4\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 144, 144);
                 ExportImage(exportPath + roundIconName, appIcon, 144, 144);
+
+                OutPut("替换 " + exportPath);
             }
 
             exportPath = filePath + "\\res\\" + prefix + "-xxxhdpi-v4\\";
-            if (File.Exists(exportPath))
+            if (File.Exists(exportPath + iconName))
             {
                 ExportImage(exportPath + iconName, appIcon, 192, 192);
                 ExportImage(exportPath + roundIconName, appIcon, 192, 192);
+
+                OutPut("替换 " + exportPath);
             }
         }
 
