@@ -465,8 +465,10 @@ public class AndroidTool
                 if (ele.Name == "provider")
                 {
                     string name = ele.GetAttribute("name", "http://schemas.android.com/apk/res/android");
+                    //2025 0124 额外判断remove 节点
+                    string tnode = ele.GetAttribute("node", "http://schemas.android.com/tools");
 
-                    if(!HasApplicationNode(aimPath, "provider", name))
+                    if (!HasApplicationNode(aimPath, "provider", name) && tnode != "remove")
                     {
                         OutPut("I: 添加 provider " + name);
 

@@ -136,6 +136,9 @@ public class CompileTool
             options = "--min-api " + minAPILevel + " ";
         }
 
+        options += "--lib " + EditorData.GetAndroidJarPath(35) + " ";
+
+
         //Jar to dex
         if (!useD8)
         {
