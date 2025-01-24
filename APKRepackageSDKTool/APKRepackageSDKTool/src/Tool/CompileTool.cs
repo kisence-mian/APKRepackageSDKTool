@@ -21,10 +21,16 @@ public class CompileTool
     public bool assignMinAPILevel = false;
     public int minAPILevel = 16;
 
-    public CompileTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
+    public CompileTool(OutPutCallBack callBack, OutPutCallBack errorCallBack, ChannelInfo info)
     {
         this.callBack = callBack;
         this.errorCallBack = errorCallBack;
+
+        //指定编译版本
+        assignMinAPILevel = info.GetAssignMinAPILevel();
+        minAPILevel = info.GetMinAPILevel();
+        useD8 = info.IsUseD8;
+
 
         cmd = new CmdService(OutPut, errorCallBack);
         rar = new RarTool(callBack, errorCallBack);

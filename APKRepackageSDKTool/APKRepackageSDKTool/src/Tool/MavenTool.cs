@@ -29,7 +29,7 @@ public class MavenTool
     CompileTool ct;
     AndroidTool at;
 
-    public MavenTool(string mavenCachePath, OutPutCallBack callBack, OutPutCallBack errorCallBack)
+    public MavenTool(string mavenCachePath, OutPutCallBack callBack, OutPutCallBack errorCallBack, ChannelInfo info)
     {
         this.callBack = callBack;
         this.errorCallBack = errorCallBack;
@@ -56,8 +56,8 @@ public class MavenTool
 
         rt = new RarTool(callBack, errorCallBack);
         ht = new HttpTool(callBack, errorCallBack);
-        ct = new CompileTool(callBack, errorCallBack);
-        at = new AndroidTool(callBack, errorCallBack);
+        ct = new CompileTool(callBack, errorCallBack, info);
+        at = new AndroidTool(callBack, errorCallBack, info);
     }
 
     public void TestConnectMaven(List<string> mavenPathList)
@@ -107,10 +107,6 @@ public class MavenTool
     /// <param name="aimPath"></param>
     public void ExtractMavenFile(List<string> mavenPathList, List<string> mavenLibList, string aimPath, ChannelInfo info)
     {
-        //指定编译版本
-        ct.assignMinAPILevel = info.GetAssignMinAPILevel();
-        ct.minAPILevel = info.GetMinAPILevel();
-
         //先根据依赖收集一份maven清单
         //主要是为了版本号唯一
         List<string> mavenFinalList = CollectMavenList(mavenLibList);

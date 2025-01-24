@@ -18,22 +18,19 @@ namespace APKRepackageSDKTool
         AndroidTool androidTool;
         RarTool rarTool;
 
-        public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
+        public ChannelTool(OutPutCallBack callBack, OutPutCallBack errorCallBack, ChannelInfo info)
         {
             this.callBack = callBack;
             this.errorCallBack = errorCallBack;
 
-            compileTool = new CompileTool(callBack, errorCallBack);
-            androidTool = new AndroidTool(callBack, errorCallBack);
+            compileTool = new CompileTool(callBack, errorCallBack,info);
+            androidTool = new AndroidTool(callBack, errorCallBack, info);
             rarTool = new RarTool(callBack, errorCallBack);
         }
 
         public void ChannelLogic(string filePath, ChannelInfo info)
         {
-            //指定编译版本
-            compileTool.assignMinAPILevel = info.GetAssignMinAPILevel();
-            compileTool.minAPILevel = info.GetMinAPILevel();
-            compileTool.useD8 = info.IsUseD8;
+
 
             if (info.IsExecuteInvalidFile)
             {
@@ -1040,7 +1037,7 @@ namespace APKRepackageSDKTool
                 }
             }
 
-            MavenTool mt = new MavenTool(EditorData.MavenCachePath,callBack, errorCallBack);
+            MavenTool mt = new MavenTool(EditorData.MavenCachePath,callBack, errorCallBack, info);
 
             mt.ExtractMavenFile(mavenPath, mavenLibPath, filePath, info);
         }

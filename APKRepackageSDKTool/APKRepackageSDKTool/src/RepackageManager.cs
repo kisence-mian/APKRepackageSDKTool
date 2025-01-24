@@ -142,7 +142,7 @@ namespace APKRepackageSDKTool
                         }
 
                         CmdService cmd = new CmdService(OutPutCallBack, ErrorCallBack);
-                        ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack);
+                        ChannelTool channelTool = new ChannelTool(OutPutCallBack, ErrorCallBack, channelInfo);
 
                         //string apktool_version = "apktool_2.3.1";
                         //EditorData.AndroidSdkPath

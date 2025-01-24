@@ -1333,7 +1333,7 @@ namespace APKRepackageSDKTool.UI
 
             var thread = new Thread(() =>
             {
-                MavenTool mt = new MavenTool(EditorData.MavenCachePath,opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                MavenTool mt = new MavenTool(EditorData.MavenCachePath,opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
                 mt.TestConnectMaven(MavenPathList);
             });
 
@@ -1345,7 +1345,7 @@ namespace APKRepackageSDKTool.UI
             OutPutWindow opw = new OutPutWindow();
             opw.Show();
 
-            MavenTool mt = new MavenTool(EditorData.MavenCachePath, opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+            MavenTool mt = new MavenTool(EditorData.MavenCachePath, opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
 
             var thread = new Thread(() =>
             {
@@ -1573,7 +1573,7 @@ namespace APKRepackageSDKTool.UI
             string aimPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
             string aarName = FileTool.GetFileNameByPath(path);
 
-            AndroidTool ct = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+            AndroidTool ct = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
             opw.Show();
 
             //生成R表
@@ -1599,7 +1599,7 @@ namespace APKRepackageSDKTool.UI
             OutPutWindow opw = new OutPutWindow();
 
             string sdkPath = EditorData.SdkLibPath + "/" + EditorData.CurrentSDKConfig.sdkName;
-            AndroidTool ct = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+            AndroidTool ct = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
             opw.Show();
 
             string[] dires = Directory.GetDirectories(path);
@@ -1624,7 +1624,7 @@ namespace APKRepackageSDKTool.UI
 
             try
             {
-                CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
 
                 //路径有效性判断
 
@@ -1669,7 +1669,7 @@ namespace APKRepackageSDKTool.UI
                 if (Directory.Exists(path + "/res"))
                 {
                     MergeResTool mergeRes = new MergeResTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
-                    AndroidTool at = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                    AndroidTool at = new AndroidTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
 
                     //合并Res
                     mergeRes.Merge(path + "/res", sdkPath + "/res");
@@ -1990,7 +1990,7 @@ namespace APKRepackageSDKTool.UI
             OutPutWindow opw = new OutPutWindow();
             opw.Show();
 
-            CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+            CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
 
             List<string> allJar =  FileTool.GetAllFileNamesByPath(path, new string[] { "jar" }, true);
             for (int i = 0; i < allJar.Count; i++)
@@ -2017,7 +2017,7 @@ namespace APKRepackageSDKTool.UI
                 OutPutWindow opw = new OutPutWindow();
                 opw.Show();
 
-                CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut);
+                CompileTool cot = new CompileTool(opw.ReceviceOutPut, opw.ReceviceErrorOutPut, EditorData.CurrentChannel);
 
                 if(FileTool.GetExpandName( openFileDialog.FileName) == "aar")
                 {

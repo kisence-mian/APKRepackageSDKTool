@@ -33,7 +33,7 @@ namespace APKRepackageSDKTool
         static string mavenCachePath = "";
 
         static string jetifierPath;
-        static string apktoolVersion = "apktool_2.6.0";
+        static string apktoolVersion = "apktool_2.11.0";
         static string baksmaliVersion = "baksmali-2.4.0.jar";
         static string bundletoolVersion = "bundletool-all-1.9.0.jar";
 

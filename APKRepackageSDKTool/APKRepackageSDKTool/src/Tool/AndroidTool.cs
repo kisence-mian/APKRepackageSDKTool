@@ -15,12 +15,12 @@ public class AndroidTool
 
     CompileTool cot;
 
-    public AndroidTool(OutPutCallBack callBack, OutPutCallBack errorCallBack)
+    public AndroidTool(OutPutCallBack callBack, OutPutCallBack errorCallBack, ChannelInfo info)
     {
         this.callBack = callBack;
         this.errorCallBack = errorCallBack;
 
-        cot = new CompileTool(callBack, errorCallBack);
+        cot = new CompileTool(callBack, errorCallBack, info);
     }
 
     #region 生成R表
