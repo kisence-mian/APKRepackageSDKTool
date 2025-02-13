@@ -982,6 +982,7 @@ namespace APKRepackageSDKTool
         public List<KeyValue> xmlHeadList = new List<KeyValue>();
         public List<ActivityInfo> activityInfoList = new List<ActivityInfo>();
         public List<KeyValue> mainActivityPropertyList = new List<KeyValue>();
+        public List<KeyValue> queriesList = new List<KeyValue>();
         public List<ServiceInfo> serviceInfoList = new List<ServiceInfo>();
         public List<ProviderInfo> providerInfoList = new List<ProviderInfo>();
         public List<KeyValue> metaInfoList = new List<KeyValue>();

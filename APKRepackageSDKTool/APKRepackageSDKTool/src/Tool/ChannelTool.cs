@@ -754,6 +754,13 @@ namespace APKRepackageSDKTool
                 androidTool.AddProvider(filePath, config.providerInfoList[i], channelInfo, info);
             }
 
+            //添加queries
+            for (int i = 0; i < config.queriesList.Count; i++)
+            {
+                OutPut("添加queries " + info.sdkName + " " + config.queriesList[i].key);
+                androidTool.AddQueries(filePath, config.queriesList[i], channelInfo, info);
+            }
+
             //添加Meta字段
             for (int i = 0; i < config.metaInfoList.Count; i++)
             {

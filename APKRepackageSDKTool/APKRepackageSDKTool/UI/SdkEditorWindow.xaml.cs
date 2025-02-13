@@ -32,6 +32,7 @@ namespace APKRepackageSDKTool.UI
         ServiceList serviceList;
         KeyValueList mainActivityPropertyList;
         ProviderList providerList;
+        KeyValueList queriesList;
         KeyValueList metaList;
         StringList libraryList;
         KeyValueList customJavaList;
@@ -48,6 +49,7 @@ namespace APKRepackageSDKTool.UI
         KeyValue currentMainActivityProperty;
         ServiceInfo currentServiceInfo;
         ProviderInfo currentProviderInfo;
+        KeyValue currentQueriesInfo;
         KeyValue currentMetaContent;
         KeyValue currentJavaContent;
         KeyValue currentManifestHeadContent;
@@ -284,6 +286,35 @@ namespace APKRepackageSDKTool.UI
                 for (int i = 0; i < providerList.Count; i++)
                 {
                     EditorData.CurrentSDKConfig.providerInfoList.Add(providerList[i]);
+                }
+            }
+        }
+
+        private KeyValueList _QueriesInfo
+        {
+            get
+            {
+                if (queriesList == null)
+                {
+                    queriesList = new KeyValueList();
+                    for (int i = 0; i < EditorData.CurrentSDKConfig.queriesList.Count; i++)
+                    {
+                        queriesList.Add(EditorData.CurrentSDKConfig.queriesList[i]);
+                    }
+                }
+
+                return queriesList;
+            }
+
+            set
+            {
+                queriesList = value;
+                queriesList.Change();
+
+                EditorData.CurrentSDKConfig.queriesList.Clear();
+                for (int i = 0; i < queriesList.Count; i++)
+                {
+                    EditorData.CurrentSDKConfig.queriesList.Add(queriesList[i]);
                 }
             }
         }
@@ -567,6 +598,7 @@ namespace APKRepackageSDKTool.UI
             ListBox_ActivtyList.ItemsSource = _ActivityList;
             ListBox_serviceList.ItemsSource = _ServiceInfo;
             ListBox_ProviderList.ItemsSource = _ProviderInfo;
+            ListBox_QueriesList.ItemsSource= _QueriesInfo;
             ListBox_MetaList.ItemsSource = MetaList;
             ListBox_CustomJava.ItemsSource = CustomJavaList;
             ListBox_CustomLibrary.ItemsSource = LibraryList;
@@ -1228,8 +1260,67 @@ namespace APKRepackageSDKTool.UI
 
         #endregion
 
-        #region Maven
+        #region Queries
 
+        private void Button_ClickAddQueries(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBox_QueriesName.Text))
+            {
+                KeyValue qu = new KeyValue();
+                qu.key = TextBox_QueriesName.Text;
+
+                _QueriesInfo.Add(qu);
+
+                _QueriesInfo = _QueriesInfo;
+
+                TextBox_QueriesName.Text = "";
+            }
+        }
+
+        private void Button_ClickDeleteQueries(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            string name = (string)btn.Tag;
+
+            for (int i = 0; i < _QueriesInfo.Count; i++)
+            {
+                if (_QueriesInfo[i].key == name)
+                {
+                    _QueriesInfo.RemoveAt(i);
+                }
+            }
+
+            _QueriesInfo = _QueriesInfo;
+        }
+
+        private void ListBox_QueriesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lb = sender as ListBox;
+
+            string Name = (string)lb.SelectedValue;
+
+            for (int i = 0; i < _QueriesInfo.Count; i++)
+            {
+                if (_QueriesInfo[i].key == Name)
+                {
+                    currentQueriesInfo = _QueriesInfo[i];
+                }
+            }
+
+            TextBox_QueriesContent.Text = currentQueriesInfo.value;
+        }
+
+        private void TextBox_QueriesContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            currentQueriesInfo.value = tb.Text;
+        }
+
+        #endregion
+
+        #region Maven
 
         private void Button_ClickAddMavenPath(object sender, RoutedEventArgs e)
         {
