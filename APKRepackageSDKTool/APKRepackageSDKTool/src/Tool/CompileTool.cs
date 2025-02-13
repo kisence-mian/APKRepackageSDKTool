@@ -334,11 +334,29 @@ public class CompileTool
         cmd.Execute("javac  -classpath " + libs + " " + JavaCompileSrcPath + "\\*.java -d " + classFilePath);
 
         //class to dex
+        if (useD8)
+        {
+            string jarPath = PathTool.GetCurrentPath() + "\\JavaCompileTempPath\\D8classes.jar ";
+            string zipPath = PathTool.GetCurrentPath() + "\\JavaCompileTempPath\\classes.zip ";
 
-        cmd.Execute("java -jar " + EditorData.GetDxPath() + " --verbose --dex --output=" + dexFilePath + " " + classFilePath);
+            cmd.Execute("jar cvf " + jarPath + " " + classFilePath);
 
-        //dex to smali
-        cmd.Execute("java -jar " + EditorData.GetBaksmaliPath() + " --o=" + smaliPath + " " + dexFilePath);
+            cmd.Execute(EditorData.GetD8Path() + " --classpath " + JavaCompileLibPath + " --lib " + EditorData.GetAndroidJarPath() + " --output=" + zipPath + " " + jarPath,true,true);
+            //解压
+            rar.Decompression(zipPath);
+
+            dexFilePath = JavaCompileTempPath + "\\classes\\classes.dex";
+            //dex to smali
+            cmd.Execute("java -jar " + EditorData.GetBaksmaliPath() + " --o=" + smaliPath + " " + dexFilePath);
+        }
+        else
+        {
+            cmd.Execute("java -jar " + EditorData.GetDxPath() + " --verbose --dex --output=" + dexFilePath + " " + classFilePath);
+            //dex to smali
+            cmd.Execute("java -jar " + EditorData.GetBaksmaliPath() + " --o=" + smaliPath + " " + dexFilePath);
+        }
+ 
+
 
         //删除临时目录
         FileTool.DeleteDirectoryComplete(JavaCompileTempPath);

@@ -578,6 +578,11 @@ namespace APKRepackageSDKTool
             return androidSdkPath + "\\platforms\\android-" + apiLevel + "\\android.jar";
         }
 
+        public static string GetAndroidJarPath()
+        {
+            return androidSdkPath + "\\platforms\\android-" + APILevel + "\\android.jar";
+        }
+
         /// <summary>
         /// 获取android sdk dxjar 的路径
         /// </summary>

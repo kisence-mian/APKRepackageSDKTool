@@ -480,7 +480,7 @@ public class AndroidTool
                     }
                     else
                     {
-                        OutPut("I: 重复的 provider " + name);
+                        OutPut("I: 重复或者不添加的 provider " + name);
                     }
                 }
 
